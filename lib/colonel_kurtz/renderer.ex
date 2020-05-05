@@ -33,9 +33,8 @@ defmodule ColonelKurtz.Renderer do
     Module.concat(block_views_module(), Macro.camelize(type) <> "View")
   end
 
-  # TODO(shawk): refer to app config by library name after mixifying
   defp block_views_module() do
-    case Application.fetch_env!(:blog_demo, ColonelKurtz) do
+    case Application.fetch_env!(:colonel_kurtz_ex, ColonelKurtz) do
       config when is_list(config) ->
         Keyword.get(config, :block_views)
 
