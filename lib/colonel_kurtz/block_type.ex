@@ -11,7 +11,7 @@ defmodule ColonelKurtz.BlockType do
       alias ColonelKurtz.ValidatableBlock
       alias ColonelKurtz.EctoHelpers
       alias ColonelKurtz.BlockTypes
-      alias ColonelKurtz.EctoColonelKurtz
+      alias ColonelKurtz.EctoBlocks
 
       @before_compile unquote(__MODULE__)
       @after_compile unquote(__MODULE__)
@@ -29,7 +29,7 @@ defmodule ColonelKurtz.BlockType do
       ]
       embedded_schema do
         field :type, :string
-        field :blocks, EctoColonelKurtz
+        field :blocks, EctoBlocks
         embeds_one :content, @content_module
       end
 
