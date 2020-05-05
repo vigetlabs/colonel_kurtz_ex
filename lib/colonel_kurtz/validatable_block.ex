@@ -1,4 +1,6 @@
 defprotocol ColonelKurtz.ValidatableBlock do
+  @moduledoc false
+
   @spec changeset(map(), map()) :: %Ecto.Changeset{}
   def changeset(struct, params)
 

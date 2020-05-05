@@ -21,19 +21,19 @@ defmodule ColonelKurtz.Validation do
 
   def validate_blocks(%Ecto.Changeset{} = changeset, _field, _opts), do: changeset
 
-  def map_block_changesets(changes, field) do
+  defp map_block_changesets(changes, field) do
     changes
     |> Map.get(field, [])
     |> to_changesets()
   end
 
-  def to_changesets(blocks) do
+  defp to_changesets(blocks) do
     Enum.map(blocks, fn block ->
       ValidatableBlock.changeset(block, Map.from_struct(block))
     end)
   end
 
-  def lift_blocks_validity(changeset, block_changesets) do
+  defp lift_blocks_validity(changeset, block_changesets) do
     case Enum.any?(block_changesets, fn cset -> !cset.valid? end) do
       false ->
         changeset
@@ -43,9 +43,9 @@ defmodule ColonelKurtz.Validation do
     end
   end
 
-  def lift_block_errors(changeset, _block_changesets, _field, false), do: changeset
+  defp lift_block_errors(changeset, _block_changesets, _field, false), do: changeset
 
-  def lift_block_errors(changeset, block_changesets, field, true) do
+  defp lift_block_errors(changeset, block_changesets, field, true) do
     case Enum.any?(block_changesets, fn cset -> !cset.valid? end) do
       false ->
         changeset
@@ -62,14 +62,14 @@ defmodule ColonelKurtz.Validation do
     end
   end
 
-  def maybe_put_block_changes(changeset, _block_changesets, _field, false), do: changeset
+  defp maybe_put_block_changes(changeset, _block_changesets, _field, false), do: changeset
 
-  def maybe_put_block_changes(changeset, block_changesets, field, true) do
+  defp maybe_put_block_changes(changeset, block_changesets, field, true) do
     put_change(changeset, field, block_changesets)
   end
 
   # is there another way to do this which is not recursive?
-  def map_blocks_errors(block_changesets) do
+  defp map_blocks_errors(block_changesets) do
     Enum.map(block_changesets, fn %{changes: changes, errors: errors} ->
       %{
         block_id: Map.get(changes, :block_id),
@@ -79,7 +79,7 @@ defmodule ColonelKurtz.Validation do
     end)
   end
 
-  def prepare_block_errors(errors) do
+  defp prepare_block_errors(errors) do
     Enum.map(errors, fn {key, {message, opts}} ->
       %{
         key: Atom.to_string(key),
