@@ -1,0 +1,2 @@
+defmodule ColonelKurtz do
+end
