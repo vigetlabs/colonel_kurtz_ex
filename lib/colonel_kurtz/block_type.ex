@@ -28,9 +28,9 @@ defmodule ColonelKurtz.BlockType do
         {Jason.Encoder, only: @block_attributes}
       ]
       embedded_schema do
-        field :type, :string
-        field :blocks, EctoBlocks
-        embeds_one :content, @content_module
+        field(:type, :string)
+        field(:blocks, EctoBlocks)
+        embeds_one(:content, @content_module)
       end
 
       def from_map(%{type: @block_type, content: content, blocks: blocks} = attrs) do

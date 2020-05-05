@@ -23,7 +23,7 @@ defmodule ColonelKurtz.FormHelpers do
     |> blocks_json(block_errors(f, field), opts)
   end
 
-  def blocks_json(blocks, errors, opts) when is_binary(blocks) do
+  def blocks_json(blocks, _errors, opts) when is_binary(blocks) do
     blocks
     |> Jason.decode!()
     |> to_json(opts)
@@ -39,7 +39,6 @@ defmodule ColonelKurtz.FormHelpers do
     blocks
     |> to_json(opts)
   end
-
 
   def block_errors_json(%Phoenix.HTML.Form{} = f, field), do: block_errors_json(f, field, [])
 
@@ -87,8 +86,6 @@ defmodule ColonelKurtz.FormHelpers do
         nil
     end
   end
-
-  defp to_json(data), do: to_json(data, [])
 
   defp to_json(data, opts) do
     Jason.encode!(data, opts)

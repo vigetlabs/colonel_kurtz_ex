@@ -7,7 +7,7 @@ defprotocol ColonelKurtz.ValidatableBlock do
 end
 
 defimpl ColonelKurtz.ValidatableBlock, for: Any do
-  defmacro __deriving__(module, struct, options) do
+  defmacro __deriving__(module, _struct, _options) do
     quote do
       defimpl ColonelKurtz.ValidatableBlock, for: unquote(module) do
         import Ecto.Changeset

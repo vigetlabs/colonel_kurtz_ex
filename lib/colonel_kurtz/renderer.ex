@@ -11,9 +11,7 @@ defmodule ColonelKurtz.Renderer do
     |> maybe_render_block(block)
   end
 
-  @doc """
-  Conditionally renders a block if it is renderable.
-  """
+  # Conditionally renders a block if it is renderable.
   defp maybe_render_block(module, block) do
     if apply(module, :renderable?, [block]) do
       apply(module, :render, ["index.html", assigns(block)])
@@ -39,7 +37,9 @@ defmodule ColonelKurtz.Renderer do
         Keyword.get(config, :block_views)
 
       _ ->
-        raise RuntimeError, message: "ColonelKurtz expected the application to configure :block_views, but it was empty."
+        raise RuntimeError,
+          message:
+            "ColonelKurtz expected the application to configure :block_views, but it was empty."
     end
   end
 end

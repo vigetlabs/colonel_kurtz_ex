@@ -21,7 +21,7 @@ defmodule ColonelKurtz.BlockTypes do
     |> to_block_type
   end
 
-  def from_map(%{type: type, content: content, blocks: blocks} = data) do
+  def from_map(%{type: _type, content: _content, blocks: _blocks} = data) do
     %{data | block_id: Map.get(data, :block_id)}
     |> to_block_type
   end
@@ -44,7 +44,9 @@ defmodule ColonelKurtz.BlockTypes do
         Keyword.get(config, :block_types)
 
       _ ->
-        raise RuntimeError, message: "ColonelKurtz expected the application to configure :block_types, but it was empty."
+        raise RuntimeError,
+          message:
+            "ColonelKurtz expected the application to configure :block_types, but it was empty."
     end
   end
 end
