@@ -1,4 +1,4 @@
-defmodule ColonelKurtz.EctoColonelKurtz do
+defmodule ColonelKurtz.EctoBlocks do
   use Ecto.Type
 
   alias ColonelKurtz.BlockTypes
