@@ -6,8 +6,8 @@ defmodule ColonelKurtz.BlockTypes do
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
 
-  @type block :: Block.t
-  @type block_struct :: BlockType.t
+  @typep block :: Block.t
+  @typep block_struct :: BlockType.t
 
   @doc """
   Converts serialized json into named block type structs.

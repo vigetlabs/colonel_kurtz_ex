@@ -24,9 +24,12 @@ defmodule ColonelKurtz.BlockType do
     required(:block_id) => nil | binary,
     required(:type) => binary,
     required(:content) => map,
-    required(:blocks) => list(Block.t)
+    required(:blocks) => list(t)
   }
 
+  @doc """
+  The BlockType __using__ macro allows modules to behave as BlockTypes.
+  """
   defmacro __using__(opts) do
     quote do
       use Ecto.Schema
@@ -41,9 +44,14 @@ defmodule ColonelKurtz.BlockType do
       import Ecto.Changeset
       import ColonelKurtz.Validation, only: [validate_blocks: 3]
 
+      alias ColonelKurtz.Block
       alias ColonelKurtz.BlockTypes
       alias ColonelKurtz.EctoBlocks
       alias ColonelKurtz.Validatable
+
+      @typep block :: Block.t
+      @typep block_struct :: unquote(__MODULE__).t
+      @typep changeset :: Ecto.Changeset.t
 
       @before_compile unquote(__MODULE__)
       @after_compile unquote(__MODULE__)
@@ -63,6 +71,12 @@ defmodule ColonelKurtz.BlockType do
         embeds_one(:content, @content_module)
       end
 
+      @doc """
+      Takes a Block map and converts it to a named BlockType struct according
+      to its :type. Generates a :block_id if necessary, and turns `block.content`
+      into a named BlockType.Content module as well.
+      """
+      @spec from_map(block) :: block_struct
       def from_map(%{type: @block_type, content: content, blocks: blocks} = attrs) do
         struct!(__MODULE__,
           block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
@@ -72,6 +86,13 @@ defmodule ColonelKurtz.BlockType do
         )
       end
 
+      @doc """
+      Given a named BlockType struct and a map of params, creates a changeset
+      and runs validations for the BlockType and BlockType.Content.
+
+      Returns %Ecto.Changeset{}.
+      """
+      @spec changeset(block_struct, block) :: changeset
       def changeset(block, params) do
         changeset =
           struct(__MODULE__)
@@ -104,6 +125,10 @@ defmodule ColonelKurtz.BlockType do
     end
   end
 
+  @doc """
+  Macro that is part of the BlockType DSL allowing users to specify the schema
+  for their custom BlockType's Content. Takes a keyword list of {name, type}.
+  """
   defmacro defattributes(attrs) do
     quote do
       @content_attributes unquote(attrs)
@@ -143,12 +168,15 @@ defmodule ColonelKurtz.BlockType do
     end)
   end
 
-  #
-  # Eventually, in order to surface errors for blocks in the UI, we need to
-  # traverse the blocks and extract errors from their changesets. This will
-  # not include the errors for the embedded schema for this block's Content.
-  # So we lift the errors from the nested changeset into the block's changeset.
-  #
+  @doc """
+  Lifts errors in the nested changeset for BlockType.Content to the changeset for
+  the BlockType itself.
+
+  Explanation: Eventually, in order to surface errors for blocks in the UI, we
+  need to traverse the blocks and extract errors from their changesets. This will
+  not include the errors for the embedded schema for this block's Content.
+  So we lift the errors from the nested changeset into the block's changeset.
+  """
   @spec lift_content_errors(changeset) :: changeset
   def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
       when is_list(errors) do

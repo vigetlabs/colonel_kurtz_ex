@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.BlockTypes — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-8967fb76bd.js"></script>
+    <script src="dist/sidebar_items-676a231aaa.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
 <link rel="stylesheet" href="assets/docs.css" />  </head>
@@ -79,21 +79,6 @@ ColonelKurtz.BlockTypes      </h1>
             </a>
             Summary
           </h1>
-  <div class="summary-types summary">
-    <h2>
-      <a href="#types">Types</a>
-    </h2>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#t:block/0">block()</a>
-  </div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#t:block_struct/0">block_struct()</a>
-  </div>
-</div>
-  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
@@ -113,49 +98,6 @@ ColonelKurtz.BlockTypes      </h1>
   </div>
         </section>
 
-        <section id="types" class="details-list">
-          <h1 class="section-heading">
-            <a class="hover-link" href="#types">
-              <span class="icon-link" aria-hidden="true"></span>
-              <span class="sr-only">Link to this section</span>
-            </a>
-Types          </h1>
-          <div class="types-list">
-<section class="detail" id="t:block/0">
-  <div class="detail-header">
-    <a href="#t:block/0" class="detail-link" title="Link to this type">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature">block()</h1>
-      <div class="specs">
-          <pre>block() :: %{type: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), content: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), blocks: [<a href="#t:block/0">block</a>()]}</pre>
-      </div>
-  </div>
-  <section class="docstring">
-  </section>
-</section>
-<section class="detail" id="t:block_struct/0">
-  <div class="detail-header">
-    <a href="#t:block_struct/0" class="detail-link" title="Link to this type">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature">block_struct()</h1>
-      <div class="specs">
-          <pre>block_struct() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){
-  block_id: nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
-  type: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
-  content: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  blocks: [<a href="#t:block/0">block</a>()]
-}</pre>
-      </div>
-  </div>
-  <section class="docstring">
-  </section>
-</section>
-          </div>
-        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -172,7 +114,7 @@ Functions          </h1>
     </a>
     <h1 class="signature">from_map(data)</h1>
       <div class="specs">
-          <pre>from_map(<a href="#t:block/0">block</a>()) :: <a href="#t:block_struct/0">block_struct</a>()</pre>
+          <pre>from_map(block()) :: block_struct()</pre>
       </div>
   </div>
   <section class="docstring">
@@ -187,7 +129,7 @@ Functions          </h1>
     </a>
     <h1 class="signature">from_string(data)</h1>
       <div class="specs">
-          <pre>from_string(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: [<a href="#t:block_struct/0">block_struct</a>()]</pre>
+          <pre>from_string(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: [block_struct()]</pre>
       </div>
   </div>
   <section class="docstring">

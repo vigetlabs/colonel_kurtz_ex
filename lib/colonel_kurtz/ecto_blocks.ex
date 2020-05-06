@@ -3,19 +3,15 @@ defmodule ColonelKurtz.EctoBlocks do
   Implements a custom Ecto.Type (https://hexdocs.pm/ecto/Ecto.Type.html#content)
   that models a serializable list of blocks stored as JSON.
   """
+
   use Ecto.Type
 
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
   alias ColonelKurtz.BlockTypes
 
-  @type block :: Block.t
-  @type block_struct :: BlockType.t
-
-  @type content_struct :: %{
-    :__struct__ => atom,
-    optional(any) => any
-  }
+  @typep block :: Block.t
+  @typep block_struct :: BlockType.t
 
   def type, do: {:array, :map}
 

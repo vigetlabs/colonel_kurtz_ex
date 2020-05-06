@@ -1,6 +1,11 @@
 defmodule ColonelKurtz.BlockTypeContent do
   @moduledoc false
 
+  @type t :: %{
+    :__struct__ => atom,
+    optional(any) => any
+  }
+
   defmacro __using__(schema: schema, block_module: block_module) do
     quote do
       use Ecto.Schema

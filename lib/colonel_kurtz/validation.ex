@@ -3,6 +3,7 @@ defmodule ColonelKurtz.Validation do
   ColonolKurtz.Validation provides `validate_blocks/2` and `validate_blocks/3`
   which are used to validate block data.
   """
+
   import Ecto.Changeset
 
   alias ColonelKurtz.EctoHelpers
