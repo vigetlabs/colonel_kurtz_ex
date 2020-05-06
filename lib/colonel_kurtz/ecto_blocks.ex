@@ -7,10 +7,10 @@ defmodule ColonelKurtz.EctoBlocks do
 
   alias ColonelKurtz.BlockTypes
 
-  @type block() :: %{
-    required(:type) => binary(),
-    required(:content) => map(),
-    required(:blocks) => list(block())
+  @type block :: %{
+    required(:type) => binary,
+    required(:content) => map,
+    required(:blocks) => list(block)
   }
 
   @type block_struct :: %{

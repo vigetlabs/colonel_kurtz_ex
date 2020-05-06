@@ -14,9 +14,9 @@ defmodule ColonelKurtz.FormHelpers do
   @type block_with_errors :: %{content: map, errors: list(map), blocks: list(block_with_errors)}
 
   @spec block_editor(form, atom) :: list(Phoenix.HTML.safe)
+  @spec block_editor(form, atom, json_opts) :: list(Phoenix.HTML.safe)
   def block_editor(form, field), do: block_editor(form, field, [])
 
-  @spec block_editor(form, atom, json_opts) :: list(Phoenix.HTML.safe)
   def block_editor(%Form{} = f, field, opts) do
     [
       raw("<div data-ck-container=\"#{Atom.to_string(field)}\"></div>"),
@@ -29,9 +29,9 @@ defmodule ColonelKurtz.FormHelpers do
   end
 
   @spec blocks_json(form, atom) :: binary
+  @spec blocks_json(form, atom, json_opts) :: binary
   def blocks_json(form, field), do: blocks_json(form, field, [])
 
-  @spec blocks_json(form, atom, json_opts) :: binary
   def blocks_json(%Form{} = f, field, opts) do
     f
     |> input_value(field)
@@ -53,9 +53,9 @@ defmodule ColonelKurtz.FormHelpers do
   end
 
   @spec block_errors_json(form, atom) :: binary
+  @spec block_errors_json(form, atom, json_opts) :: binary
   def block_errors_json(%Form{} = f, field), do: block_errors_json(f, field, [])
 
-  @spec block_errors_json(form, atom, json_opts) :: binary
   def block_errors_json(%Form{} = f, field, opts) do
     case block_errors(f, field) do
       nil ->

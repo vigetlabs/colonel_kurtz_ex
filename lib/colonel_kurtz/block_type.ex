@@ -141,7 +141,7 @@ defmodule ColonelKurtz.BlockType do
   to atoms. Will only contain the keys specified in the schema (Defined by
   using the `defattributes/1` macro).
   """
-  @spec attributes_from_params(list(atom()), map()) :: map()
+  @spec attributes_from_params(list(atom), map) :: map
   def attributes_from_params(schema_keys, params) do
     Enum.reduce(schema_keys, %{}, fn key, acc ->
       Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))

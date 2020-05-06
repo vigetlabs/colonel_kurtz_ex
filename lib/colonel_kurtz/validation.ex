@@ -8,7 +8,7 @@ defmodule ColonelKurtz.Validation do
   alias ColonelKurtz.EctoHelpers
   alias ColonelKurtz.Validatable
 
-  @type changeset :: %Ecto.Changeset{changes: map()}
+  @type changeset :: %Ecto.Changeset{changes: map}
   @type changeset_list :: list(changeset)
 
   @doc """
@@ -17,12 +17,18 @@ defmodule ColonelKurtz.Validation do
 
   Returns %Ecto.Changeset{}.
   """
-  @spec validate_blocks(changeset, atom) :: changeset
-  def validate_blocks(%Ecto.Changeset{} = changeset, field) do
-    validate_blocks(changeset, field, is_block: false)
+  @spec validate_blocks(changeset, atom | list(atom)) :: changeset
+  @spec validate_blocks(changeset, atom, keyword) :: changeset
+  def validate_blocks(%Ecto.Changeset{} = changeset, field_or_fields) do
+    validate_blocks(changeset, field_or_fields, is_block: false)
   end
 
-  @spec validate_blocks(changeset, atom, keyword) :: changeset
+  def validate_blocks(%Ecto.Changeset{} = changeset, fields, opts) when is_list(fields) do
+    Enum.reduce(fields, changeset, fn field, changeset ->
+      validate_blocks(changeset, field, opts)
+    end)
+  end
+
   def validate_blocks(%Ecto.Changeset{changes: changes} = changeset, field, opts) do
     is_block = Keyword.get(opts, :is_block)
     block_changesets = map_block_changesets(changes, field)

@@ -8,6 +8,6 @@ defmodule ColonelKurtzTest.BlockTypes.ExampleType do
 
   def validate_content(_content, changeset) do
     changeset
-    |> validate_required([:text])
+    |> validate_required(:text)
   end
 end
