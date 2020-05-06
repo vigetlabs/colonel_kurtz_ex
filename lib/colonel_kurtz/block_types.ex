@@ -1,6 +1,6 @@
 defmodule ColonelKurtz.BlockTypes do
   @moduledoc """
-  Provides methods for marshalling data into named BlockType structs.
+  Provides functions for marshalling data into named BlockType structs.
   """
 
   alias ColonelKurtz.Block

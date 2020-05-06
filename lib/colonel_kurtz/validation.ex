@@ -1,6 +1,6 @@
 defmodule ColonelKurtz.Validation do
   @moduledoc """
-  ColonolKurtz.Validation provides `validate_blocks/2` and `validate_blocks/3`
+  `ColonelKurtz.Validation` provides `validate_blocks/2` and `validate_blocks/3`
   which are used to validate block data.
   """
 

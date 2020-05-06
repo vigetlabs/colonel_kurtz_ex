@@ -4,11 +4,11 @@ defmodule ColonelKurtz.BlockType do
   behavior. Block Types are embedded Ecto Schemas that conform to the
   Validatable protocol.
 
-  A Block is of some type (e.g. "Image Block") and have a well-defined schema
-  for the attributes they require. That schema is specified as a dynamically
-  generated nested module within the using module and is defined by a user call
-  to the `defattributes` macro that specifies the schema for the Blocks' Content.
-  The Block Type schema embeds_one of the Content module.
+  A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
+  well-defined schema with content attributes (`content`). The content schema is
+  defined by a user call to the `defattributes` macro, which generates an
+  embedded schema under the hood. The Block Type schema `embeds_one` of the
+  generated Content module.
   """
 
   import Ecto.Changeset, only: [add_error: 4]
@@ -156,11 +156,11 @@ defmodule ColonelKurtz.BlockType do
     end
   end
 
-  @doc """
-  Extracts the Block's Content attributes from params, converting string keys
-  to atoms. Will only contain the keys specified in the schema (Defined by
-  using the `defattributes/1` macro).
-  """
+  #
+  # Extracts the Block's Content attributes from params, converting string keys
+  # to atoms. Will only contain the keys specified in the schema (Defined by
+  # using the `defattributes/1` macro).
+  #
   @spec attributes_from_params(list(atom), map) :: map
   def attributes_from_params(schema_keys, params) do
     Enum.reduce(schema_keys, %{}, fn key, acc ->
@@ -168,15 +168,15 @@ defmodule ColonelKurtz.BlockType do
     end)
   end
 
-  @doc """
-  Lifts errors in the nested changeset for BlockType.Content to the changeset for
-  the BlockType itself.
-
-  Explanation: Eventually, in order to surface errors for blocks in the UI, we
-  need to traverse the blocks and extract errors from their changesets. This will
-  not include the errors for the embedded schema for this block's Content.
-  So we lift the errors from the nested changeset into the block's changeset.
-  """
+  #
+  # Lifts errors in the nested changeset for BlockType.Content to the changeset for
+  # the BlockType itself.
+  #
+  # Explanation: Eventually, in order to surface errors for blocks in the UI, we
+  # need to traverse the blocks and extract errors from their changesets. This will
+  # not include the errors for the embedded schema for this block's Content.
+  # So we lift the errors from the nested changeset into the block's changeset.
+  #
   @spec lift_content_errors(changeset) :: changeset
   def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
       when is_list(errors) do
