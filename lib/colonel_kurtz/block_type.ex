@@ -14,22 +14,17 @@ defmodule ColonelKurtz.BlockType do
   import Ecto.Changeset, only: [add_error: 4]
   import ColonelKurtz.BlockTypeContent, only: [defcontentmodule: 1]
 
+  alias ColonelKurtz.Block
   alias ColonelKurtz.EctoHelpers
 
   @type changeset :: Ecto.Changeset.t
 
-  @type block :: %{
-    required(:type) => binary,
-    required(:content) => map,
-    required(:blocks) => list(block)
-  }
-
-  @type block_struct :: %{
+  @type t :: %{
     :__struct__ => atom,
     required(:block_id) => nil | binary,
     required(:type) => binary,
     required(:content) => map,
-    required(:blocks) => list(block)
+    required(:blocks) => list(Block.t)
   }
 
   defmacro __using__(opts) do

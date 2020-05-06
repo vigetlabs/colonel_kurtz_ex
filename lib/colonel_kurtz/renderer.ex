@@ -4,7 +4,9 @@ defmodule ColonelKurtz.Renderer do
   :block_views for ColonelKurtz.
   """
 
-  @type block :: %{type: binary, blocks: list(block), content: map}
+  alias ColonelKurtz.Block
+
+  @type block :: Block.t
 
   @spec render_blocks(nil) :: nil
   def render_blocks(nil), do: nil

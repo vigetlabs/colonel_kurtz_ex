@@ -3,19 +3,11 @@ defmodule ColonelKurtz.BlockTypes do
   Provides methods for marshalling data into named BlockType structs.
   """
 
-  @type block :: %{
-    required(:type) => binary,
-    required(:content) => map,
-    required(:blocks) => list(block)
-  }
+  alias ColonelKurtz.Block
+  alias ColonelKurtz.BlockType
 
-  @type block_struct :: %{
-    :__struct__ => atom,
-    required(:block_id) => nil | binary,
-    required(:type) => binary,
-    required(:content) => map,
-    required(:blocks) => list(block)
-  }
+  @type block :: Block.t
+  @type block_struct :: BlockType.t
 
   @doc """
   Converts serialized json into named block type structs.

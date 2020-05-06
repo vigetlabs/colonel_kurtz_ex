@@ -18,7 +18,6 @@ defmodule ColonelKurtz.Validation do
   Returns %Ecto.Changeset{}.
   """
   @spec validate_blocks(changeset, atom | list(atom)) :: changeset
-  @spec validate_blocks(changeset, atom, keyword) :: changeset
   def validate_blocks(%Ecto.Changeset{} = changeset, field_or_fields) do
     validate_blocks(changeset, field_or_fields, is_block: false)
   end

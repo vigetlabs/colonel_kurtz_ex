@@ -5,21 +5,12 @@ defmodule ColonelKurtz.EctoBlocks do
   """
   use Ecto.Type
 
+  alias ColonelKurtz.Block
+  alias ColonelKurtz.BlockType
   alias ColonelKurtz.BlockTypes
 
-  @type block :: %{
-    required(:type) => binary,
-    required(:content) => map,
-    required(:blocks) => list(block)
-  }
-
-  @type block_struct :: %{
-    :__struct__ => atom,
-    required(:block_id) => nil | binary,
-    required(:type) => binary,
-    required(:content) => content_struct,
-    required(:blocks) => list(block_struct)
-  }
+  @type block :: Block.t
+  @type block_struct :: BlockType.t
 
   @type content_struct :: %{
     :__struct__ => atom,
