@@ -2,6 +2,8 @@
 
 `ColonelKurtzEx` facilitates working with the block content editor [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz) in [Phoenix](https://www.phoenixframework.org/) applications.
 
+[Documentation](http://code.viget.com/colonel_kurtz_ex/) is available on GitHub and will be on HexDocs soon!
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed by adding `colonel_kurtz_ex` to your list of dependencies in `mix.exs`:
