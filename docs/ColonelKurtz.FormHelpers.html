@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.FormHelpers — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-f6d2d75e38.js"></script>
+    <script src="dist/sidebar_items-33f157f782.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -67,6 +67,9 @@ colonel_kurtz_ex      </a>
 ColonelKurtz.FormHelpers      </h1>
 
 
+        <section id="moduledoc">
+<p>Form helpers for phoenix.</p>
+        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -76,6 +79,31 @@ ColonelKurtz.FormHelpers      </h1>
             </a>
             Summary
           </h1>
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:block_error/0">block_error()</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:block_with_errors/0">block_with_errors()</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:form/0">form()</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:json_opts/0">json_opts()</a>
+  </div>
+</div>
+  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
@@ -110,9 +138,84 @@ ColonelKurtz.FormHelpers      </h1>
     <a href="#blocks_json/3">blocks_json(f, field, opts)</a>
   </div>
 </div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#blocks_json_from_blocks/3">blocks_json_from_blocks(blocks, errors, opts)</a>
+  </div>
+</div>
   </div>
         </section>
 
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Types          </h1>
+          <div class="types-list">
+<section class="detail" id="t:block_error/0">
+  <div class="detail-header">
+    <a href="#t:block_error/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">block_error()</h1>
+      <div class="specs">
+          <pre>block_error() :: %{errors: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()], blocks: [<a href="#t:block_error/0">block_error</a>()]}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="t:block_with_errors/0">
+  <div class="detail-header">
+    <a href="#t:block_with_errors/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">block_with_errors()</h1>
+      <div class="specs">
+          <pre>block_with_errors() :: %{
+  content: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  errors: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()],
+  blocks: [<a href="#t:block_with_errors/0">block_with_errors</a>()]
+}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="t:form/0">
+  <div class="detail-header">
+    <a href="#t:form/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">form()</h1>
+      <div class="specs">
+          <pre>form() :: <a href="https://hexdocs.pm/phoenix_html/2.14.2/Phoenix.HTML.Form.html#t:t/0">Phoenix.HTML.Form.t</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="t:json_opts/0">
+  <div class="detail-header">
+    <a href="#t:json_opts/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">json_opts()</h1>
+      <div class="specs">
+          <pre>json_opts() :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>() | <a href="https://hexdocs.pm/jason/1.2.1/Jason.Encode.html#t:opts/0">Jason.Encode.opts</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+          </div>
+        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -128,6 +231,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">block_editor(form, field)</h1>
+      <div class="specs">
+          <pre>block_editor(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) :: [<a href="https://hexdocs.pm/phoenix_html/2.14.2/Phoenix.HTML.html#t:safe/0">Phoenix.HTML.safe</a>()]</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>
@@ -139,6 +245,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">block_editor(f, field, opts)</h1>
+      <div class="specs">
+          <pre>block_editor(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="#t:json_opts/0">json_opts</a>()) :: [<a href="https://hexdocs.pm/phoenix_html/2.14.2/Phoenix.HTML.html#t:safe/0">Phoenix.HTML.safe</a>()]</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>
@@ -150,6 +259,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">block_errors_json(f, field)</h1>
+      <div class="specs">
+          <pre>block_errors_json(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>
@@ -161,6 +273,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">block_errors_json(f, field, opts)</h1>
+      <div class="specs">
+          <pre>block_errors_json(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="#t:json_opts/0">json_opts</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>
@@ -172,6 +287,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">blocks_json(form, field)</h1>
+      <div class="specs">
+          <pre>blocks_json(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>
@@ -183,6 +301,24 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">blocks_json(f, field, opts)</h1>
+      <div class="specs">
+          <pre>blocks_json(<a href="#t:form/0">form</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="#t:json_opts/0">json_opts</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="blocks_json_from_blocks/3">
+  <div class="detail-header">
+    <a href="#blocks_json_from_blocks/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">blocks_json_from_blocks(blocks, errors, opts)</h1>
+      <div class="specs">
+          <pre>blocks_json_from_blocks(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>(), <a href="#t:json_opts/0">json_opts</a>()) ::
+  <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()</pre>
+      </div>
   </div>
   <section class="docstring">
   </section>

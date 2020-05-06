@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtzEx — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-f6d2d75e38.js"></script>
+    <script src="dist/sidebar_items-33f157f782.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -63,22 +63,70 @@ colonel_kurtz_ex      </a>
     <div id="content" class="content-inner">
 
 <h1>ColonelKurtzEx</h1>
-<p><strong>TODO: Add description</strong></p>
+<p><code class="inline">ColonelKurtzEx</code> facilitates working with the block content editor <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a> in <a href="https://www.phoenixframework.org/">Phoenix</a> applications.</p>
 <h2 id="installation" class="section-heading">
   <a href="#installation" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Installation
 </h2>
 
-<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed
-by adding <code class="inline">colonel_kurtz_ex</code> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="9226447243-1">do</span><span class="w">
-  </span><span class="p" data-group-id="9226447243-2">[</span><span class="w">
-    </span><span class="p" data-group-id="9226447243-3">{</span><span class="ss">:colonel_kurtz_ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="9226447243-3">}</span><span class="w">
-  </span><span class="p" data-group-id="9226447243-2">]</span><span class="w">
-</span><span class="k" data-group-id="9226447243-1">end</span></code></pre>
-<p>Documentation can be generated with <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a>
-and published on <a href="https://hexdocs.pm">HexDocs</a>. Once published, the docs can
-be found at <a href="https://hexdocs.pm/colonel_kurtz_ex">https://hexdocs.pm/colonel_kurtz_ex</a>.</p>
+<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed by adding <code class="inline">colonel_kurtz_ex</code> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
+<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="7677320801-1">do</span><span class="w">
+  </span><span class="p" data-group-id="7677320801-2">[</span><span class="w">
+    </span><span class="p" data-group-id="7677320801-3">{</span><span class="ss">:colonel_kurtz_ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="7677320801-3">}</span><span class="w">
+  </span><span class="p" data-group-id="7677320801-2">]</span><span class="w">
+</span><span class="k" data-group-id="7677320801-1">end</span></code></pre>
+<p>Documentation can be generated with <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a> and published on <a href="https://hexdocs.pm">HexDocs</a>. Once published, the docs can be found at <a href="https://hexdocs.pm/colonel_kurtz_ex">https://hexdocs.pm/colonel_kurtz_ex</a>.</p>
+<h2 id="development" class="section-heading">
+  <a href="#development" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Development
+</h2>
+
+<h3 id="code-quality" class="section-heading">
+  <a href="#code-quality" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Code Quality
+</h3>
+
+<p>To support high code quality this project uses <a href="https://github.com/jeremyjh/dialyxir">dialyxir</a> and <a href="https://github.com/rrrene/credo">credo</a> for static code analysis and <a href="https://hexdocs.pm/ex_unit/ExUnit.html">ExUnit</a> for testing.</p>
+<h4>Typespecs</h4>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">dialyzer</span></code></pre>
+<h4>Code Style</h4>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">credo</span><span class="w"> </span><span class="o">--</span><span class="n">strict</span></code></pre>
+<h4>Tests</h4>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">test</span></code></pre>
+<h2 id="contributing" class="section-heading">
+  <a href="#contributing" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Contributing
+</h2>
+
+<ol>
+<li><a href="http://github.com/vigetlabs/colonel_kurtz_ex/fork">Fork</a> the library
+</li>
+<li>Create your feature branch (<code class="inline">git checkout -b my-new-feature</code>)
+</li>
+<li>Commit your changes (<code class="inline">git commit -am &#39;Add some feature&#39;</code>)
+</li>
+<li>Push to the branch (<code class="inline">git push origin my-new-feature</code>)
+</li>
+<li>Create new Pull Request
+</li>
+</ol>
+<h2 id="authors" class="section-heading">
+  <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Authors
+</h2>
+
+<ul>
+<li>Solomon Hawk (@solomonhawk)
+</li>
+<li>Dylan Lederle-Ensign (@dlederle)
+</li>
+</ul>
+<h2 id="license" class="section-heading">
+  <a href="#license" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  License
+</h2>
+
+<p>ColonelKurtzEx is released under the MIT License. See the LICENSE file for further details.</p>
       <footer class="footer">
         <p>
           <span class="line">

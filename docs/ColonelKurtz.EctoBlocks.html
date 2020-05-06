@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.EctoBlocks — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-f6d2d75e38.js"></script>
+    <script src="dist/sidebar_items-33f157f782.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
   </head>
@@ -67,6 +67,10 @@ colonel_kurtz_ex      </a>
 ColonelKurtz.EctoBlocks      </h1>
 
 
+        <section id="moduledoc">
+<p>Implements a custom Ecto.Type (<a href="https://hexdocs.pm/ecto/Ecto.Type.html#content">https://hexdocs.pm/ecto/Ecto.Type.html#content</a>)
+that models a serializable list of blocks stored as JSON.</p>
+        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -76,6 +80,26 @@ ColonelKurtz.EctoBlocks      </h1>
             </a>
             Summary
           </h1>
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:block/0">block()</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:block_struct/0">block_struct()</a>
+  </div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:content_struct/0">content_struct()</a>
+  </div>
+</div>
+  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
@@ -119,6 +143,63 @@ ColonelKurtz.EctoBlocks      </h1>
   </div>
         </section>
 
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Types          </h1>
+          <div class="types-list">
+<section class="detail" id="t:block/0">
+  <div class="detail-header">
+    <a href="#t:block/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">block()</h1>
+      <div class="specs">
+          <pre>block() :: %{type: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), content: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), blocks: [<a href="#t:block/0">block</a>()]}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="t:block_struct/0">
+  <div class="detail-header">
+    <a href="#t:block_struct/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">block_struct()</h1>
+      <div class="specs">
+          <pre>block_struct() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){
+  block_id: nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  type: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
+  content: <a href="#t:content_struct/0">content_struct</a>(),
+  blocks: [<a href="#t:block_struct/0">block_struct</a>()]
+}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+<section class="detail" id="t:content_struct/0">
+  <div class="detail-header">
+    <a href="#t:content_struct/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">content_struct()</h1>
+      <div class="specs">
+          <pre>content_struct() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){optional(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) => <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+          </div>
+        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -134,6 +215,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">cast(data)</h1>
+      <div class="specs">
+          <pre>cast(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | [<a href="#t:block/0">block</a>()]) :: {:ok, [<a href="#t:block_struct/0">block_struct</a>()]} | :error</pre>
+      </div>
   </div>
   <section class="docstring">
 <p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:cast/1"><code class="inline">Ecto.Type.cast/1</code></a>.</p>
@@ -146,6 +230,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">dump(blocks)</h1>
+      <div class="specs">
+          <pre>dump([<a href="#t:block_struct/0">block_struct</a>()]) :: {:ok, [<a href="#t:block/0">block</a>()]} | :error</pre>
+      </div>
   </div>
   <section class="docstring">
 <p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:dump/1"><code class="inline">Ecto.Type.dump/1</code></a>.</p>
@@ -182,6 +269,9 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">load(data)</h1>
+      <div class="specs">
+          <pre>load([<a href="#t:block/0">block</a>()]) :: {:ok, [<a href="#t:block_struct/0">block_struct</a>()]}</pre>
+      </div>
   </div>
   <section class="docstring">
 <p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:load/1"><code class="inline">Ecto.Type.load/1</code></a>.</p>

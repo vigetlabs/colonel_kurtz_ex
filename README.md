@@ -16,8 +16,6 @@ end
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc) and published on [HexDocs](https://hexdocs.pm). Once published, the docs can be found at [https://hexdocs.pm/colonel_kurtz_ex](https://hexdocs.pm/colonel_kurtz_ex).
 
----
-
 ## Development
 
 ### Code Quality
@@ -34,8 +32,6 @@ To support high code quality this project uses [dialyxir](https://github.com/jer
 #### Tests
     mix test
 
----
-
 ## Contributing
 
 1. [Fork](http://github.com/vigetlabs/colonel_kurtz_ex/fork) the library
@@ -43,8 +39,6 @@ To support high code quality this project uses [dialyxir](https://github.com/jer
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
----
 
 ## Authors
 
