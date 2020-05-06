@@ -10,9 +10,10 @@ defmodule ColonelKurtz.MixProject do
       deps: deps(),
       applications: applications(Mix.env()),
       compilers: compilers(Mix.env()),
-      aliases: aliases(),
       dialyzer: dialyzer(),
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test],
       docs: [
         main: "readme",
         extras: ["README.md"],
@@ -46,13 +47,8 @@ defmodule ColonelKurtz.MixProject do
       {:jason, "~> 1.0"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, "~> 0.19", only: [:dev, :test]}
-    ]
-  end
-
-  defp aliases do
-    [
-      types: []
+      {:ex_doc, "~> 0.19", only: [:dev, :test]},
+      {:excoveralls, "~> 0.10", only: :test}
     ]
   end
 
