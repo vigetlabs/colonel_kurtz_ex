@@ -7,7 +7,12 @@ defmodule ColonelKurtz.MixProject do
       version: "0.1.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      docs: [
+        main: "readme",
+        extras: ["README.md"],
+        output: "docs"
+      ]
     ]
   end
 
@@ -24,7 +29,8 @@ defmodule ColonelKurtz.MixProject do
       {:phoenix, "~> 1.5.0"},
       {:ecto_sql, "~> 3.4"},
       {:phoenix_html, "~> 2.11"},
-      {:jason, "~> 1.0"}
+      {:jason, "~> 1.0"},
+      {:ex_doc, "~> 0.19", only: [:dev, :test]}
     ]
   end
 end
