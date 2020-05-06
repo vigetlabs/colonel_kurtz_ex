@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
-    <title>ColonelKurtzEx — colonel_kurtz_ex v0.1.0</title>
+    <title>ColonelKurtzEx (CKEX) — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-33f157f782.js"></script>
+    <script src="dist/sidebar_items-8967fb76bd.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
-  </head>
+<link rel="stylesheet" href="assets/docs.css" />  </head>
   <body data-type="extras">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
 <div class="main">
@@ -62,20 +62,348 @@ colonel_kurtz_ex      </a>
   <div class="content-outer">
     <div id="content" class="content-inner">
 
-<h1>ColonelKurtzEx</h1>
-<p><code class="inline">ColonelKurtzEx</code> facilitates working with the block content editor <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a> in <a href="https://www.phoenixframework.org/">Phoenix</a> applications.</p>
+<h1>ColonelKurtzEx (CKEX)</h1>
+<p><code>ColonelKurtzEx</code> facilitates working with the block content editor <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a> in <a href="https://www.phoenixframework.org/">Phoenix</a> applications. The main faculties <code>ColonelKurtzEx</code> provides are focused on <strong>structured data</strong>, <strong>validation</strong>, and <strong>rendering</strong>.</p>
+<p><a href="http://code.viget.com/colonel_kurtz_ex/">Documentation</a> is available on GitHub and will be on HexDocs soon!</p>
+<p><strong>Note on terminology</strong>: For clarity and conciseness, this document may refer to the elixir library as <strong><code>CKEX</code></strong> and the javascript library as <strong><code>CKJS</code></strong>.</p>
+<h1>Table of Contents</h1>
+<ol>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#getting-set-up">Getting Set Up</a></li>
+<li><a href="#faqs">FAQs</a></li>
+<li><a href="#development">Development</a></li>
+<li><a href="#contributing">Contributing</a></li>
+<li><a href="#authors">Authors</a></li>
+<li><a href="#license">License</a></li>
+</ol>
+<h2 id="overview" class="section-heading">
+  <a href="#overview" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Overview
+</h2>
+
+<details style="margin-bottom: 1rem;" markdown="block">
+  <summary>
+    <strong>Colonel Kurtz (CKJS)</strong>
+  </summary>
+<p>Colonel Kurtz is a block content editor implemented in JS.</p>
+<p>It is recommended that you have a reasonable understanding of <code>CKJS</code> and how to use it before diving into <code>CKEX</code>. Specifically, how the data is structured and how to extend its functionality with new block types. Head over to <a href="https://github.com/vigetlabs/colonel-kurtz">the repo</a> for more information.</p>
+<p>Here's a brief summary of the basics to better orient you to some concepts relevant to <code>CKEX</code>:</p>
+<ol>
+<li><code>CKJS</code> produces a (potentially deeply) nested tree of <code>blocks</code> in JSON format.</li>
+<li>A <code>block</code> has the following fields: <code>type</code>, <code>content</code>, and <code>blocks</code> (the latter represents any nested child blocks).</li>
+<li>When you define a <code>CKJS</code> block type, you implement it using a React Component which affords you great flexibility when it comes to the UI you present to users of your application.</li>
+</ol>
+</details>
+<details>
+  <summary>
+    <strong>Structured Data</strong>
+  </summary>
+<p>Anyone familiar with Elixir and the surrounding community is likely to already understand the benefits of structured data. This isn't an essay on the subject but suffice to say that we believe in using named structs and predictable data wherever possible. One of the main motivations of <code>ColonelKurtzEx</code> is to convert <code>CKJS</code> JSON into named  structs.</p>
+</details>
+<details>
+  <summary>
+    <strong>Validation</strong>
+  </summary>
+<p>Data integrity is crucial to building robust software and validation is important for helping users create valid data through providing helpful error messages. <code>ColonelKurtzEx</code> gives developers the ability to validate <code>CKJS</code> JSON data by leveraging <a href="https://hexdocs.pm/ecto/Ecto.Changeset.html#content">Ecto Changesets</a> which should be familiar to many Elixir developers. If you've done anything with databases or validation you've likely used <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.html"><code>Ecto</code></a> and will be familiar with how to implement validation rules for CK data using <code>CKEX</code>.</p>
+</details>
+<details>
+  <summary>
+    <strong>Rendering</strong>
+  </summary>
+<p><code>ColonelKurtzEx</code> provides a <code>BlockTypeView</code> macro that can be used in <a href="https://hexdocs.pm/phoenix/Phoenix.View.html#content">Phoenix Views</a>. A block type view, aside from being a normal Phoenix View (used to handle presentation of data), controls whether a block can render by specifying an implementation for <code>renderable?/1</code>. The default is <code>true</code>, but modules that <code>use</code> the macro may override this method to enable more fine-grained control over whether a block should be rendered based on its current data.</p>
+<p>For example, you might need to model a block that requires exactly 3 images to be defined in its data. If a greater or lesser number is specified, the block type view can disable rendering (e.g. to prevent invalid layouts from happening). However, you should try to implement these rules in your block type validation to prevent invalid data from reaching the database in the first place.</p>
+</details>
 <h2 id="installation" class="section-heading">
   <a href="#installation" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Installation
 </h2>
 
-<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed by adding <code class="inline">colonel_kurtz_ex</code> to your list of dependencies in <code class="inline">mix.exs</code>:</p>
-<pre><code class="nohighlight makeup elixir"><span class="kd">def</span><span class="w"> </span><span class="nf">deps</span><span class="w"> </span><span class="k" data-group-id="7677320801-1">do</span><span class="w">
-  </span><span class="p" data-group-id="7677320801-2">[</span><span class="w">
-    </span><span class="p" data-group-id="7677320801-3">{</span><span class="ss">:colonel_kurtz_ex</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~&gt; 0.1.0&quot;</span><span class="p" data-group-id="7677320801-3">}</span><span class="w">
-  </span><span class="p" data-group-id="7677320801-2">]</span><span class="w">
-</span><span class="k" data-group-id="7677320801-1">end</span></code></pre>
+<p>If <a href="https://hex.pm/docs/publish">available in Hex</a>, the package can be installed by adding <code>colonel_kurtz_ex</code> to your list of dependencies in <code>mix.exs</code>:</p>
+<pre><code class="language-elixir">def deps do
+  [
+    {:colonel_kurtz_ex, &quot;~&gt; 0.1.0&quot;}
+  ]
+end
+</code></pre>
 <p>Documentation can be generated with <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a> and published on <a href="https://hexdocs.pm">HexDocs</a>. Once published, the docs can be found at <a href="https://hexdocs.pm/colonel_kurtz_ex">https://hexdocs.pm/colonel_kurtz_ex</a>.</p>
+<h2 id="getting-set-up" class="section-heading">
+  <a href="#getting-set-up" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  Getting Set Up
+</h2>
+
+<p>To get set up with <code>ColonelKurtzEx</code>, you'll need to install and configure <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a>. Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to <code>CKJS</code>, you'll need to add the corresponding modules for <code>CKEX</code> (a <code>BlockType</code>, <code>BlockTypeView</code>, and template).</p>
+<p><strong>Note</strong>: The following sections are expandable (and are collapsed by default).</p>
+<details>
+  <summary>
+    <strong>1. Add Folders for BlockTypes and BlockTypeViews</strong>
+  </summary>
+<p>After adding the library to your dependencies, you'll want to define a few modules in the scope of your application. One for your custom <code>BlockType</code> definitions, and one for your <code>BlockTypeView</code>s.</p>
+<p><strong>Note:</strong> <em>it is important that each of these concepts live inside some module namespace in your application so that the library can look up specific block type and view modules at runtime.</em></p>
+<details>
+  <summary>
+    See an example
+  </summary>
+<p>For example, assuming a standard phoenix project structure:</p>
+<ol>
+<li>
+<p>Create a new subfolder inside <code>lib/your_app_web/views/</code>, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. <code>lib/your_app_web/blocks/</code> folder and <code>YourAppWeb.Blocks</code> module.).</p>
+</li>
+<li>
+<p>Create a new subfolder inside <code>lib/your_app/</code>. Again, the name doesn't matter so long as you configure <code>ColonelKurtzEx</code> correctly (more information in the following section). For example, you might creat a folder named <code>lib/your_app/block_types/</code> and to contain the <code>YourApp.BlockTypes</code> namespace.</p>
+</li>
+</ol>
+</details>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      2. Configure <code>ColonelKurtzEx</code>
+    </strong>
+  </summary>
+<p>Add the following to your <code>config/config.exs</code> to allow <code>CKEX</code> to locate your custom <code>BlockType</code> and <code>BlockTypeView</code> modules:</p>
+<pre><code class="language-elixir">config :colonel_kurtz_ex, ColonelKurtz,
+  block_views: YourApp.Blocks,
+  block_types: YourApp.BlockTypes
+</code></pre>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      3. Add a CK field to one of your app's schemas</code>
+    </strong>
+  </summary>
+<ol>
+<li>
+<p>First, amend the schema to add a new field that will hold your <code>CKJS</code> data:</p>
+<pre><code class="language-elixir">defmodule YourApp.Post do
+  use Ecto.Schema
+
+  # 1. alias the custom ecto type
+  alias ColonelKurtzEx.EctoBlocks
+
+  # 2. import the validation helper
+  import ColonelKurtzEx.Validation, only: [validate_blocks: 2]
+
+  schema &quot;posts&quot; do
+    field :title, :string
+    # 3. add a field of this type, named whatever you like
+    field :blocks, EctoBlocks, default: []
+  end
+
+  def changeset(post, params \\ %{}) do
+    post
+    # 4. make sure you cast the new field in your changeset
+    |&gt; cast(params, [:title, :blocks])
+    # 5. call `validate_blocks` passing the name of your field
+    |&gt; validate_blocks(:blocks)
+  end
+end
+</code></pre>
+<p><strong>Note:</strong> <code>validate_blocks/2</code> can take an atom or a list of atoms if you have more than one set of blocks fields to validate.</p>
+</li>
+<li>
+<p>Then create the migration to add the field to your database</p>
+<pre><code class="language-bash">mix ecto.gen.migration add_blocks_to_posts
+</code></pre>
+</li>
+<li>
+<p><code>EctoBlocks</code> expects the underlying field to be a <code>:map</code> which is implemented as a <code>jsonb</code> column in databases such as Postgres.</p>
+<pre><code class="language-elixir"># priv/repo/migrations/&lt;timestamp&gt;_add_blocks_to_posts.exs
+
+defmodule YourApp.Repo.Migrations.AddBlocksToPost do
+  use Ecto.Migration
+
+  def change do
+    alter table(&quot;posts&quot;) do
+      add :blocks, :map
+    end
+  end
+end
+</code></pre>
+</li>
+<li>
+<p>Run your migration</p>
+<pre><code class="language-bash">mix ecto.migrate
+</code></pre>
+</li>
+</ol>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      4. Teach your Phoenix Views how to render blocks
+    </strong>
+  </summary>
+<ol>
+<li>
+<p>Use <a href="ColonelKurtz.Renderer.html#render_blocks/1"><code>ColonelKurtz.Renderer.render_blocks/1</code></a> to render block content somewhere in a template.</p>
+ <details>
+   <summary>
+     More information
+   </summary>
+<p>You may import this method as needed in the views that will render blocks. Or, as a convenience, you may <code>import</code> this function automatically in all of your phoenix views by adding it to the <code>your_app_web.ex</code> definition for <code>view</code> (or <code>view_helpers</code> if you want it to be available for live views as well, example below).</p>
+ </details>
+</li>
+<li>
+<p>In addition, to render the block editor in your forms, you'll want to pull in <a href="ColonelKurtz.FormHelpers.html"><code>ColonelKurtz.FormHelpers</code></a> too. The example below shows how to do this for all Phoenix Views in your application.</p>
+ <details>
+   <summary>
+     See an example
+   </summary>
+<pre><code class="language-elixir"># lib/your_app_web.ex
+
+  # ...
+
+  defp view_helpers do
+    quote do
+      use Phoenix.HTML
+
+      import Phoenix.LiveView.Helpers
+      import BlogDemoWeb.LiveHelpers
+
+      # 1. import `render_blocks/1` so that it is available for all views
+      import ColonelKurtz.Renderer, only: [render_blocks: 1]
+
+      # 2. import the form helpers to make `block_editor/2` available in your form templates
+      import ColonelKurtz.FormHelpers
+
+      import Phoenix.View
+
+      import BlogDemoWeb.ErrorHelpers
+      import BlogDemoWeb.Gettext
+
+      alias BlogDemoWeb.Router.Helpers, as: Routes
+    end
+  end
+  # ...
+</code></pre>
+ </details>
+</li>
+<li>
+<p>Render your blocks inside your view's show template:</p>
+<pre><code class="language-elixir"># lib/your_app_web/templates/blocks/show.html.eex
+
+# ...
+
+&lt;%= render_blocks @post.blocks %&gt;
+
+# ...
+
+</code></pre>
+</li>
+<li>
+<p>Render the block editor field inside your view's form:</p>
+<pre><code class="language-elixir"># lib/your_app_web/templates/blocks/form.html.eex
+
+# ...
+
+&lt;%= label f, :blocks %&gt;
+&lt;%= error_tag f, :blocks %&gt;
+&lt;%= block_editor f, :blocks %&gt;
+
+# ...
+</code></pre>
+</li>
+</ol>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      5. Add your custom BlockTypes
+    </strong>
+  </summary>
+<p><strong>Note</strong>: As of this writing, there remains a lot of work to do in order to provide a default set of useful block types, some of which are already provided by <code>CKJS</code>, along with generators to aide in the creation of new block types.</p>
+<ol>
+<li>
+<p><strong>Create your BlockType module</strong>: Continuing from the example scenario outlined above, create a new block type at <code>lib/your_app/block_types/image.ex</code> where <code>image</code> is just an example of a descriptive name of the block you're modeling.</p>
+<pre><code class="language-elixir"># lib/your_app/block_types/image.ex
+
+defmodule YourApp.BlockTypes.ImageBlock do
+  # 1. use the BlockType macro, and specify the type string that matches the data returned by your CKJS block type
+  use ColonelKurtz.BlockType, type: &quot;image&quot;
+
+  # 2. use the `defattributes` macro to specify the schema for your block's content
+  defattributes(
+    src: :string,
+    width: :integer,
+    height: :integer
+  )
+
+  # 3. optional, but encouraged - define your validation rules for the block's content
+  def validate_content(_content, changeset) do
+    changeset
+    |&gt; validate_required([:src, :width, :height])
+    # ... any other custom validation rules you need ...
+  end
+
+  # 4. optional, as necessary - define validation rules for the block itself
+  def validate(_block, changeset) do
+    changeset
+    # e.g. this block must have at least 1 child block
+    |&gt; validate_length(:blocks, min: 1)
+  end
+end
+</code></pre>
+</li>
+<li>
+<p><strong>Create your BlockView</strong>: create a new block view at <code>lib/your_app_web/blocks/image_view.ex</code>.</p>
+<p><strong>Note:</strong> make sure you've configured <code>ColonelKurtzEx</code> with the location of your <code>block_views</code> and <code>block_types</code>. See &quot;<strong>Configure <code>ColonelKurtzEx</code></strong>&quot; above.</p>
+<pre><code class="language-elixir"># lib/your_app_web/blocks/image_view.ex
+
+defmodule YourAppWeb.Blocks.ImageView do
+  use YourAppWeb, :view
+  use ColonelKurtz.BlockTypeView
+
+  # optionally implement `renderable?/1`
+  def renderable?(%ImageBlock{content: %{src: &quot;&quot;}} = block), do: false
+  def renderable?(_block), do: true
+end
+</code></pre>
+</li>
+</ol>
+<hr />
+</details>
+<h2 id="faqs" class="section-heading">
+  <a href="#faqs" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  FAQs
+</h2>
+
+<details>
+  <summary>
+    <strong>
+      How does <code>ColonelKurtzEx</code> look up my custom block type and view modules?
+    </strong>
+  </summary>
+<p>You configure the <code>:block_views</code> and <code>:block_types</code> options for <code>CKEX</code> in your <code>config.exs</code> by providing the modules in your app that will contain your custom block types and views. When <code>CKEX</code> marshalls blocks JSON, it parses data into lists of maps using <a href="https://hexdocs.pm/jason/1.2.1/Jason.html"><code>Jason</code></a> and then looks up a block type based on the block's <code>type</code> field.</p>
+<p>It does so by calling <code>Module.concat</code> with the module you specified for <code>:block_types</code> and <code>Macro.camelize(type) &lt;&gt; &quot;Block&quot;</code> (e.g. <code>&quot;image&quot;</code> =&gt; <code>YourApp.BlockTypes.ImageBlock</code>).</p>
+<p>Similarly, to lookup your view modules <code>CKEX</code> calls <code>Module.concat</code> with the module you specified for <code>:block_views</code> and <code>Macro.camelize(type) &lt;&gt; &quot;View&quot;</code> (e.g. <code>&quot;image&quot;</code> =&gt; <code>YourAppWeb.Blocks.ImageView</code>).</p>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      How can I inspect the block data or errors in a nice format?
+    </strong>
+  </summary>
+<p>Take a look at the functions provided in <a href="ColonelKurtz.FormHelpers.html"><code>ColonelKurtz.FormHelpers</code></a>, specifically <code>blocks_json/3</code> and <code>block_errors_json/3</code>. Both of these methods accept a third argument which is a list of options to pass to <a href="https://hexdocs.pm/jason/1.2.1/Jason.Encoder.html"><code>Jason.Encoder</code></a> (hint: try <code>pretty: true</code>).</p>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
+      My block type schema changed, how can I migrate my existing block data?
+    </strong>
+  </summary>
+<p>Congratulations, you've discovered an unsolved Hard Problem™.</p>
+<p>We're currently working on a proposal for library changes that might better facilitate data migrations on CK block JSON.</p>
+<p>In the meantime, it is recommended to leverage your RDBMS's capabilities for querying and modifying JSON. Our best advice for now is: As much as you can, try to avoid the need to migrate CK JSON data.</p>
+<hr />
+</details>
 <h2 id="development" class="section-heading">
   <a href="#development" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Development
@@ -86,29 +414,27 @@ colonel_kurtz_ex      </a>
   Code Quality
 </h3>
 
-<p>To support high code quality this project uses <a href="https://github.com/jeremyjh/dialyxir">dialyxir</a> and <a href="https://github.com/rrrene/credo">credo</a> for static code analysis and <a href="https://hexdocs.pm/ex_unit/ExUnit.html">ExUnit</a> for testing.</p>
+<p>To help maintain high code quality this project uses <a href="https://github.com/jeremyjh/dialyxir">dialyxir</a> and <a href="https://github.com/rrrene/credo">credo</a> for static code analysis, <a href="https://hexdocs.pm/ex_unit/ExUnit.html">ExUnit</a> for testing and <a href="https://github.com/parroty/excoveralls">ExCoveralls</a> for test coverage.</p>
 <h4>Typespecs</h4>
-<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">dialyzer</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">dialyzer</span><span class="w">
+</span></code></pre>
 <h4>Code Style</h4>
-<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">credo</span><span class="w"> </span><span class="o">--</span><span class="n">strict</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">credo</span><span class="w"> </span><span class="o">--</span><span class="n">strict</span><span class="w">
+</span></code></pre>
 <h4>Tests</h4>
-<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">test</span></code></pre>
+<pre><code class="nohighlight makeup elixir"><span class="n">mix</span><span class="w"> </span><span class="n">test</span><span class="w">
+</span></code></pre>
 <h2 id="contributing" class="section-heading">
   <a href="#contributing" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Contributing
 </h2>
 
 <ol>
-<li><a href="http://github.com/vigetlabs/colonel_kurtz_ex/fork">Fork</a> the library
-</li>
-<li>Create your feature branch (<code class="inline">git checkout -b my-new-feature</code>)
-</li>
-<li>Commit your changes (<code class="inline">git commit -am &#39;Add some feature&#39;</code>)
-</li>
-<li>Push to the branch (<code class="inline">git push origin my-new-feature</code>)
-</li>
-<li>Create new Pull Request
-</li>
+<li><a href="http://github.com/vigetlabs/colonel_kurtz_ex/fork">Fork</a> the library</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
 </ol>
 <h2 id="authors" class="section-heading">
   <a href="#authors" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
@@ -116,10 +442,8 @@ colonel_kurtz_ex      </a>
 </h2>
 
 <ul>
-<li>Solomon Hawk (@solomonhawk)
-</li>
-<li>Dylan Lederle-Ensign (@dlederle)
-</li>
+<li>Solomon Hawk (@solomonhawk)</li>
+<li>Dylan Lederle-Ensign (@dlederle)</li>
 </ul>
 <h2 id="license" class="section-heading">
   <a href="#license" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>

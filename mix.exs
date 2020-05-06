@@ -17,7 +17,10 @@ defmodule ColonelKurtz.MixProject do
       docs: [
         main: "readme",
         extras: ["README.md"],
-        output: "docs"
+        output: "docs",
+        assets: "assets",
+        before_closing_head_tag: &docs_before_closing_head_tag/1,
+        markdown_processor: ExDoc.Markdown.Cmark
       ]
     ]
   end
@@ -48,7 +51,8 @@ defmodule ColonelKurtz.MixProject do
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19", only: [:dev, :test]},
-      {:excoveralls, "~> 0.10", only: :test}
+      {:excoveralls, "~> 0.10", only: :test},
+      {:cmark, "~> 0.7", only: :dev}
     ]
   end
 
@@ -59,4 +63,9 @@ defmodule ColonelKurtz.MixProject do
       ignore_warnings: "config/.dialyzer_ignore.exs"
     ]
   end
+
+  defp docs_before_closing_head_tag(:html) do
+    ~s(<link rel="stylesheet" href="assets/docs.css" />)
+  end
+  defp docs_before_closing_head_tag(_), do: ""
 end

@@ -8,10 +8,10 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.Validation — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-33f157f782.js"></script>
+    <script src="dist/sidebar_items-8967fb76bd.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
-  </head>
+<link rel="stylesheet" href="assets/docs.css" />  </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
 <div class="main">
@@ -68,7 +68,7 @@ ColonelKurtz.Validation      </h1>
 
 
         <section id="moduledoc">
-<p>ColonolKurtz.Validation provides <a href="#validate_blocks/2"><code class="inline">validate_blocks/2</code></a> and <a href="#validate_blocks/3"><code class="inline">validate_blocks/3</code></a>
+<p>ColonolKurtz.Validation provides <a href="#validate_blocks/2"><code>validate_blocks/2</code></a> and <a href="#validate_blocks/3"><code>validate_blocks/3</code></a>
 which are used to validate block data.</p>
         </section>
 
@@ -101,14 +101,14 @@ which are used to validate block data.</p>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#validate_blocks/2">validate_blocks(changeset, field)</a>
+    <a href="#validate_blocks/2">validate_blocks(changeset, field_or_fields)</a>
   </div>
-    <div class="summary-synopsis"><p>Given a changeset with an EctoBlocks field of the name specified as <code class="inline">field</code>,
-validates the blocks contained in <code class="inline">changeset.changes.&lt;field&gt;</code>.</p></div>
+    <div class="summary-synopsis"><p>Given a changeset with an EctoBlocks field of the name specified as <code>field</code>,
+validates the blocks contained in <code>changeset.changes.&lt;field&gt;</code>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#validate_blocks/3">validate_blocks(changeset, field, opts)</a>
+    <a href="#validate_blocks/3">validate_blocks(changeset, fields, opts)</a>
   </div>
 </div>
   </div>
@@ -183,14 +183,14 @@ Functions          </h1>
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">validate_blocks(changeset, field)</h1>
+    <h1 class="signature">validate_blocks(changeset, field_or_fields)</h1>
       <div class="specs">
-          <pre>validate_blocks(<a href="#t:changeset/0">changeset</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()) :: <a href="#t:changeset/0">changeset</a>()</pre>
+          <pre>validate_blocks(<a href="#t:changeset/0">changeset</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()]) :: <a href="#t:changeset/0">changeset</a>()</pre>
       </div>
   </div>
   <section class="docstring">
-<p>Given a changeset with an EctoBlocks field of the name specified as <code class="inline">field</code>,
-validates the blocks contained in <code class="inline">changeset.changes.&lt;field&gt;</code>.</p>
+<p>Given a changeset with an EctoBlocks field of the name specified as <code>field</code>,
+validates the blocks contained in <code>changeset.changes.&lt;field&gt;</code>.</p>
 <p>Returns %Ecto.Changeset{}.</p>
   </section>
 </section>
@@ -200,7 +200,7 @@ validates the blocks contained in <code class="inline">changeset.changes.&lt;fie
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">validate_blocks(changeset, field, opts)</h1>
+    <h1 class="signature">validate_blocks(changeset, fields, opts)</h1>
       <div class="specs">
           <pre>validate_blocks(<a href="#t:changeset/0">changeset</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: <a href="#t:changeset/0">changeset</a>()</pre>
       </div>
