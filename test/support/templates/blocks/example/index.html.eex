@@ -1,0 +1,3 @@
+<div>
+  <p><%= @content.text %></p>
+</div>
