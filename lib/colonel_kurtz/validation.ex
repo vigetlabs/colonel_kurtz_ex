@@ -8,6 +8,7 @@ defmodule ColonelKurtz.Validation do
 
   alias ColonelKurtz.EctoHelpers
   alias ColonelKurtz.Validatable
+  alias ColonelKurtz.BlockTypes
 
   @type changeset :: %Ecto.Changeset{changes: map}
   @type changeset_list :: list(changeset)
@@ -64,7 +65,7 @@ defmodule ColonelKurtz.Validation do
   @spec to_changesets(list(map)) :: changeset_list
   defp to_changesets(blocks) do
     Enum.map(blocks, fn block ->
-      Validatable.changeset(block, Map.from_struct(block))
+      BlockTypes.block_type_module(block.type).changeset(block, Map.from_struct(block))
     end)
   end
 

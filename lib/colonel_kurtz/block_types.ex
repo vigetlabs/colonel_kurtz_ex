@@ -57,21 +57,9 @@ defmodule ColonelKurtz.BlockTypes do
   end
 
   @spec block_type_module(binary) :: module
-  defp block_type_module(type) do
-    case lookup_block_type_module(type) do
-      {:error, :does_not_exist, module} ->
-        raise RuntimeError,
-          message: "The application configured :block_types, but #{module} does not exist."
-
-      module ->
-        module
-    end
-  end
-
-  defp lookup_block_type_module(type) do
+  def block_type_module(type) do
     block_types_module()
-    |> block_type_module_name(type)
-    |> module_exists?()
+    |> Module.concat(Macro.camelize(type) <> "Block")
   end
 
   @spec block_types_module :: module
