@@ -6,7 +6,7 @@ defmodule ColonelKurtz.Renderer do
 
   alias ColonelKurtz.Block
 
-  @typep block :: Block.t
+  @typep block :: Block.t()
 
   @spec render_blocks(nil) :: nil
   def render_blocks(nil), do: nil

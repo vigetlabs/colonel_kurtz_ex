@@ -6,8 +6,8 @@ defmodule ColonelKurtz.BlockTypes do
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
 
-  @typep block :: Block.t
-  @typep block_struct :: BlockType.t
+  @typep block :: Block.t()
+  @typep block_struct :: BlockType.t()
 
   @doc """
   Converts serialized json into named block type structs.
@@ -56,8 +56,10 @@ defmodule ColonelKurtz.BlockTypes do
   end
 
   @spec block_type_module(binary) :: module
-  defp block_type_module(type) do
-    Module.concat(block_types_module(), Macro.camelize(type) <> "Block")
+  def block_type_module(type) do
+    block_types_module()
+    |> Module.concat(Macro.camelize(type) <> "Block")
+    |> Module.concat(Block)
   end
 
   @spec block_types_module :: module

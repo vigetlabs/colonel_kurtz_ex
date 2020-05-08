@@ -3,11 +3,10 @@ defmodule ColonelKurtzTest do
   use ExUnit.Case
   doctest ColonelKurtz
 
-  alias ColonelKurtz.Validatable
   alias ColonelKurtzTest.BlockTypes.ExampleType
 
   def example_type_with_content(content) do
-    ExampleType.from_map(%{
+    ExampleType.Block.from_map(%{
       type: "example",
       blocks: [],
       content: content
@@ -18,14 +17,14 @@ defmodule ColonelKurtzTest do
     test "example" do
       block = example_type_with_content(%{text: "Example"})
 
-      assert %ExampleType{} = block
-      assert %{valid?: true} = Validatable.changeset(block, Map.from_struct(block))
+      assert %ExampleType.Block{} = block
+      assert %{valid?: true} = ExampleType.Block.changeset(block, Map.from_struct(block))
     end
 
     test "returns false for invalid block" do
       block = example_type_with_content(%{text: ""})
 
-      assert %{valid?: false} = Validatable.changeset(block, Map.from_struct(block))
+      assert %{valid?: false} = ExampleType.Block.changeset(block, Map.from_struct(block))
     end
   end
 
@@ -35,7 +34,8 @@ defmodule ColonelKurtzTest do
         example_type_with_content(%{text: "Example"})
       ]
 
-      assert [safe: ["<div>\n  <p>", "Example", "</p>\n</div>\n"]] = ColonelKurtz.Renderer.render_blocks(blocks)
+      assert [safe: ["<div>\n  <p>", "Example", "</p>\n</div>\n"]] =
+               ColonelKurtz.Renderer.render_blocks(blocks)
     end
   end
 end

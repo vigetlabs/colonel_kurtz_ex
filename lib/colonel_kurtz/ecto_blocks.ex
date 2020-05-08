@@ -10,8 +10,8 @@ defmodule ColonelKurtz.EctoBlocks do
   alias ColonelKurtz.BlockType
   alias ColonelKurtz.BlockTypes
 
-  @typep block :: Block.t
-  @typep block_struct :: BlockType.t
+  @typep block :: Block.t()
+  @typep block_struct :: BlockType.t()
 
   def type, do: {:array, :map}
 
