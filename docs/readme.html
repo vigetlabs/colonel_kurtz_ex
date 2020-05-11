@@ -139,7 +139,7 @@ end
     <strong>1. Add Folders for BlockTypes and BlockTypeViews</strong>
   </summary>
 <p>After adding the library to your dependencies, you'll want to define a few modules in the scope of your application. One for your custom <code>BlockType</code> definitions, and one for your <code>BlockTypeView</code>s.</p>
-<p><strong>Note:</strong> <em>it is important that each of these concepts live inside some module namespace in your application so that the library can look up specific block type and view modules at runtime.</em></p>
+<p><strong>Note:</strong> <em>it is important that each of these concepts live inside a dedicated module namespace in your application so that the library can look up specific block type and view modules at runtime.</em></p>
 <details>
   <summary>
     See an example
@@ -147,7 +147,7 @@ end
 <p>For example, assuming a standard phoenix project structure:</p>
 <ol>
 <li>
-<p>Create a new subfolder inside <code>lib/your_app_web/views/</code>, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. <code>lib/your_app_web/blocks/</code> folder and <code>YourAppWeb.Blocks</code> module.).</p>
+<p>Create a new subfolder inside <code>lib/your_app_web/views/</code>, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. <code>lib/your_app_web/views/blocks/</code> folder and <code>YourAppWeb.Blocks</code> module.).</p>
 </li>
 <li>
 <p>Create a new subfolder inside <code>lib/your_app/</code>. Again, the name doesn't matter so long as you configure <code>ColonelKurtzEx</code> correctly (more information in the following section). For example, you might creat a folder named <code>lib/your_app/block_types/</code> and to contain the <code>YourApp.BlockTypes</code> namespace.</p>
@@ -190,15 +190,15 @@ end
   schema &quot;posts&quot; do
     field :title, :string
     # 3. add a field of this type, named whatever you like
-    field :blocks, EctoBlocks, default: []
+    field :content, EctoBlocks, default: []
   end
 
   def changeset(post, params \\ %{}) do
     post
     # 4. make sure you cast the new field in your changeset
-    |&gt; cast(params, [:title, :blocks])
+    |&gt; cast(params, [:title, :content])
     # 5. call `validate_blocks` passing the name of your field
-    |&gt; validate_blocks(:blocks)
+    |&gt; validate_blocks(:content)
   end
 end
 </code></pre>
@@ -206,19 +206,19 @@ end
 </li>
 <li>
 <p>Then create the migration to add the field to your database</p>
-<pre><code class="language-bash">mix ecto.gen.migration add_blocks_to_posts
+<pre><code class="language-bash">mix ecto.gen.migration add_content_to_posts
 </code></pre>
 </li>
 <li>
-<p><code>EctoBlocks</code> expects the underlying field to be a <code>:map</code> which is implemented as a <code>jsonb</code> column in databases such as Postgres.</p>
-<pre><code class="language-elixir"># priv/repo/migrations/&lt;timestamp&gt;_add_blocks_to_posts.exs
+<p><code>EctoBlocks</code> expects the underlying field to be a <code>:map</code> which is implemented as a <code>jsonb</code> column in Postgres.</p>
+<pre><code class="language-elixir"># priv/repo/migrations/&lt;timestamp&gt;_add_content_to_posts.exs
 
-defmodule YourApp.Repo.Migrations.AddBlocksToPost do
+defmodule YourApp.Repo.Migrations.AddContentToPost do
   use Ecto.Migration
 
   def change do
     alter table(&quot;posts&quot;) do
-      add :blocks, :map
+      add :content, :map
     end
   end
 end
@@ -285,11 +285,11 @@ end
 </li>
 <li>
 <p>Render your blocks inside your view's show template:</p>
-<pre><code class="language-elixir"># lib/your_app_web/templates/blocks/show.html.eex
+<pre><code class="language-elixir"># lib/your_app_web/templates/post/show.html.eex
 
 # ...
 
-&lt;%= render_blocks @post.blocks %&gt;
+&lt;%= render_blocks @post.content %&gt;
 
 # ...
 
@@ -297,13 +297,13 @@ end
 </li>
 <li>
 <p>Render the block editor field inside your view's form:</p>
-<pre><code class="language-elixir"># lib/your_app_web/templates/blocks/form.html.eex
+<pre><code class="language-elixir"># lib/your_app_web/templates/post/form.html.eex
 
 # ...
 
-&lt;%= label f, :blocks %&gt;
-&lt;%= error_tag f, :blocks %&gt;
-&lt;%= block_editor f, :blocks %&gt;
+&lt;%= label f, :content %&gt;
+&lt;%= error_tag f, :content %&gt;
+&lt;%= block_editor f, :content %&gt;
 
 # ...
 </code></pre>

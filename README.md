@@ -87,7 +87,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
   After adding the library to your dependencies, you'll want to define a few modules in the scope of your application. One for your custom `BlockType` definitions, and one for your `BlockTypeView`s.
 
-  **Note:** *it is important that each of these concepts live inside some module namespace in your application so that the library can look up specific block type and view modules at runtime.*
+  **Note:** *it is important that each of these concepts live inside a dedicated module namespace in your application so that the library can look up specific block type and view modules at runtime.*
 
 <details>
   <summary>
@@ -96,7 +96,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
   For example, assuming a standard phoenix project structure:
 
-  1. Create a new subfolder inside `lib/your_app_web/views/`, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. `lib/your_app_web/blocks/` folder and `YourAppWeb.Blocks` module.).
+  1. Create a new subfolder inside `lib/your_app_web/views/`, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. `lib/your_app_web/views/blocks/` folder and `YourAppWeb.Blocks` module.).
 
   2. Create a new subfolder inside `lib/your_app/`. Again, the name doesn't matter so long as you configure `ColonelKurtzEx` correctly (more information in the following section). For example, you might creat a folder named `lib/your_app/block_types/` and to contain the `YourApp.BlockTypes` namespace.
 </details>
@@ -144,15 +144,15 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
         schema "posts" do
           field :title, :string
           # 3. add a field of this type, named whatever you like
-          field :blocks, EctoBlocks, default: []
+          field :content, EctoBlocks, default: []
         end
 
         def changeset(post, params \\ %{}) do
           post
           # 4. make sure you cast the new field in your changeset
-          |> cast(params, [:title, :blocks])
+          |> cast(params, [:title, :content])
           # 5. call `validate_blocks` passing the name of your field
-          |> validate_blocks(:blocks)
+          |> validate_blocks(:content)
         end
       end
       ```
@@ -162,20 +162,20 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
   2. Then create the migration to add the field to your database
 
       ```bash
-      mix ecto.gen.migration add_blocks_to_posts
+      mix ecto.gen.migration add_content_to_posts
       ```
 
-  3. `EctoBlocks` expects the underlying field to be a `:map` which is implemented as a `jsonb` column in databases such as Postgres.
+  3. `EctoBlocks` expects the underlying field to be a `:map` which is implemented as a `jsonb` column in Postgres.
 
       ```elixir
-      # priv/repo/migrations/<timestamp>_add_blocks_to_posts.exs
+      # priv/repo/migrations/<timestamp>_add_content_to_posts.exs
 
-      defmodule YourApp.Repo.Migrations.AddBlocksToPost do
+      defmodule YourApp.Repo.Migrations.AddContentToPost do
         use Ecto.Migration
 
         def change do
           alter table("posts") do
-            add :blocks, :map
+            add :content, :map
           end
         end
       end
@@ -246,11 +246,11 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
   3. Render your blocks inside your view's show template:
 
       ```elixir
-      # lib/your_app_web/templates/blocks/show.html.eex
+      # lib/your_app_web/templates/post/show.html.eex
 
       # ...
 
-      <%= render_blocks @post.blocks %>
+      <%= render_blocks @post.content %>
 
       # ...
 
@@ -259,13 +259,13 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
   4. Render the block editor field inside your view's form:
 
       ```elixir
-      # lib/your_app_web/templates/blocks/form.html.eex
+      # lib/your_app_web/templates/post/form.html.eex
 
       # ...
 
-      <%= label f, :blocks %>
-      <%= error_tag f, :blocks %>
-      <%= block_editor f, :blocks %>
+      <%= label f, :content %>
+      <%= error_tag f, :content %>
+      <%= block_editor f, :content %>
 
       # ...
       ```
