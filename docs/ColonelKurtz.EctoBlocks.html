@@ -8,10 +8,10 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.EctoBlocks — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-f6d2d75e38.js"></script>
+    <script src="dist/sidebar_items-676a231aaa.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
-  </head>
+<link rel="stylesheet" href="assets/docs.css" />  </head>
   <body data-type="modules">
     <script>try { if(localStorage.getItem('night-mode') === 'true') document.body.className += ' night-mode'; } catch (e) { }</script>
 <div class="main">
@@ -67,6 +67,10 @@ colonel_kurtz_ex      </a>
 ColonelKurtz.EctoBlocks      </h1>
 
 
+        <section id="moduledoc">
+<p>Implements a custom <a href="https://hexdocs.pm/ecto/Ecto.Type.html#content">Ecto.Type</a>
+that models a serializable list of blocks stored as JSON.</p>
+        </section>
 
         <section id="summary" class="details-list">
           <h1 class="section-heading">
@@ -84,37 +88,37 @@ ColonelKurtz.EctoBlocks      </h1>
   <div class="summary-signature">
     <a href="#cast/1">cast(data)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:cast/1"><code class="inline">Ecto.Type.cast/1</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:cast/1"><code>Ecto.Type.cast/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#dump/1">dump(blocks)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:dump/1"><code class="inline">Ecto.Type.dump/1</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:dump/1"><code>Ecto.Type.dump/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#embed_as/1">embed_as(_)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:embed_as/1"><code class="inline">Ecto.Type.embed_as/1</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:embed_as/1"><code>Ecto.Type.embed_as/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#equal?/2">equal?(term1, term2)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:equal?/2"><code class="inline">Ecto.Type.equal?/2</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:equal?/2"><code>Ecto.Type.equal?/2</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#load/1">load(data)</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:load/1"><code class="inline">Ecto.Type.load/1</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:load/1"><code>Ecto.Type.load/1</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#type/0">type()</a>
   </div>
-    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:type/0"><code class="inline">Ecto.Type.type/0</code></a>.</p></div>
+    <div class="summary-synopsis"><p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:type/0"><code>Ecto.Type.type/0</code></a>.</p></div>
 </div>
   </div>
         </section>
@@ -134,9 +138,12 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">cast(data)</h1>
+      <div class="specs">
+          <pre>cast(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>() | [block()]) :: {:ok, [block_struct()]} | :error</pre>
+      </div>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:cast/1"><code class="inline">Ecto.Type.cast/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:cast/1"><code>Ecto.Type.cast/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="dump/1">
@@ -146,9 +153,12 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">dump(blocks)</h1>
+      <div class="specs">
+          <pre>dump([block_struct()]) :: {:ok, [block()]} | :error</pre>
+      </div>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:dump/1"><code class="inline">Ecto.Type.dump/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:dump/1"><code>Ecto.Type.dump/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="embed_as/1">
@@ -160,7 +170,7 @@ Functions          </h1>
     <h1 class="signature">embed_as(_)</h1>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:embed_as/1"><code class="inline">Ecto.Type.embed_as/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:embed_as/1"><code>Ecto.Type.embed_as/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="equal?/2">
@@ -172,7 +182,7 @@ Functions          </h1>
     <h1 class="signature">equal?(term1, term2)</h1>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:equal?/2"><code class="inline">Ecto.Type.equal?/2</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:equal?/2"><code>Ecto.Type.equal?/2</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="load/1">
@@ -182,9 +192,12 @@ Functions          </h1>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">load(data)</h1>
+      <div class="specs">
+          <pre>load([block()]) :: {:ok, [block_struct()]}</pre>
+      </div>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:load/1"><code class="inline">Ecto.Type.load/1</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:load/1"><code>Ecto.Type.load/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="type/0">
@@ -196,7 +209,7 @@ Functions          </h1>
     <h1 class="signature">type()</h1>
   </div>
   <section class="docstring">
-<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:type/0"><code class="inline">Ecto.Type.type/0</code></a>.</p>
+<p>Callback implementation for <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Type.html#c:type/0"><code>Ecto.Type.type/0</code></a>.</p>
   </section>
 </section>
           </div>

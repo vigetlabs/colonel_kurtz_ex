@@ -1,0 +1,18 @@
+details {
+  margin: 1rem 0;
+}
+
+summary {
+  margin-bottom: 1rem;
+}
+
+summary > .section-heading {
+  display: inline-block;
+  margin-top: 0;
+}
+
+hr {
+  border-style: solid;
+  border-width: 1px 0 0 0;
+  border-color: #373F52;
+}
