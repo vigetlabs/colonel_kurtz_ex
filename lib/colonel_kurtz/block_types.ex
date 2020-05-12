@@ -105,4 +105,17 @@ defmodule ColonelKurtz.BlockTypes do
         module
     end
   end
+
+  @spec block_types_module :: module
+  defp block_types_module do
+    case Application.fetch_env!(:colonel_kurtz_ex, ColonelKurtz) do
+      config when is_list(config) ->
+        Keyword.get(config, :block_types)
+
+      _ ->
+        raise RuntimeError,
+          message:
+            "ColonelKurtz expected the application to configure :block_types, but it was empty."
+    end
+  end
 end
