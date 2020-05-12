@@ -77,7 +77,7 @@ defmodule ColonelKurtz.BlockType do
       into a named BlockType.Content module as well.
       """
       @spec from_map(block) :: block_struct
-      def from_map(%{type: @block_type, content: content, blocks: blocks} = attrs) do
+      def from_map(%{content: content, blocks: blocks} = attrs) do
         struct!(__MODULE__,
           block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
           type: @block_type,
