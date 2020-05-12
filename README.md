@@ -76,7 +76,7 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 
 ## Getting Set Up
 
-To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz). Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to `CKJS`, you'll need to add the corresponding modules for `CKEX` (a `BlockType`, `BlockTypeView`, and template).
+To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz). Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to `CKJS`, you'll need to add the corresponding modules for `CKEX` (a `BlockType`, `BlockTypeView`, and template). In the future `CKEX` will provide generators to expedite the process of common tasks such as adding a new block type.
 
 **Note**: The following sections are expandable (and are collapsed by default).
 
@@ -98,7 +98,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
   1. Create a new subfolder inside `lib/your_app_web/views/`, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. `lib/your_app_web/views/blocks/` folder and `YourAppWeb.Blocks` module.).
 
-  2. Create a new subfolder inside `lib/your_app/`. Again, the name doesn't matter so long as you configure `ColonelKurtzEx` correctly (more information in the following section). For example, you might creat a folder named `lib/your_app/block_types/` and to contain the `YourApp.BlockTypes` namespace.
+  2. Create a new subfolder inside `lib/your_app/`. Again, the name doesn't matter so long as you configure `ColonelKurtzEx` correctly (more information in the following section). For example, you might create a folder named `lib/your_app/block_types/` and to contain the `YourApp.BlockTypes` namespace.
 </details>
 
   ---
@@ -115,7 +115,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
   ```elixir
   config :colonel_kurtz_ex, ColonelKurtz,
-    block_views: YourApp.Blocks,
+    block_views: YourAppWeb.Blocks,
     block_types: YourApp.BlockTypes
   ```
 
@@ -203,7 +203,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
           More information
         </summary>
 
-        You may import this method as needed in the views that will render blocks. Or, as a convenience, you may `import` this function automatically in all of your phoenix views by adding it to the `your_app_web.ex` definition for `view` (or `view_helpers` if you want it to be available for live views as well, example below).
+        You may import this method as needed in the views that will render blocks. Or, as a convenience, you may import this function automatically in all of your phoenix views by adding it to the `your_app_web.ex` definition for `view` (or `view_helpers` if you want it to be available for live views as well, example below).
       </details>
 
   2. In addition, to render the block editor in your forms, you'll want to pull in `ColonelKurtz.FormHelpers` too. The example below shows how to do this for all Phoenix Views in your application.
@@ -338,6 +338,18 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 <details>
   <summary>
     <strong>
+      How can I inspect the block data or errors in a nice format?
+    </strong>
+  </summary>
+
+  Take a look at the functions provided in `ColonelKurtz.FormHelpers`, specifically `blocks_json/3` and `block_errors_json/3`. Both of these methods accept a third argument which is a list of options to pass to `Jason.Encoder` (hint: try `pretty: true`).
+
+  ---
+</details>
+
+<details>
+  <summary>
+    <strong>
       How does <code>ColonelKurtzEx</code> look up my custom block type and view modules?
     </strong>
   </summary>
@@ -347,18 +359,6 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
   It does so by calling `Module.concat` with the module you specified for `:block_types` and `Macro.camelize(type) <> "Block"` (e.g. `"image"` => `YourApp.BlockTypes.ImageBlock`).
 
   Similarly, to lookup your view modules `CKEX` calls `Module.concat` with the module you specified for `:block_views` and `Macro.camelize(type) <> "View"` (e.g. `"image"` => `YourAppWeb.Blocks.ImageView`).
-
-  ---
-</details>
-
-<details>
-  <summary>
-    <strong>
-      How can I inspect the block data or errors in a nice format?
-    </strong>
-  </summary>
-
-  Take a look at the functions provided in `ColonelKurtz.FormHelpers`, specifically `blocks_json/3` and `block_errors_json/3`. Both of these methods accept a third argument which is a list of options to pass to `Jason.Encoder` (hint: try `pretty: true`).
 
   ---
 </details>

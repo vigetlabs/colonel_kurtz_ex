@@ -132,7 +132,7 @@ end
   Getting Set Up
 </h2>
 
-<p>To get set up with <code>ColonelKurtzEx</code>, you'll need to install and configure <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a>. Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to <code>CKJS</code>, you'll need to add the corresponding modules for <code>CKEX</code> (a <code>BlockType</code>, <code>BlockTypeView</code>, and template).</p>
+<p>To get set up with <code>ColonelKurtzEx</code>, you'll need to install and configure <a href="https://github.com/vigetlabs/colonel-kurtz">Colonel Kurtz</a>. Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to <code>CKJS</code>, you'll need to add the corresponding modules for <code>CKEX</code> (a <code>BlockType</code>, <code>BlockTypeView</code>, and template). In the future <code>CKEX</code> will provide generators to expedite the process of common tasks such as adding a new block type.</p>
 <p><strong>Note</strong>: The following sections are expandable (and are collapsed by default).</p>
 <details>
   <summary>
@@ -150,7 +150,7 @@ end
 <p>Create a new subfolder inside <code>lib/your_app_web/views/</code>, using whatever name you'd like that corresponds with the module you'll be defining views inside (e.g. <code>lib/your_app_web/views/blocks/</code> folder and <code>YourAppWeb.Blocks</code> module.).</p>
 </li>
 <li>
-<p>Create a new subfolder inside <code>lib/your_app/</code>. Again, the name doesn't matter so long as you configure <code>ColonelKurtzEx</code> correctly (more information in the following section). For example, you might creat a folder named <code>lib/your_app/block_types/</code> and to contain the <code>YourApp.BlockTypes</code> namespace.</p>
+<p>Create a new subfolder inside <code>lib/your_app/</code>. Again, the name doesn't matter so long as you configure <code>ColonelKurtzEx</code> correctly (more information in the following section). For example, you might create a folder named <code>lib/your_app/block_types/</code> and to contain the <code>YourApp.BlockTypes</code> namespace.</p>
 </li>
 </ol>
 </details>
@@ -164,7 +164,7 @@ end
   </summary>
 <p>Add the following to your <code>config/config.exs</code> to allow <code>CKEX</code> to locate your custom <code>BlockType</code> and <code>BlockTypeView</code> modules:</p>
 <pre><code class="language-elixir">config :colonel_kurtz_ex, ColonelKurtz,
-  block_views: YourApp.Blocks,
+  block_views: YourAppWeb.Blocks,
   block_types: YourApp.BlockTypes
 </code></pre>
 <hr />
@@ -245,7 +245,7 @@ end
    <summary>
      More information
    </summary>
-<p>You may import this method as needed in the views that will render blocks. Or, as a convenience, you may <code>import</code> this function automatically in all of your phoenix views by adding it to the <code>your_app_web.ex</code> definition for <code>view</code> (or <code>view_helpers</code> if you want it to be available for live views as well, example below).</p>
+<p>You may import this method as needed in the views that will render blocks. Or, as a convenience, you may import this function automatically in all of your phoenix views by adding it to the <code>your_app_web.ex</code> definition for <code>view</code> (or <code>view_helpers</code> if you want it to be available for live views as well, example below).</p>
  </details>
 </li>
 <li>
@@ -376,21 +376,21 @@ end
 <details>
   <summary>
     <strong>
+      How can I inspect the block data or errors in a nice format?
+    </strong>
+  </summary>
+<p>Take a look at the functions provided in <a href="ColonelKurtz.FormHelpers.html"><code>ColonelKurtz.FormHelpers</code></a>, specifically <code>blocks_json/3</code> and <code>block_errors_json/3</code>. Both of these methods accept a third argument which is a list of options to pass to <a href="https://hexdocs.pm/jason/1.2.1/Jason.Encoder.html"><code>Jason.Encoder</code></a> (hint: try <code>pretty: true</code>).</p>
+<hr />
+</details>
+<details>
+  <summary>
+    <strong>
       How does <code>ColonelKurtzEx</code> look up my custom block type and view modules?
     </strong>
   </summary>
 <p>You configure the <code>:block_views</code> and <code>:block_types</code> options for <code>CKEX</code> in your <code>config.exs</code> by providing the modules in your app that will contain your custom block types and views. When <code>CKEX</code> marshalls blocks JSON, it parses data into lists of maps using <a href="https://hexdocs.pm/jason/1.2.1/Jason.html"><code>Jason</code></a> and then looks up a block type based on the block's <code>type</code> field.</p>
 <p>It does so by calling <code>Module.concat</code> with the module you specified for <code>:block_types</code> and <code>Macro.camelize(type) &lt;&gt; &quot;Block&quot;</code> (e.g. <code>&quot;image&quot;</code> =&gt; <code>YourApp.BlockTypes.ImageBlock</code>).</p>
 <p>Similarly, to lookup your view modules <code>CKEX</code> calls <code>Module.concat</code> with the module you specified for <code>:block_views</code> and <code>Macro.camelize(type) &lt;&gt; &quot;View&quot;</code> (e.g. <code>&quot;image&quot;</code> =&gt; <code>YourAppWeb.Blocks.ImageView</code>).</p>
-<hr />
-</details>
-<details>
-  <summary>
-    <strong>
-      How can I inspect the block data or errors in a nice format?
-    </strong>
-  </summary>
-<p>Take a look at the functions provided in <a href="ColonelKurtz.FormHelpers.html"><code>ColonelKurtz.FormHelpers</code></a>, specifically <code>blocks_json/3</code> and <code>block_errors_json/3</code>. Both of these methods accept a third argument which is a list of options to pass to <a href="https://hexdocs.pm/jason/1.2.1/Jason.Encoder.html"><code>Jason.Encoder</code></a> (hint: try <code>pretty: true</code>).</p>
 <hr />
 </details>
 <details>
