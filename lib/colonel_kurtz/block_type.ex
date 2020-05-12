@@ -1,13 +1,23 @@
 defmodule ColonelKurtz.BlockType do
+  @moduledoc """
+  The BlockType module defines a macro that is used to mix in the Block Type
+  behavior. Block Types are embedded Ecto Schemas. 
+
+  A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
+  well-defined schema with content attributes (`content`). The content schema is
+  defined by a user in a `TypeName.Content` module. The Block Type schema
+  `embeds_one` of the generated Content module.
+  """
+
   defmacro __using__(_opts) do
     quote do
       @type t :: %{
-        :__struct__ => atom,
-        required(:block_id) => nil | binary,
-        required(:type) => binary,
-        required(:content) => map,
-        required(:blocks) => list(t)
-      }
+              :__struct__ => atom,
+              required(:block_id) => nil | binary,
+              required(:type) => binary,
+              required(:content) => map,
+              required(:blocks) => list(t)
+            }
       @typep changeset :: Ecto.Changeset.t()
 
       use Ecto.Schema
@@ -21,7 +31,6 @@ defmodule ColonelKurtz.BlockType do
 
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      # Lookup content module
       @content_module Module.concat(__MODULE__, Content)
 
       embedded_schema do
@@ -81,7 +90,7 @@ defmodule ColonelKurtz.BlockType do
       # So we lift the errors from the nested changeset into the block's changeset.
       #
       def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
-      when is_list(errors) do
+          when is_list(errors) do
         Enum.reduce(errors, changeset, fn {key, {message, opts}}, acc ->
           acc
           |> Map.put(:valid?, false)
@@ -104,4 +113,3 @@ defmodule ColonelKurtz.BlockType do
     end
   end
 end
-

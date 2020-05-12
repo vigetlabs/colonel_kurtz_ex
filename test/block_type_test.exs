@@ -5,7 +5,6 @@ defmodule ColonelKurtzTest.BlockTypeTest do
 
   doctest ColonelKurtz.BlockType
 
-  alias ColonelKurtz.Validatable
   alias ColonelKurtzTest.BlockTypes.ExampleBlock
 
   describe "BlockType" do
@@ -13,13 +12,13 @@ defmodule ColonelKurtzTest.BlockTypeTest do
       block = build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})
 
       assert %ExampleBlock{} = block
-      assert %{valid?: true} = Validatable.changeset(block, Map.from_struct(block))
+      assert %{valid?: true} = ExampleBlock.changeset(block, Map.from_struct(block))
     end
 
     test "returns false for invalid block" do
       block = build_block_type(ExampleBlock, type: "example", content: %{text: ""})
 
-      assert %{valid?: false} = Validatable.changeset(block, Map.from_struct(block))
+      assert %{valid?: false} = ExampleBlock.changeset(block, Map.from_struct(block))
     end
   end
 

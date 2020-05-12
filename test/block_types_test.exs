@@ -5,7 +5,6 @@ defmodule ColonelKurtzTest.BlockTypesTest do
 
   doctest ColonelKurtz.BlockTypes
 
-  alias ColonelKurtz.BlockTypes
   alias ColonelKurtzTest.BlockTypes.ExampleBlock
 
   describe "BlockTypes" do

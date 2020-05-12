@@ -1,8 +1,6 @@
-defmodule ColonelKurtzTest.BlockTypes.ExampleBlock do
+defmodule ColonelKurtzTest.BlockTypes.ExampleBlock.Content do
   @moduledoc false
-  use ColonelKurtz.BlockType
-
-  import Ecto.Changeset
+  use ColonelKurtz.BlockTypeContent
 
   embedded_schema do
     field(:text, :string)

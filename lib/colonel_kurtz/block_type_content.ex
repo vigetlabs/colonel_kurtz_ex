@@ -6,67 +6,75 @@ defmodule ColonelKurtz.BlockTypeContent do
           optional(any) => any
         }
 
-  defmacro __using__(schema: schema, block_module: block_module) do
+  defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
       @primary_key false
 
-      import unquote(__MODULE__)
       import Ecto.Changeset
+      import ColonelKurtz.BlockTypeContent
 
       alias ColonelKurtz.BlockTypes
-      alias ColonelKurtz.Validatable
 
-      @block_module unquote(block_module)
+      @derive [Jason.Encoder]
 
-      @derive [
-        Validatable,
-        {Jason.Encoder, only: unquote(Keyword.keys(schema))}
-      ]
-      embedded_schema do
-        unquote do
-          for {name, type} <- schema do
-            quote do
-              field(unquote(name), unquote(type))
-            end
-          end
-        end
+      @before_compile ColonelKurtz.BlockTypeContent
+
+      def changeset(content, params) do
+        embeds = __schema__(:embeds)
+        fields = __schema__(:fields) -- embeds
+
+        cset =
+          struct!(__MODULE__)
+          |> cast(params_map(params), fields)
+
+        cset =
+          Enum.reduce(embeds, cset, fn embed_name, cset ->
+            cast_embed(cset, embed_name)
+          end)
+
+        validate(content, cset)
       end
 
       def from_map(attrs) do
         struct_attrs =
-          for {name, type} <- unquote(schema),
+          for name <- __schema__(:fields),
               into: Keyword.new(),
               do: {name, Map.get(attrs, name)}
 
         struct!(__MODULE__, struct_attrs)
       end
 
-      def changeset(content, params) do
-        cset =
-          struct!(__MODULE__)
-          |> cast(params_map(params), Keyword.keys(unquote(schema)))
-
-        Validatable.validate(content, cset)
-      end
-
-      def validate(content, changeset) do
-        apply(@block_module, :validate_content, [content, changeset])
-      end
+      def validate(_content, changeset), do: changeset
+      defoverridable validate: 2
     end
   end
 
-  defmacro defcontentmodule(attrs) do
-    schema = Keyword.get(attrs, :schema)
-    block_module = Keyword.get(attrs, :block_module)
-
-    quote do
-      defmodule Content do
-        @moduledoc false
-        use ColonelKurtz.BlockTypeContent,
-          schema: unquote(schema),
-          block_module: unquote(block_module)
+  def __before_compile__(%{module: module}) do
+    block_module_contents =
+      quote do
+        use ColonelKurtz.BlockType
       end
+
+    module
+    |> get_block_module_name()
+    |> maybe_create(block_module_contents)
+  end
+
+  defp get_block_module_name(content_module_name) do
+    content_module_name
+    |> Module.split()
+    |> Enum.drop(-1)
+    |> Module.concat()
+  end
+
+  defp maybe_create(module, module_contents) do
+    case ColonelKurtz.Utils.module_exists?(module) do
+      false ->
+        Module.create(module, module_contents, Macro.Env.location(__ENV__))
+
+      true ->
+        module
     end
   end
 
