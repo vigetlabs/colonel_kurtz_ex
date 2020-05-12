@@ -7,7 +7,6 @@ defmodule ColonelKurtz.Validation do
   import Ecto.Changeset
 
   alias ColonelKurtz.EctoHelpers
-  alias ColonelKurtz.Validatable
   alias ColonelKurtz.BlockTypes
 
   @type changeset :: %Ecto.Changeset{changes: map}
