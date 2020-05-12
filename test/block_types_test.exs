@@ -20,7 +20,7 @@ defmodule ColonelKurtzTest.BlockTypesTest do
     end
 
     test "from_map/1 returns a named block type struct" do
-      assert %ExampleBlock{} = build_block_type(ExampleBlock)
+      assert %ExampleBlock{} = build_block_type(ExampleBlock, type: "example")
     end
   end
 end

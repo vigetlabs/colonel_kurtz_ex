@@ -5,6 +5,7 @@ defmodule ColonelKurtz.BlockTypes do
 
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
+  alias ColonelKurtz.Utils
 
   @typep block :: Block.t
   @typep block_struct :: BlockType.t
@@ -68,14 +69,14 @@ defmodule ColonelKurtz.BlockTypes do
 
   defp lookup_block_type_module(type) do
     block_types_module()
-    |> Module.concat(Macro.camelize(type) <> "Block")
+    |> block_type_module_name(type)
     |> module_exists?()
   end
 
   @spec block_types_module :: module
   defp block_types_module do
-    with {:ok, config} <- fetch_config(),
-         {:ok, module} <- block_types_config(config) do
+    with {:ok, config} <- Utils.fetch_config(),
+         {:ok, module} <- Utils.block_types_config(config) do
       module
     else
       {:error, :missing_config} ->
@@ -90,22 +91,12 @@ defmodule ColonelKurtz.BlockTypes do
     end
   end
 
-  defp fetch_config() do
-    case Application.fetch_env(:colonel_kurtz_ex, ColonelKurtz) do
-      :error -> {:error, :missing_config}
-      config -> config
-    end
-  end
-
-  defp block_types_config(config) do
-    case Keyword.fetch(config, :block_types) do
-      :error -> {:error, :missing_block_types}
-      block_types -> block_types
-    end
+  defp block_type_module_name(module, type) do
+    Module.concat(module, Macro.camelize(type) <> "Block")
   end
 
   defp module_exists?(module) do
-    case function_exported?(module, :__info__, 1) do
+    case Utils.module_exists?(module) do
       false ->
         {:error, :does_not_exist, module}
 
