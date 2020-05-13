@@ -15,7 +15,7 @@ defmodule ColonelKurtz.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [coveralls: :test, check: :test],
-      docs: docs()
+      docs: docs(),
       package: package(),
       source_url: "https://github.com/vigetlabs/colonel_kurtz_ex",
       description: description()
