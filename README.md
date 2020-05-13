@@ -253,7 +253,8 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
               # 1. import `render_blocks/1` so that it is available for all views
               import ColonelKurtz, only: [render_blocks: 1, block_editor: 2]
 
-              # 2. optional: import all of the form helpers if you want to use other methods (such as `blocks_json/2` or `block_errors_json/2`)
+              # 2. optional: import all of the form helpers if you want to use other functions
+              #    (such as `blocks_json/2` or `block_errors_json/2`)
               import ColonelKurtz.FormHelpers
 
               import Phoenix.View
@@ -295,6 +296,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
       # ...
       ```
 
+      Note: The `block_editor` helper outputs some markup that you must [mount`CKJS`](https://github.com/vigetlabs/colonel-kurtz/tree/master/docs#creating-an-editor) on.
   ---
 </details>
 
@@ -312,7 +314,9 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
       ```elixir
       # lib/your_app/block_types/image.ex
 
-      # 1. optional, you may choose to define the `<type>Block` module if you need to add validation at the block level (for most use cases you can skip this step; it's only necessary if you need to validate e.g. that a block has a particular number of child `:blocks`).
+      # 1. optional, you may choose to define the `<type>Block` module if you need to add validation
+      #     at the block level (for most use cases you can skip this step; it's only necessary if
+      #     you need to validate e.g. that a block has a particular number of child `:blocks`).
       defmodule YourApp.BlockTypes.ImageBlock do
         use ColonelKurtz.BlockType
 
@@ -325,7 +329,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
       # 2. define the `<type>Block.Content` module within your configured `:block_types` namespace
       defmodule YourApp.BlockTypes.ImageBlock.Content do
-        # 3. use the BlockType macro, and specify the type string that matches the data returned by your CKJS block type
+        # 3. use the BlockType macro
         use ColonelKurtz.BlockTypeContent
 
         # 4. use the `embedded_schema` macro to specify the schema for your block's content
