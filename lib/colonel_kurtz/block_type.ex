@@ -47,8 +47,6 @@ defmodule ColonelKurtz.BlockType do
 
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      @content_module Module.concat(__MODULE__, Content)
-
       @derive [Jason.Encoder]
 
       embedded_schema do
