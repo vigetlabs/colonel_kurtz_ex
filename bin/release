@@ -76,7 +76,7 @@ echo "✅"
 # Ensure working directory is clean
 #
 echo -n "Checking for clean git working directory... "
-if [[ ! -n $(git status -s) ]]; then
+if [[ -n $(git status -s) ]]; then
   echo -e "🚫\\nYou have changes in your working tree. Please stash or commit them before issuing a release."
   exit 1
 fi
