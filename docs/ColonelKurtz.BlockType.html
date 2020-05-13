@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.BlockType — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-676a231aaa.js"></script>
+    <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
 <link rel="stylesheet" href="assets/docs.css" />  </head>
@@ -64,18 +64,20 @@ colonel_kurtz_ex      </a>
 
       <h1>
         <small class="app-vsn">colonel_kurtz_ex v0.1.0</small>
-ColonelKurtz.BlockType      </h1>
+ColonelKurtz.BlockType          <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type.ex#L1" title="View Source" class="view-source" rel="help">
+            <span class="icon-code" aria-hidden="true"></span>
+            <span class="sr-only">View Source</span>
+          </a>
+      </h1>
 
 
         <section id="moduledoc">
 <p>The BlockType module defines a macro that is used to mix in the Block Type
-behavior. Block Types are embedded Ecto Schemas that conform to the
-Validatable protocol.</p>
+behavior. Block Types are embedded Ecto Schemas.</p>
 <p>A Block has a <code>type</code> (e.g. &quot;image&quot;), a list of children (<code>blocks</code>), and a
 well-defined schema with content attributes (<code>content</code>). The content schema is
-defined by a user call to the <code>defattributes</code> macro, which generates an
-embedded schema under the hood. The Block Type schema <code>embeds_one</code> of the
-generated Content module.</p>
+defined by a user in a <code>TypeName.Content</code> module. The Block Type schema
+<code>embeds_one</code> of the Content module.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -90,11 +92,6 @@ generated Content module.</p>
     <h2>
       <a href="#types">Types</a>
     </h2>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#t:changeset/0">changeset()</a>
-  </div>
-</div>
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#t:t/0">t()</a>
@@ -113,15 +110,8 @@ generated Content module.</p>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#attributes_from_params/2">attributes_from_params(schema_keys, params)</a>
+    <a href="#attributes_from_params/1">attributes_from_params(params)</a>
   </div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#defattributes/1">defattributes(attrs)</a>
-  </div>
-    <div class="summary-synopsis"><p>Macro that is part of the BlockType DSL allowing users to specify the schema
-for their custom BlockType's Content. Takes a keyword list of {name, type}.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
@@ -139,20 +129,6 @@ for their custom BlockType's Content. Takes a keyword list of {name, type}.</p><
             </a>
 Types          </h1>
           <div class="types-list">
-<section class="detail" id="t:changeset/0">
-  <div class="detail-header">
-    <a href="#t:changeset/0" class="detail-link" title="Link to this type">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature">changeset()</h1>
-      <div class="specs">
-          <pre>changeset() :: <a href="https://hexdocs.pm/ecto/3.4.3/Ecto.Changeset.html#t:t/0">Ecto.Changeset.t</a>()</pre>
-      </div>
-  </div>
-  <section class="docstring">
-  </section>
-</section>
 <section class="detail" id="t:t/0">
   <div class="detail-header">
     <a href="#t:t/0" class="detail-link" title="Link to this type">
@@ -160,6 +136,10 @@ Types          </h1>
       <span class="sr-only">Link to this type</span>
     </a>
     <h1 class="signature">t()</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type.ex#L16" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
       <div class="specs">
           <pre>t() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){
   block_id: nil | <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
@@ -189,38 +169,32 @@ Functions          </h1>
       <span class="sr-only">Link to this macro</span>
     </a>
     <h1 class="signature">__using__(opts)</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type.ex#L29" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
       <span class="note">(macro)</span>
   </div>
   <section class="docstring">
 <p>The BlockType <strong>using</strong> macro allows modules to behave as BlockTypes.</p>
   </section>
 </section>
-<section class="detail" id="attributes_from_params/2">
+<section class="detail" id="attributes_from_params/1">
   <div class="detail-header">
-    <a href="#attributes_from_params/2" class="detail-link" title="Link to this function">
+    <a href="#attributes_from_params/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">attributes_from_params(schema_keys, params)</h1>
+    <h1 class="signature">attributes_from_params(params)</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type.ex#L129" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
       <div class="specs">
-          <pre>attributes_from_params([<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()], <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
+          <pre>attributes_from_params(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
       </div>
   </div>
   <section class="docstring">
-  </section>
-</section>
-<section class="detail" id="defattributes/1">
-  <div class="detail-header">
-    <a href="#defattributes/1" class="detail-link" title="Link to this macro">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this macro</span>
-    </a>
-    <h1 class="signature">defattributes(attrs)</h1>
-      <span class="note">(macro)</span>
-  </div>
-  <section class="docstring">
-<p>Macro that is part of the BlockType DSL allowing users to specify the schema
-for their custom BlockType's Content. Takes a keyword list of {name, type}.</p>
   </section>
 </section>
 <section class="detail" id="lift_content_errors/1">
@@ -230,8 +204,12 @@ for their custom BlockType's Content. Takes a keyword list of {name, type}.</p>
       <span class="sr-only">Link to this function</span>
     </a>
     <h1 class="signature">lift_content_errors(changeset)</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type.ex#L112" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
       <div class="specs">
-          <pre>lift_content_errors(<a href="#t:changeset/0">changeset</a>()) :: <a href="#t:changeset/0">changeset</a>()</pre>
+          <pre>lift_content_errors(changeset()) :: changeset()</pre>
       </div>
   </div>
   <section class="docstring">

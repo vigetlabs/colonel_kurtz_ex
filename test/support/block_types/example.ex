@@ -1,12 +1,12 @@
-defmodule ColonelKurtzTest.BlockTypes.ExampleBlock do
+defmodule ColonelKurtzTest.BlockTypes.ExampleBlock.Content do
   @moduledoc false
-  use ColonelKurtz.BlockType, type: "example"
+  use ColonelKurtz.BlockTypeContent
 
-  import Ecto.Changeset
+  embedded_schema do
+    field(:text, :string, null: false)
+  end
 
-  defattributes(text: :string)
-
-  def validate_content(_content, changeset) do
+  def validate(_content, changeset) do
     changeset
     |> validate_required(:text)
   end

@@ -1,11 +1,11 @@
 defmodule ColonelKurtzTest.BlockTypeTest do
   @moduledoc false
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use ColonelKurtzTest.BlockBuilders
+  use ColonelKurtzTest.TestConfig
 
   doctest ColonelKurtz.BlockType
 
-  alias ColonelKurtz.Validatable
   alias ColonelKurtzTest.BlockTypes.ExampleBlock
 
   describe "BlockType" do
@@ -13,17 +13,21 @@ defmodule ColonelKurtzTest.BlockTypeTest do
       block = build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})
 
       assert %ExampleBlock{} = block
-      assert %{valid?: true} = Validatable.changeset(block, Map.from_struct(block))
+      assert %{valid?: true} = ExampleBlock.changeset(block, Map.from_struct(block))
     end
 
     test "returns false for invalid block" do
       block = build_block_type(ExampleBlock, type: "example", content: %{text: ""})
 
-      assert %{valid?: false} = Validatable.changeset(block, Map.from_struct(block))
+      assert %{valid?: false} = ExampleBlock.changeset(block, Map.from_struct(block))
     end
   end
 
   describe "Renderer" do
+    test "render_blocks/1 renders nothing if given no blocks" do
+      assert [] = ColonelKurtz.Renderer.render_blocks([])
+    end
+
     test "render_blocks/1 renders blocks" do
       blocks = [
         build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})

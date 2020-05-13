@@ -1,5 +1,5 @@
 defmodule ColonelKurtzTest do
   @moduledoc false
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest ColonelKurtz
 end

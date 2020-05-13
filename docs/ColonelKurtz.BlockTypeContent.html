@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
-    <title>ColonelKurtz.Renderer — colonel_kurtz_ex v0.1.0</title>
+    <title>ColonelKurtz.BlockTypeContent — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
     <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
@@ -64,7 +64,7 @@ colonel_kurtz_ex      </a>
 
       <h1>
         <small class="app-vsn">colonel_kurtz_ex v0.1.0</small>
-ColonelKurtz.Renderer          <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/renderer.ex#L1" title="View Source" class="view-source" rel="help">
+ColonelKurtz.BlockTypeContent          <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type_content.ex#L1" title="View Source" class="view-source" rel="help">
             <span class="icon-code" aria-hidden="true"></span>
             <span class="sr-only">View Source</span>
           </a>
@@ -72,8 +72,13 @@ ColonelKurtz.Renderer          <a href="https://github.com/vigetlabs/colonel_kur
 
 
         <section id="moduledoc">
-<p>Provides a utility for rendering blocks. Requires the application to configure
-:block_views for ColonelKurtz.</p>
+<p><code>BlockTypeContent</code> is used to model the inner <code>content</code> field for a given block
+type. Each block type has a unique schema represented by an Ecto.Schema that
+defines an <code>embedded_schema</code> for the expected fields (corresponding with the
+JS implementation for this block type).</p>
+<p>Modules that use this macro may optionally define a <code>validate/2</code> that receives
+the Content struct and a changeset with the fields in their <code>embedded_schema</code>
+already cast and ready to be validated.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -84,23 +89,62 @@ ColonelKurtz.Renderer          <a href="https://github.com/vigetlabs/colonel_kur
             </a>
             Summary
           </h1>
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:t/0">t()</a>
+  </div>
+</div>
+  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#block_view_module!/1">block_view_module!(type)</a>
+    <a href="#__using__/1">__using__(opts)</a>
   </div>
+    <div class="summary-synopsis"><p>Macro for mixing in the BlockTypeContent behavior.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#render_blocks/1">render_blocks(blocks)</a>
+    <a href="#params_map/1">params_map(params)</a>
   </div>
 </div>
   </div>
         </section>
 
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Types          </h1>
+          <div class="types-list">
+<section class="detail" id="t:t/0">
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">t()</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type_content.ex#L16" class="view-source" rel="help" title="View Source">
+       <span class="icon-code" aria-hidden="true"></span>
+       <span class="sr-only">View Source</span>
+     </a>
+      <div class="specs">
+          <pre>t() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){optional(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) => <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+          </div>
+        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -109,38 +153,36 @@ ColonelKurtz.Renderer          <a href="https://github.com/vigetlabs/colonel_kur
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="block_view_module!/1">
+<section class="detail" id="__using__/1">
   <div class="detail-header">
-    <a href="#block_view_module!/1" class="detail-link" title="Link to this function">
+    <a href="#__using__/1" class="detail-link" title="Link to this macro">
       <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this function</span>
+      <span class="sr-only">Link to this macro</span>
     </a>
-    <h1 class="signature">block_view_module!(type)</h1>
-      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/renderer.ex#L46" class="view-source" rel="help" title="View Source">
+    <h1 class="signature">__using__(opts)</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type_content.ex#L24" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
-      <div class="specs">
-          <pre>block_view_module!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">none</a>()</pre>
-      </div>
+      <span class="note">(macro)</span>
   </div>
   <section class="docstring">
+<p>Macro for mixing in the BlockTypeContent behavior.</p>
   </section>
 </section>
-<section class="detail" id="render_blocks/1">
+<section class="detail" id="params_map/1">
   <div class="detail-header">
-    <a href="#render_blocks/1" class="detail-link" title="Link to this function">
+    <a href="#params_map/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">render_blocks(blocks)</h1>
-      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/renderer.ex#L14" class="view-source" rel="help" title="View Source">
+    <h1 class="signature">params_map(params)</h1>
+      <a href="https://github.com/vigetlabs/colonel_kurtz_ex/blob/master/lib/colonel_kurtz/block_type_content.ex#L103" class="view-source" rel="help" title="View Source">
        <span class="icon-code" aria-hidden="true"></span>
        <span class="sr-only">View Source</span>
      </a>
       <div class="specs">
-          <pre>render_blocks(nil) :: nil</pre>
-          <pre>render_blocks([block()]) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">iodata</a>()</pre>
+          <pre>params_map(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
       </div>
   </div>
   <section class="docstring">

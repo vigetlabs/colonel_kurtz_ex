@@ -6,14 +6,14 @@ defmodule ColonelKurtz.Validation do
 
   import Ecto.Changeset
 
+  alias ColonelKurtz.BlockTypes
   alias ColonelKurtz.EctoHelpers
-  alias ColonelKurtz.Validatable
 
-  @type changeset :: %Ecto.Changeset{changes: map}
-  @type changeset_list :: list(changeset)
+  @typep changeset :: %Ecto.Changeset{changes: map}
+  @typep changeset_list :: list(changeset)
 
   @doc """
-  Given a changeset with an EctoBlocks field of the name specified as `field`,
+  Given a changeset with an CKBlocks field of the name specified as `field`,
   validates the blocks contained in `changeset.changes.<field>`.
 
   Returns %Ecto.Changeset{}.
@@ -64,7 +64,7 @@ defmodule ColonelKurtz.Validation do
   @spec to_changesets(list(map)) :: changeset_list
   defp to_changesets(blocks) do
     Enum.map(blocks, fn block ->
-      Validatable.changeset(block, Map.from_struct(block))
+      BlockTypes.block_type_module!(block.type).changeset(block, Map.from_struct(block))
     end)
   end
 
@@ -111,10 +111,12 @@ defmodule ColonelKurtz.Validation do
     put_change(changeset, field, block_changesets)
   end
 
+  #
   # Is there another way to do this which is not recursive? The main trouble
   # is we need a deeply nested tree of changesets in order to collect all the
   # errors which requires us to `put_change` via Ecto in order to ensure
   # `changeset.changes.blocks` is a changeset rather than data.
+  #
   @spec map_blocks_errors(changeset_list) :: list(map)
   defp map_blocks_errors(block_changesets) do
     Enum.map(block_changesets, fn %{changes: changes, errors: errors} ->

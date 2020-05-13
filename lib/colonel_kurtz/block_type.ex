@@ -1,23 +1,17 @@
 defmodule ColonelKurtz.BlockType do
   @moduledoc """
   The BlockType module defines a macro that is used to mix in the Block Type
-  behavior. Block Types are embedded Ecto Schemas that conform to the
-  Validatable protocol.
+  behavior. Block Types are embedded Ecto Schemas.
 
   A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
   well-defined schema with content attributes (`content`). The content schema is
-  defined by a user call to the `defattributes` macro, which generates an
-  embedded schema under the hood. The Block Type schema `embeds_one` of the
-  generated Content module.
+  defined by a user in a `TypeName.Content` module. The Block Type schema
+  `embeds_one` of the Content module.
   """
 
-  import Ecto.Changeset, only: [add_error: 4]
-  import ColonelKurtz.BlockTypeContent, only: [defcontentmodule: 1]
+  import Ecto.Changeset
 
-  alias ColonelKurtz.Block
   alias ColonelKurtz.EctoHelpers
-
-  @type changeset :: Ecto.Changeset.t()
 
   @type t :: %{
           :__struct__ => atom,
@@ -27,64 +21,40 @@ defmodule ColonelKurtz.BlockType do
           required(:blocks) => list(t)
         }
 
+  @typep changeset :: Ecto.Changeset.t()
+
   @doc """
   The BlockType __using__ macro allows modules to behave as BlockTypes.
   """
-  defmacro __using__(opts) do
+  defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
-      @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      import unquote(__MODULE__),
-        only: [
-          defattributes: 1,
-          attributes_from_params: 2,
-          lift_content_errors: 1
-        ]
-
-      import Ecto.Changeset
       import ColonelKurtz.Validation, only: [validate_blocks: 3]
+      import Ecto.Changeset
+      import ColonelKurtz.BlockType
 
       alias ColonelKurtz.Block
-      alias ColonelKurtz.BlockTypes
-      alias ColonelKurtz.EctoBlocks
-      alias ColonelKurtz.Validatable
+      alias ColonelKurtz.BlockType
+      alias ColonelKurtz.CKBlocks
+      alias ColonelKurtz.EctoHelpers
 
-      @typep block :: Block.t()
-      @typep block_struct :: unquote(__MODULE__).t
       @typep changeset :: Ecto.Changeset.t()
+      @typep block :: block
+      @typep block_struct :: BlockType.t()
 
-      @before_compile unquote(__MODULE__)
-      @after_compile unquote(__MODULE__)
-
-      @block_type unquote(opts[:type])
       @block_attributes [:block_id, :type, :content, :blocks]
-      @content_attributes []
+
       @content_module Module.concat(__MODULE__, Content)
 
-      @derive [
-        Validatable,
-        {Jason.Encoder, only: @block_attributes}
-      ]
-      embedded_schema do
-        field(:type, :string)
-        field(:blocks, EctoBlocks)
-        embeds_one(:content, @content_module)
-      end
+      @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      @doc """
-      Takes a Block map and converts it to a named BlockType struct according
-      to its :type. Generates a :block_id if necessary, and turns `block.content`
-      into a named BlockType.Content module as well.
-      """
-      @spec from_map(block) :: block_struct
-      def from_map(%{type: @block_type, content: content, blocks: blocks} = attrs) do
-        struct!(__MODULE__,
-          block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
-          type: @block_type,
-          content: @content_module.from_map(content_attributes(content)),
-          blocks: blocks || []
-        )
+      @derive {Jason.Encoder, only: @block_attributes}
+
+      embedded_schema do
+        field(:type, :string, null: false)
+        field(:blocks, CKBlocks)
+        embeds_one(:content, @content_module)
       end
 
       @doc """
@@ -93,7 +63,7 @@ defmodule ColonelKurtz.BlockType do
 
       Returns %Ecto.Changeset{}.
       """
-      @spec changeset(block_struct, block) :: changeset
+      @spec changeset(block_struct, map) :: changeset
       def changeset(block, params) do
         changeset =
           struct(__MODULE__)
@@ -102,72 +72,33 @@ defmodule ColonelKurtz.BlockType do
           |> lift_content_errors()
           |> validate_blocks(:blocks, is_block: true)
 
-        Validatable.validate(block, changeset)
+        validate(block, changeset)
       end
 
-      @doc """
-      An overridable method that gets called with the `block.content` params when
-      creating a new Block of a given type. Must return data that conforms to the
-      Content module's schema.
-
-      This is useful if you want to do any additional formatting or if any of
-      the fields in your schema are computed.
-      """
-      def content_attributes(params) do
-        attributes_from_params(content_schema_keys(), params)
-      end
-
-      defoverridable content_attributes: 1
-
+      @spec validate(block_struct, changeset) :: changeset
       def validate(_block, changeset), do: changeset
       defoverridable validate: 2
 
-      def validate_content(_content, changeset), do: changeset
-      defoverridable validate_content: 2
-    end
-  end
+      @doc """
+      Takes a Block map and converts it to a named BlockType struct according
+      to its :type. Generates a :block_id if necessary, and turns `block.content`
+      into a named BlockType.Content module as well.
+      """
+      @spec from_map(block) :: block_struct
+      def from_map(%{type: type, content: content, blocks: blocks} = attrs) do
+        content =
+          content
+          |> attributes_from_params()
+          |> @content_module.from_map()
 
-  @doc """
-  Macro that is part of the BlockType DSL allowing users to specify the schema
-  for their custom BlockType's Content. Takes a keyword list of {name, type}.
-  """
-  defmacro defattributes(attrs) do
-    quote do
-      @content_attributes unquote(attrs)
-    end
-  end
-
-  defmacro __before_compile__(_env) do
-    quote do
-      def content_schema_keys do
-        Keyword.keys(@content_attributes || [])
-      end
-
-      def content_schema do
-        @content_attributes || []
+        struct!(__MODULE__,
+          block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
+          type: type,
+          content: content,
+          blocks: blocks || []
+        )
       end
     end
-  end
-
-  defmacro __after_compile__(%{module: module}, _bytecode) do
-    quote do
-      defcontentmodule(
-        schema: unquote(module.content_schema()),
-        block_module: unquote(module)
-      )
-    end
-  end
-
-  #
-  # Extracts the Block's Content attributes from params, converting string keys
-  # to atoms. Will only contain the keys specified in the schema (Defined by
-  # using the `defattributes/1` macro).
-  #
-  @spec attributes_from_params(list(atom), map) :: map
-  def attributes_from_params(schema_keys, params) do
-    Enum.reduce(schema_keys, %{}, fn key, acc ->
-      Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))
-    end)
   end
 
   #
@@ -190,4 +121,16 @@ defmodule ColonelKurtz.BlockType do
   end
 
   def lift_content_errors(changeset), do: changeset
+
+  #
+  # Extracts the Block's Content attributes from params, converting string keys
+  # to atoms. Will only contain the keys specified in the schema (Defined by
+  # using the `defattributes/1` macro).
+  #
+  @spec attributes_from_params(map) :: map
+  def attributes_from_params(params) do
+    Enum.reduce(Map.keys(params), %{}, fn key, acc ->
+      Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))
+    end)
+  end
 end

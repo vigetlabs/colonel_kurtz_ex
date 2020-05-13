@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtzEx (CKEX) — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-676a231aaa.js"></script>
+    <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
 <link rel="stylesheet" href="assets/docs.css" />  </head>
@@ -127,6 +127,56 @@ colonel_kurtz_ex      </a>
 end
 </code></pre>
 <p>Documentation can be generated with <a href="https://github.com/elixir-lang/ex_doc">ExDoc</a> and published on <a href="https://hexdocs.pm">HexDocs</a>. Once published, the docs can be found at <a href="https://hexdocs.pm/colonel_kurtz_ex">https://hexdocs.pm/colonel_kurtz_ex</a>.</p>
+<h2 id="api" class="section-heading">
+  <a href="#api" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
+  API
+</h2>
+
+<p>The root module for <code>ColonelKurtzEx</code> (<a href="ColonelKurtz.html"><code>ColonelKurtz</code></a>) defines the most commonly used API methods when interacting with the library. It delegates all of the implementation to various other submodules. In most cases you won't have to think too hard about where to import things from unless you're reaching for a function that's less commonly used.</p>
+<ul>
+<li>
+<p><code>block_editor(form, field)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.FormHelpers.html#block_editor/2"><code>ColonelKurtz.FormHelpers.block_editor/2</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>block_editor(form, field, opts)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.FormHelpers.html#block_editor/3"><code>ColonelKurtz.FormHelpers.block_editor/3</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>blocks_json(form, field)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.FormHelpers.html#blocks_json/2"><code>ColonelKurtz.FormHelpers.blocks_json/2</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>blocks_json(form, field, opts)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.FormHelpers.html#blocks_json/3"><code>ColonelKurtz.FormHelpers.blocks_json/3</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>render_blocks(blocks)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.Renderer.html#render_blocks/1"><code>ColonelKurtz.Renderer.render_blocks/1</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>validate_blocks(changeset, field)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.Validation.html#validate_blocks/2"><code>ColonelKurtz.Validation.validate_blocks/2</code></a>)</li>
+</ul>
+</li>
+<li>
+<p><code>validate_blocks(changeset, field, opts)</code></p>
+<ul>
+<li>(See <a href="ColonelKurtz.Validation.html#validate_blocks/3"><code>ColonelKurtz.Validation.validate_blocks/3</code></a>)</li>
+</ul>
+</li>
+</ul>
 <h2 id="getting-set-up" class="section-heading">
   <a href="#getting-set-up" class="hover-link"><span class="icon-link" aria-hidden="true"></span></a>
   Getting Set Up
@@ -182,7 +232,7 @@ end
   use Ecto.Schema
 
   # 1. alias the custom ecto type
-  alias ColonelKurtzEx.EctoBlocks
+  alias ColonelKurtzEx.CKBlocks
 
   # 2. import the validation helper
   import ColonelKurtzEx.Validation, only: [validate_blocks: 2]
@@ -190,7 +240,7 @@ end
   schema &quot;posts&quot; do
     field :title, :string
     # 3. add a field of this type, named whatever you like
-    field :content, EctoBlocks, default: []
+    field :content, CKBlocks, default: []
   end
 
   def changeset(post, params \\ %{}) do
@@ -210,7 +260,7 @@ end
 </code></pre>
 </li>
 <li>
-<p><code>EctoBlocks</code> expects the underlying field to be a <code>:map</code> which is implemented as a <code>jsonb</code> column in Postgres.</p>
+<p><code>CKBlocks</code> expects the underlying field to be a <code>:map</code> which is implemented as a <code>jsonb</code> column in Postgres.</p>
 <pre><code class="language-elixir"># priv/repo/migrations/&lt;timestamp&gt;_add_content_to_posts.exs
 
 defmodule YourApp.Repo.Migrations.AddContentToPost do
@@ -240,7 +290,7 @@ end
   </summary>
 <ol>
 <li>
-<p>Use <a href="ColonelKurtz.Renderer.html#render_blocks/1"><code>ColonelKurtz.Renderer.render_blocks/1</code></a> to render block content somewhere in a template.</p>
+<p>Use <a href="ColonelKurtz.html#render_blocks/1"><code>ColonelKurtz.render_blocks/1</code></a> to render block content somewhere in a template.</p>
  <details>
    <summary>
      More information
@@ -249,7 +299,7 @@ end
  </details>
 </li>
 <li>
-<p>In addition, to render the block editor in your forms, you'll want to pull in <a href="ColonelKurtz.FormHelpers.html"><code>ColonelKurtz.FormHelpers</code></a> too. The example below shows how to do this for all Phoenix Views in your application.</p>
+<p>In addition, to render the block editor in your forms, you'll want to pull in <a href="ColonelKurtz.html#render_blocks/1"><code>ColonelKurtz.render_blocks/1</code></a> too. The example below shows how to do this for all Phoenix Views in your application.</p>
  <details>
    <summary>
      See an example
@@ -266,9 +316,10 @@ end
       import BlogDemoWeb.LiveHelpers
 
       # 1. import `render_blocks/1` so that it is available for all views
-      import ColonelKurtz.Renderer, only: [render_blocks: 1]
+      import ColonelKurtz, only: [render_blocks: 1, block_editor: 2]
 
-      # 2. import the form helpers to make `block_editor/2` available in your form templates
+      # 2. optional: import all of the form helpers if you want to use other functions
+      #    (such as `blocks_json/2` or `block_errors_json/2`)
       import ColonelKurtz.FormHelpers
 
       import Phoenix.View
@@ -307,6 +358,7 @@ end
 
 # ...
 </code></pre>
+<p>Note: The <code>block_editor</code> helper outputs some markup that you must <a href="https://github.com/vigetlabs/colonel-kurtz/tree/master/docs#creating-an-editor">mount<code>CKJS</code></a> on.</p>
 </li>
 </ol>
 <hr />
@@ -323,29 +375,36 @@ end
 <p><strong>Create your BlockType module</strong>: Continuing from the example scenario outlined above, create a new block type at <code>lib/your_app/block_types/image.ex</code> where <code>image</code> is just an example of a descriptive name of the block you're modeling.</p>
 <pre><code class="language-elixir"># lib/your_app/block_types/image.ex
 
+# 1. optional, you may choose to define the `&lt;type&gt;Block` module if you need to add validation
+#     at the block level (for most use cases you can skip this step; it's only necessary if
+#     you need to validate e.g. that a block has a particular number of child `:blocks`).
 defmodule YourApp.BlockTypes.ImageBlock do
-  # 1. use the BlockType macro, and specify the type string that matches the data returned by your CKJS block type
-  use ColonelKurtz.BlockType, type: &quot;image&quot;
+  use ColonelKurtz.BlockType
 
-  # 2. use the `defattributes` macro to specify the schema for your block's content
-  defattributes(
-    src: :string,
-    width: :integer,
-    height: :integer
-  )
-
-  # 3. optional, but encouraged - define your validation rules for the block's content
-  def validate_content(_content, changeset) do
-    changeset
-    |&gt; validate_required([:src, :width, :height])
-    # ... any other custom validation rules you need ...
-  end
-
-  # 4. optional, as necessary - define validation rules for the block itself
   def validate(_block, changeset) do
     changeset
     # e.g. this block must have at least 1 child block
     |&gt; validate_length(:blocks, min: 1)
+  end
+end
+
+# 2. define the `&lt;type&gt;Block.Content` module within your configured `:block_types` namespace
+defmodule YourApp.BlockTypes.ImageBlock.Content do
+  # 3. use the BlockType macro
+  use ColonelKurtz.BlockTypeContent
+
+  # 4. use the `embedded_schema` macro to specify the schema for your block's content
+  embedded_schema do
+    field :src, :string
+    field :width, :integer
+    field :height, :integer
+  end
+
+  # 5. optional, but encouraged - define your validation rules for the block's content
+  def validate(_content, changeset) do
+    changeset
+    |&gt; validate_required([:src, :width, :height])
+    # ... any other custom validation rules you need ...
   end
 end
 </code></pre>

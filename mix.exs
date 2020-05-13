@@ -9,19 +9,16 @@ defmodule ColonelKurtz.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       applications: applications(Mix.env()),
+      aliases: aliases(),
       compilers: compilers(Mix.env()),
       dialyzer: dialyzer(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [coveralls: :test],
-      docs: [
-        main: "readme",
-        extras: ["README.md"],
-        output: "docs",
-        assets: "assets",
-        before_closing_head_tag: &docs_before_closing_head_tag/1,
-        markdown_processor: ExDoc.Markdown.Cmark
-      ]
+      docs: docs(),
+      package: package(),
+      source_url: "https://github.com/vigetlabs/colonel_kurtz_ex",
+      description: description()
     ]
   end
 
@@ -41,18 +38,27 @@ defmodule ColonelKurtz.MixProject do
   def compilers(:test), do: [:phoenix] ++ Mix.compilers()
   def compilers(_), do: Mix.compilers()
 
-  # Run "mix help deps" to learn about dependencies.
+  defp description do
+    "ColonelKurtzEx facilitates working with the JavaScript block content editor [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz) in Phoenix applications."
+  end
+
   defp deps do
     [
-      {:phoenix, "~> 1.5.0"},
+      {:phoenix, "~> 1.4.17 or ~> 1.5.0"},
       {:ecto_sql, "~> 3.4"},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix_html, "~> 2.14"},
       {:jason, "~> 1.0"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19", only: [:dev, :test]},
       {:excoveralls, "~> 0.10", only: :test},
       {:cmark, "~> 0.7", only: :dev}
+    ]
+  end
+
+  def aliases do
+    [
+      check: ["credo --strict", "dialyzer", "cmd MIX_ENV=test mix test"]
     ]
   end
 
@@ -64,9 +70,29 @@ defmodule ColonelKurtz.MixProject do
     ]
   end
 
+  defp docs do
+    [
+      main: "readme",
+      extras: ["README.md"],
+      output: "docs",
+      assets: "assets",
+      before_closing_head_tag: &docs_before_closing_head_tag/1,
+      markdown_processor: ExDoc.Markdown.Cmark
+    ]
+  end
+
   defp docs_before_closing_head_tag(:html) do
     ~s(<link rel="stylesheet" href="assets/docs.css" />)
   end
 
   defp docs_before_closing_head_tag(_), do: ""
+
+  defp package do
+    [
+      name: "colonel_kurtz_ex",
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/vigetlabs/colonel_kurtz_ex"},
+      files: ~w(lib .formatter.exs mix.exs README* LICENSE* CHANGELOG*)
+    ]
+  end
 end

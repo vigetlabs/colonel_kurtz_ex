@@ -1,72 +1,101 @@
 defmodule ColonelKurtz.BlockTypeContent do
-  @moduledoc false
+  @moduledoc """
+  `BlockTypeContent` is used to model the inner `content` field for a given block
+  type. Each block type has a unique schema represented by an Ecto.Schema that
+  defines an `embedded_schema` for the expected fields (corresponding with the
+  JS implementation for this block type).
+
+  Modules that use this macro may optionally define a `validate/2` that receives
+  the Content struct and a changeset with the fields in their `embedded_schema`
+  already cast and ready to be validated.
+  """
+
+  alias ColonelKurtz.BlockType
+  alias ColonelKurtz.Utils
 
   @type t :: %{
           :__struct__ => atom,
           optional(any) => any
         }
 
-  defmacro __using__(schema: schema, block_module: block_module) do
+  @doc """
+  Macro for mixing in the BlockTypeContent behavior.
+  """
+  defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
+
+      import Ecto.Changeset
+      import ColonelKurtz.BlockTypeContent
+
+      alias ColonelKurtz.BlockTypeContent
+      alias ColonelKurtz.BlockTypes
+
+      @typep changeset :: Ecto.Changeset.t()
+      @typep block_content :: BlockTypeContent.t()
+
+      @before_compile ColonelKurtz.BlockTypeContent
+
       @primary_key false
 
-      import unquote(__MODULE__)
-      import Ecto.Changeset
+      @derive [Jason.Encoder]
 
-      alias ColonelKurtz.BlockTypes
-      alias ColonelKurtz.Validatable
+      @spec changeset(block_content, map) :: changeset
+      def changeset(content, params) do
+        embeds = __schema__(:embeds)
+        fields = __schema__(:fields) -- embeds
 
-      @block_module unquote(block_module)
+        changeset =
+          struct!(__MODULE__)
+          |> cast(params_map(params), fields)
 
-      @derive [
-        Validatable,
-        {Jason.Encoder, only: unquote(Keyword.keys(schema))}
-      ]
-      embedded_schema do
-        unquote do
-          for {name, type} <- schema do
-            quote do
-              field(unquote(name), unquote(type))
-            end
-          end
-        end
+        changeset_with_embeds =
+          Enum.reduce(embeds, changeset, fn embed_name, c ->
+            cast_embed(c, embed_name)
+          end)
+
+        validate(content, changeset_with_embeds)
       end
 
+      @spec from_map(map) :: block_content
       def from_map(attrs) do
         struct_attrs =
-          for {name, type} <- unquote(schema),
+          for name <- __schema__(:fields),
               into: Keyword.new(),
               do: {name, Map.get(attrs, name)}
 
         struct!(__MODULE__, struct_attrs)
       end
 
-      def changeset(content, params) do
-        cset =
-          struct!(__MODULE__)
-          |> cast(params_map(params), Keyword.keys(unquote(schema)))
-
-        Validatable.validate(content, cset)
-      end
-
-      def validate(content, changeset) do
-        apply(@block_module, :validate_content, [content, changeset])
-      end
+      @spec validate(block_content, changeset) :: changeset
+      def validate(_content, changeset), do: changeset
+      defoverridable validate: 2
     end
   end
 
-  defmacro defcontentmodule(attrs) do
-    schema = Keyword.get(attrs, :schema)
-    block_module = Keyword.get(attrs, :block_module)
-
-    quote do
-      defmodule Content do
-        @moduledoc false
-        use ColonelKurtz.BlockTypeContent,
-          schema: unquote(schema),
-          block_module: unquote(block_module)
+  def __before_compile__(%{module: module}) do
+    block_module_contents =
+      quote do
+        use BlockType
       end
+
+    module
+    |> get_block_module_name()
+    |> maybe_create(block_module_contents)
+  end
+
+  @spec get_block_module_name(module) :: module
+  defp get_block_module_name(content_module_name) do
+    content_module_name
+    |> Module.split()
+    |> Enum.drop(-1)
+    |> Module.concat()
+  end
+
+  @spec maybe_create(atom, Macro.t()) :: nil | {:module, module, binary, term}
+  defp maybe_create(module, module_contents) do
+    unless Utils.module_defined?(module) do
+      Module.create(module, module_contents, Macro.Env.location(__ENV__))
     end
   end
 
