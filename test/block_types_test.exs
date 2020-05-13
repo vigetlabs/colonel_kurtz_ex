@@ -19,7 +19,7 @@ defmodule ColonelKurtzTest.BlockTypesTest do
 
     test "from_map/1 throws a RuntimeError if ck configuration is missing block_types" do
       clear_config()
-      set_config([block_views: BlockTypes])
+      set_config(block_views: BlockTypes)
 
       assert_raise RuntimeError, ~r/did not provide the :block_types field/, fn ->
         BlockTypes.from_map(%{

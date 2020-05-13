@@ -9,6 +9,10 @@ defmodule ColonelKurtz.BlockType do
   `embeds_one` of the generated Content module.
   """
 
+  import Ecto.Changeset
+
+  alias ColonelKurtz.EctoHelpers
+
   @type t :: %{
           :__struct__ => atom,
           required(:block_id) => nil | binary,
@@ -17,6 +21,8 @@ defmodule ColonelKurtz.BlockType do
           required(:blocks) => list(t)
         }
 
+  @typep changeset :: Ecto.Changeset.t()
+
   @doc """
   The BlockType __using__ macro allows modules to behave as BlockTypes.
   """
@@ -24,14 +30,14 @@ defmodule ColonelKurtz.BlockType do
     quote do
       use Ecto.Schema
 
-      alias ColonelKurtz.CKBlocks
-      alias ColonelKurtz.EctoHelpers
       import ColonelKurtz.Validation, only: [validate_blocks: 3]
       import Ecto.Changeset
       import ColonelKurtz.BlockType
 
       alias ColonelKurtz.Block
       alias ColonelKurtz.BlockType
+      alias ColonelKurtz.CKBlocks
+      alias ColonelKurtz.EctoHelpers
 
       @typep changeset :: Ecto.Changeset.t()
       @typep block :: block
@@ -92,39 +98,39 @@ defmodule ColonelKurtz.BlockType do
           blocks: blocks || []
         )
       end
-
-      #
-      # Lifts errors in the nested changeset for BlockType.Content to the changeset for
-      # the BlockType itself.
-      #
-      # Explanation: Eventually, in order to surface errors for blocks in the UI, we
-      # need to traverse the blocks and extract errors from their changesets. This will
-      # not include the errors for the embedded schema for this block's Content.
-      # So we lift the errors from the nested changeset into the block's changeset.
-      #
-      @spec lift_content_errors(changeset) :: changeset
-      def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
-          when is_list(errors) do
-        Enum.reduce(errors, changeset, fn {key, {message, opts}}, acc ->
-          acc
-          |> Map.put(:valid?, false)
-          |> add_error(key, EctoHelpers.format_error(message, opts), opts)
-        end)
-      end
-
-      def lift_content_errors(changeset), do: changeset
-
-      #
-      # Extracts the Block's Content attributes from params, converting string keys
-      # to atoms. Will only contain the keys specified in the schema (Defined by
-      # using the `defattributes/1` macro).
-      #
-      @spec attributes_from_params(map) :: map
-      def attributes_from_params(params) do
-        Enum.reduce(Map.keys(params), %{}, fn key, acc ->
-          Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))
-        end)
-      end
     end
+  end
+
+  #
+  # Lifts errors in the nested changeset for BlockType.Content to the changeset for
+  # the BlockType itself.
+  #
+  # Explanation: Eventually, in order to surface errors for blocks in the UI, we
+  # need to traverse the blocks and extract errors from their changesets. This will
+  # not include the errors for the embedded schema for this block's Content.
+  # So we lift the errors from the nested changeset into the block's changeset.
+  #
+  @spec lift_content_errors(changeset) :: changeset
+  def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
+      when is_list(errors) do
+    Enum.reduce(errors, changeset, fn {key, {message, opts}}, acc ->
+      acc
+      |> Map.put(:valid?, false)
+      |> add_error(key, EctoHelpers.format_error(message, opts), opts)
+    end)
+  end
+
+  def lift_content_errors(changeset), do: changeset
+
+  #
+  # Extracts the Block's Content attributes from params, converting string keys
+  # to atoms. Will only contain the keys specified in the schema (Defined by
+  # using the `defattributes/1` macro).
+  #
+  @spec attributes_from_params(map) :: map
+  def attributes_from_params(params) do
+    Enum.reduce(Map.keys(params), %{}, fn key, acc ->
+      Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))
+    end)
   end
 end

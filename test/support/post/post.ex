@@ -1,4 +1,5 @@
 defmodule ColonelKurtzTest.Post do
+  @moduledoc false
   use Ecto.Schema
 
   import ColonelKurtz, only: [validate_blocks: 2]

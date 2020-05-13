@@ -13,10 +13,9 @@ defmodule ColonelKurtzTest.TestConfig do
     end
   end
 
-  def get_config() do
+  def get_config do
     Application.get_env(:colonel_kurtz_ex, ColonelKurtz)
   end
-
 
   def set_config(config) do
     Application.put_env(:colonel_kurtz_ex, ColonelKurtz, config)
@@ -30,7 +29,7 @@ defmodule ColonelKurtzTest.TestConfig do
     )
   end
 
-  def clear_config() do
+  def clear_config do
     Application.delete_env(:colonel_kurtz_ex, ColonelKurtz)
   end
 end
