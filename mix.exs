@@ -4,7 +4,7 @@ defmodule ColonelKurtz.MixProject do
   def project do
     [
       app: :colonel_kurtz_ex,
-      version: "0.1.0",
+      version: File.read!("VERSION") |> String.trim(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -58,7 +58,8 @@ defmodule ColonelKurtz.MixProject do
 
   def aliases do
     [
-      check: ["credo --strict", "dialyzer", "cmd MIX_ENV=test mix test"]
+      check: ["credo --strict", "dialyzer", "cmd MIX_ENV=test mix test"],
+      types: ["dialyzer"]
     ]
   end
 

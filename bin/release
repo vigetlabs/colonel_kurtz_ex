@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+
+# exit on errors
+set -o errexit
+set -o pipefail
+
+export MIX_QUIET=true
+
+#
+# Ensure semver is available (https://github.com/fsaintjacques/semver-tool/blob/master/src/semver)
+#
+echo -n "Checking for semver... "
+if [ ! $(which semver) ]; then
+  echo -e "🚫\\n'semver' is not available."
+  exit 1
+fi
+echo "✅"
+
+#
+# Validate semver bump version argument
+#
+echo -n "Checking release arguments... "
+if [[ ! $1 =~ ^(patch|minor|major|release)$ ]]; then
+  echo -e "🚫\\nPlease specify a version to bump for the release (patch, minor, major, release). You passed '$1'".
+  exit 1
+fi
+echo "✅"
+
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+NEW_VERSION=$(semver bump $1 $(cat VERSION))
+
+#
+# Only allow releases to happen in clean master branches
+#
+echo -n "Checking for git master branch... "
+if [ ! $GIT_BRANCH == "master" ]; then
+  echo -e "🚫\\nReleases should only happen from the master branch. You have '$GIT_BRANCH' checked out."
+  exit 1
+fi
+echo "✅"
+
+#
+# Confirm release
+#
+read -p "> Are you sure you want to bump the $1 version and release '$NEW_VERSION'? (y/n) " CHOICE
+case "$CHOICE" in
+  n|N ) echo "Release cancelled" && exit 1;;
+  y|Y ) ;;
+  * ) echo "Invalid response." && exit 1;;
+esac
+
+#
+# Ensure formatting is up to date
+#
+echo -n "Running 'mix format'... "
+mix format --check-formatted
+echo "✅"
+
+#
+# Ensure working directory is clean
+#
+echo -n "Checking for clean git working directory... "
+if [[ -n $(git status -s) ]]; then
+  echo -e "🚫\\nYou have changes in your working tree. Please stash or commit them before issuing a release."
+  exit 1
+fi
+echo "✅"
+
+#
+# Run checks (credo, dialyzer, test)
+#
+echo -n "Running mix checks... "
+mix credo --strict && \
+mix test && \
+mix types --quiet || echo -e "🚫 One or more mix checks failed." && exit 1
+echo "✅"
+
+#
+# Bump version number
+#
+echo -n "Bumping $1 version... "
+echo $NEW_VERSION > VERSION
+echo "✅"
+
+#
+# Generate and commit updated docs
+#
+echo "Updating docs... "
+mix docs
+
+git add VERSION
+git add docs
+git commit -m "[release] $NEW_VERSION Bump $1 version, update docs/"
+echo "✅ Docs updated and committed"
+
+#
+# Create new git tag
+#
+echo "Tagging $NEW_VERSION for release..."
+git tag -a $NEW_VERSION -m "[release] Add tag for $NEW_VERSION"
+git push origin master --tags
+echo "✅ Tagged release and pushed up the master branch"
+
+#
+# Publish to hex
+#
+echo -n "Publishing to hex... "
+mix hex.publish || echo "🚫 Publication failed!" && exit 1
+echo "✅ Publication successful for $NEW_VERSION!"
