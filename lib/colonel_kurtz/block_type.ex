@@ -6,7 +6,7 @@ defmodule ColonelKurtz.BlockType do
   A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
   well-defined schema with content attributes (`content`). The content schema is
   defined by a user in a `TypeName.Content` module. The Block Type schema
-  `embeds_one` of the generated Content module.
+  `embeds_one` of the Content module.
   """
 
   import Ecto.Changeset
