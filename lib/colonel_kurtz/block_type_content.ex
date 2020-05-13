@@ -94,7 +94,7 @@ defmodule ColonelKurtz.BlockTypeContent do
 
   @spec maybe_create(atom, Macro.t()) :: nil | {:module, module, binary, term}
   defp maybe_create(module, module_contents) do
-    unless Utils.module_exists?(module) do
+    unless Utils.module_defined?(module) do
       Module.create(module, module_contents, Macro.Env.location(__ENV__))
     end
   end

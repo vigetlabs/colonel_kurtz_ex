@@ -5,6 +5,8 @@ defmodule ColonelKurtz.Renderer do
   """
 
   alias ColonelKurtz.Block
+  alias ColonelKurtz.Config
+  alias ColonelKurtz.Utils
 
   @typep block :: Block.t()
 
@@ -19,7 +21,7 @@ defmodule ColonelKurtz.Renderer do
   @spec render_block(block) :: iodata
   defp render_block(%{type: type} = block) do
     type
-    |> view_module()
+    |> block_view_module!()
     |> maybe_render_block(block)
   end
 
@@ -40,21 +42,49 @@ defmodule ColonelKurtz.Renderer do
     ]
   end
 
-  @spec view_module(binary) :: module
-  defp view_module(type) do
-    Module.concat(block_views_module(), Macro.camelize(type) <> "View")
+  @spec block_view_module!(binary) :: module | none
+  def block_view_module!(type) do
+    case lookup_block_view_module!(type) do
+      {:error, :does_not_exist, module} ->
+        raise RuntimeError,
+          message: "The application configured :block_types, but #{module} does not exist."
+
+      {:ok, module} ->
+        module
+    end
   end
 
-  @spec block_views_module :: module
-  defp block_views_module do
-    case Application.get_env(:colonel_kurtz_ex, ColonelKurtz) do
-      config when is_list(config) ->
-        Keyword.get(config, :block_views)
+  @spec lookup_block_view_module!(binary) :: {:ok, module} | {:error, :does_not_exist, module}
+  defp lookup_block_view_module!(type) do
+    case block_views_module() do
+      {:ok, module} ->
+        module
+        |> block_view_module_name(type)
+        |> Utils.module_exists?()
 
-      _ ->
+      {:error, :missing_field, field} ->
         raise RuntimeError,
           message:
-            "ColonelKurtz expected the application to configure :block_views, but it was empty."
+            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+
+      {:error, :missing_config} ->
+        raise RuntimeError,
+          message:
+            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
     end
+  end
+
+  @spec block_views_module ::
+          {:ok, module} | {:error, :missing_config} | {:error, :missing_field, :block_views}
+  defp block_views_module do
+    with {:ok, config} <- Config.fetch_config(),
+         {:ok, module} <- Config.get(config, :block_views) do
+      {:ok, module}
+    end
+  end
+
+  @spec block_view_module_name(module, binary) :: module
+  defp block_view_module_name(module, type) do
+    Module.concat(module, Macro.camelize(type) <> "View")
   end
 end

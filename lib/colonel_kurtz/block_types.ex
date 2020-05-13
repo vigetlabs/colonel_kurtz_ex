@@ -78,7 +78,7 @@ defmodule ColonelKurtz.BlockTypes do
           {:ok, module} | {:error, atom} | {:error, atom, module}
   defp lookup_block_type_module(type) do
     with {:ok, block_types} <- block_types_module(),
-         {:ok, module} <- module_exists?(block_type_module_name(block_types, type)) do
+         {:ok, module} <- Utils.module_exists?(block_type_module_name(block_types, type)) do
       {:ok, module}
     end
   end
@@ -89,7 +89,7 @@ defmodule ColonelKurtz.BlockTypes do
       {:ok, module} ->
         module
         |> block_type_module_name(type)
-        |> module_exists?()
+        |> Utils.module_exists?()
 
       {:error, :missing_field, field} ->
         raise RuntimeError,
@@ -115,16 +115,5 @@ defmodule ColonelKurtz.BlockTypes do
   @spec block_type_module_name(module, binary) :: module
   defp block_type_module_name(module, type) do
     Module.concat(module, Macro.camelize(type) <> "Block")
-  end
-
-  @spec module_exists?(module) :: {:ok, module} | {:error, :does_not_exist, module}
-  defp module_exists?(module) do
-    case Utils.module_exists?(module) do
-      false ->
-        {:error, :does_not_exist, module}
-
-      true ->
-        {:ok, module}
-    end
   end
 end

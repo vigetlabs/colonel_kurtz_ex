@@ -29,6 +29,19 @@ defmodule ColonelKurtzTest.BlockTypesTest do
       end
     end
 
+    test "render_blocks/1 throws a RuntimeError if ck configuration is missing block_views" do
+      clear_config()
+      set_config(block_types: ColonelKurtzTest.BlockTypes)
+
+      assert_raise RuntimeError, ~r/did not provide the :block_views field/, fn ->
+        ColonelKurtz.render_blocks([
+          BlockTypes.from_map(%{
+            type: "example"
+          })
+        ])
+      end
+    end
+
     test "from_map/1 throws a RuntimeError if ck configuration is missing" do
       clear_config()
 
