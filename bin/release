@@ -76,7 +76,7 @@ echo "✅"
 # Ensure working directory is clean
 #
 echo -n "Checking for clean git working directory... "
-if [[ -n $(git status -s) ]]; then
+if [[ ! -n $(git status -s) ]]; then
   echo -e "🚫\\nYou have changes in your working tree. Please stash or commit them before issuing a release."
   exit 1
 fi
@@ -90,19 +90,25 @@ export MIX_QUIET=true
 #
 echo -n "Running 'mix format'... "
 mix format --check-formatted || \
-echo -e "\\n🚫 Mix formatting is out of sync. Run 'mix format', commit the results, and restart the release." && \
-exit 1
+(
+  echo -e "\\n🚫 Mix formatting is out of sync. Run 'mix format', commit the results, and restart the release." && \
+  exit 1
+)
 echo "✅"
 
 #
 # Run checks (credo, dialyzer, test)
 #
-echo -n "Running mix checks... "
-mix credo --strict && \
-mix test && \
-mix types --quiet || echo -e "🚫 One or more mix checks failed." && \
-exit 1
-echo "✅"
+echo "Running mix checks... "
+(
+  mix credo --strict && \
+  mix test && \
+  mix types --quiet
+) || ( \
+  echo "🚫 One or more mix checks failed." && \
+  exit 1
+)
+echo "✅ All mix checks passed successfully!"
 
 #
 # Bump version number
