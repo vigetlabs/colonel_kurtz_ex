@@ -1,7 +1,7 @@
 defmodule ColonelKurtz.BlockType do
   @moduledoc """
   The BlockType module defines a macro that is used to mix in the Block Type
-  behavior. Block Types are embedded Ecto Schemas. 
+  behavior. Block Types are embedded Ecto Schemas.
 
   A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
   well-defined schema with content attributes (`content`). The content schema is
@@ -9,33 +9,45 @@ defmodule ColonelKurtz.BlockType do
   `embeds_one` of the generated Content module.
   """
 
+  @type t :: %{
+          :__struct__ => atom,
+          required(:block_id) => nil | binary,
+          required(:type) => binary,
+          required(:content) => map,
+          required(:blocks) => list(t)
+        }
+
+  @doc """
+  The BlockType __using__ macro allows modules to behave as BlockTypes.
+  """
   defmacro __using__(_opts) do
     quote do
-      @type t :: %{
-              :__struct__ => atom,
-              required(:block_id) => nil | binary,
-              required(:type) => binary,
-              required(:content) => map,
-              required(:blocks) => list(t)
-            }
-      @typep changeset :: Ecto.Changeset.t()
-
       use Ecto.Schema
-      alias ColonelKurtz.EctoBlocks
+
+      alias ColonelKurtz.CKBlocks
       alias ColonelKurtz.EctoHelpers
       import ColonelKurtz.Validation, only: [validate_blocks: 3]
       import Ecto.Changeset
       import ColonelKurtz.BlockType
 
-      @derive [Jason.Encoder]
+      alias ColonelKurtz.Block
+      alias ColonelKurtz.BlockType
+
+      @typep changeset :: Ecto.Changeset.t()
+      @typep block :: block
+      @typep block_struct :: BlockType.t()
+
+      @content_module Module.concat(__MODULE__, Content)
 
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
       @content_module Module.concat(__MODULE__, Content)
 
+      @derive [Jason.Encoder]
+
       embedded_schema do
         field(:type, :string, null: false)
-        field(:blocks, EctoBlocks)
+        field(:blocks, CKBlocks)
         embeds_one(:content, @content_module)
       end
 
@@ -45,7 +57,7 @@ defmodule ColonelKurtz.BlockType do
 
       Returns %Ecto.Changeset{}.
       """
-      @spec changeset(t, map) :: changeset
+      @spec changeset(block_struct, map) :: changeset
       def changeset(block, params) do
         changeset =
           struct(__MODULE__)
@@ -57,7 +69,7 @@ defmodule ColonelKurtz.BlockType do
         validate(block, changeset)
       end
 
-      @spec validate(t, changeset) :: changeset
+      @spec validate(block_struct, changeset) :: changeset
       def validate(_block, changeset), do: changeset
       defoverridable validate: 2
 
@@ -66,6 +78,7 @@ defmodule ColonelKurtz.BlockType do
       to its :type. Generates a :block_id if necessary, and turns `block.content`
       into a named BlockType.Content module as well.
       """
+      @spec from_map(block) :: block_struct
       def from_map(%{type: type, content: content, blocks: blocks} = attrs) do
         content =
           content
@@ -89,6 +102,7 @@ defmodule ColonelKurtz.BlockType do
       # not include the errors for the embedded schema for this block's Content.
       # So we lift the errors from the nested changeset into the block's changeset.
       #
+      @spec lift_content_errors(changeset) :: changeset
       def lift_content_errors(%{changes: %{content: %{errors: errors}}} = changeset)
           when is_list(errors) do
         Enum.reduce(errors, changeset, fn {key, {message, opts}}, acc ->
@@ -105,6 +119,7 @@ defmodule ColonelKurtz.BlockType do
       # to atoms. Will only contain the keys specified in the schema (Defined by
       # using the `defattributes/1` macro).
       #
+      @spec attributes_from_params(map) :: map
       def attributes_from_params(params) do
         Enum.reduce(Map.keys(params), %{}, fn key, acc ->
           Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))

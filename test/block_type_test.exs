@@ -1,7 +1,8 @@
 defmodule ColonelKurtzTest.BlockTypeTest do
   @moduledoc false
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   use ColonelKurtzTest.BlockBuilders
+  use ColonelKurtzTest.TestConfig
 
   doctest ColonelKurtz.BlockType
 
@@ -23,6 +24,10 @@ defmodule ColonelKurtzTest.BlockTypeTest do
   end
 
   describe "Renderer" do
+    test "render_blocks/1 renders nothing if given no blocks" do
+      assert [] = ColonelKurtz.Renderer.render_blocks([])
+    end
+
     test "render_blocks/1 renders blocks" do
       blocks = [
         build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})

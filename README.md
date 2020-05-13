@@ -136,7 +136,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
         use Ecto.Schema
 
         # 1. alias the custom ecto type
-        alias ColonelKurtzEx.EctoBlocks
+        alias ColonelKurtzEx.CKBlocks
 
         # 2. import the validation helper
         import ColonelKurtzEx.Validation, only: [validate_blocks: 2]
@@ -144,7 +144,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
         schema "posts" do
           field :title, :string
           # 3. add a field of this type, named whatever you like
-          field :content, EctoBlocks, default: []
+          field :content, CKBlocks, default: []
         end
 
         def changeset(post, params \\ %{}) do
@@ -165,7 +165,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
       mix ecto.gen.migration add_content_to_posts
       ```
 
-  3. `EctoBlocks` expects the underlying field to be a `:map` which is implemented as a `jsonb` column in Postgres.
+  3. `CKBlocks` expects the underlying field to be a `:map` which is implemented as a `jsonb` column in Postgres.
 
       ```elixir
       # priv/repo/migrations/<timestamp>_add_content_to_posts.exs

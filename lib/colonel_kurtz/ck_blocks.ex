@@ -1,4 +1,4 @@
-defmodule ColonelKurtz.EctoBlocks do
+defmodule ColonelKurtz.CKBlocks do
   @moduledoc """
   Implements a custom [Ecto.Type](https://hexdocs.pm/ecto/Ecto.Type.html#content)
   that models a serializable list of blocks stored as JSON.

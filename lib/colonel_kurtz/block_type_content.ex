@@ -1,41 +1,66 @@
 defmodule ColonelKurtz.BlockTypeContent do
-  @moduledoc false
+  @moduledoc """
+  `BlockTypeContent` is used to model the inner `content` field for a given block
+  type. Each block type has a unique schema represented by an Ecto.Schema that
+  defines an `embedded_schema` for the expected fields (corresponding with the
+  JS implementation for this block type).
+
+  Modules that use this macro may optionally define a `validate/2` that receives
+  the Content struct and a changeset with the fields in their `embedded_schema`
+  already cast and ready to be validated.
+  """
+
+  alias ColonelKurtz.BlockType
+  alias ColonelKurtz.Utils
 
   @type t :: %{
           :__struct__ => atom,
           optional(any) => any
         }
 
+  @typep module_body ::
+           {:use, [context: atom, import: atom], [{:__aliases__, [alias: boolean], list(atom)}]}
+
+  @doc """
+  Macro for mixing in the BlockTypeContent behavior.
+  """
   defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
-      @primary_key false
 
       import Ecto.Changeset
       import ColonelKurtz.BlockTypeContent
 
+      alias ColonelKurtz.BlockTypeContent
       alias ColonelKurtz.BlockTypes
 
-      @derive [Jason.Encoder]
+      @typep changeset :: Ecto.Changeset.t()
+      @typep block_content :: block_content
 
       @before_compile ColonelKurtz.BlockTypeContent
 
+      @primary_key false
+
+      @derive [Jason.Encoder]
+
+      @spec changeset(block_content, map) :: changeset
       def changeset(content, params) do
         embeds = __schema__(:embeds)
         fields = __schema__(:fields) -- embeds
 
-        cset =
+        changeset =
           struct!(__MODULE__)
           |> cast(params_map(params), fields)
 
-        cset =
-          Enum.reduce(embeds, cset, fn embed_name, cset ->
-            cast_embed(cset, embed_name)
+        changeset_with_embeds =
+          Enum.reduce(embeds, changeset, fn embed_name, c ->
+            cast_embed(c, embed_name)
           end)
 
-        validate(content, cset)
+        validate(content, changeset_with_embeds)
       end
 
+      @spec from_map(keyword) :: block_content
       def from_map(attrs) do
         struct_attrs =
           for name <- __schema__(:fields),
@@ -45,6 +70,7 @@ defmodule ColonelKurtz.BlockTypeContent do
         struct!(__MODULE__, struct_attrs)
       end
 
+      @spec validate(block_content, changeset) :: changeset
       def validate(_content, changeset), do: changeset
       defoverridable validate: 2
     end
@@ -53,7 +79,7 @@ defmodule ColonelKurtz.BlockTypeContent do
   def __before_compile__(%{module: module}) do
     block_module_contents =
       quote do
-        use ColonelKurtz.BlockType
+        use BlockType
       end
 
     module
@@ -61,6 +87,7 @@ defmodule ColonelKurtz.BlockTypeContent do
     |> maybe_create(block_module_contents)
   end
 
+  @spec get_block_module_name(module) :: module
   defp get_block_module_name(content_module_name) do
     content_module_name
     |> Module.split()
@@ -68,13 +95,10 @@ defmodule ColonelKurtz.BlockTypeContent do
     |> Module.concat()
   end
 
+  @spec maybe_create(atom, module_body) :: nil | {:module, module, binary, term}
   defp maybe_create(module, module_contents) do
-    case ColonelKurtz.Utils.module_exists?(module) do
-      false ->
-        Module.create(module, module_contents, Macro.Env.location(__ENV__))
-
-      true ->
-        module
+    unless Utils.module_exists?(module) do
+      Module.create(module, module_contents, Macro.Env.location(__ENV__))
     end
   end
 

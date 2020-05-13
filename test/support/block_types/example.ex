@@ -3,7 +3,7 @@ defmodule ColonelKurtzTest.BlockTypes.ExampleBlock.Content do
   use ColonelKurtz.BlockTypeContent
 
   embedded_schema do
-    field(:text, :string)
+    field(:text, :string, null: false)
   end
 
   def validate(_content, changeset) do
