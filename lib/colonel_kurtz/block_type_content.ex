@@ -57,7 +57,7 @@ defmodule ColonelKurtz.BlockTypeContent do
         validate(content, changeset_with_embeds)
       end
 
-      @spec from_map(keyword) :: block_content
+      @spec from_map(map) :: block_content
       def from_map(attrs) do
         struct_attrs =
           for name <- __schema__(:fields),

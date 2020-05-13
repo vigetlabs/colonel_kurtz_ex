@@ -14,7 +14,7 @@ defmodule ColonelKurtz.MixProject do
       dialyzer: dialyzer(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, check: :test],
+      preferred_cli_env: [coveralls: :test],
       docs: docs(),
       package: package(),
       source_url: "https://github.com/vigetlabs/colonel_kurtz_ex",
@@ -58,7 +58,7 @@ defmodule ColonelKurtz.MixProject do
 
   def aliases do
     [
-      check: ["do credo --strict, dialyzer, test"]
+      check: ["credo --strict", "dialyzer", "cmd MIX_ENV=test mix test"]
     ]
   end
 
