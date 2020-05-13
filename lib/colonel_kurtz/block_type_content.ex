@@ -35,7 +35,7 @@ defmodule ColonelKurtz.BlockTypeContent do
       alias ColonelKurtz.BlockTypes
 
       @typep changeset :: Ecto.Changeset.t()
-      @typep block_content :: block_content
+      @typep block_content :: BlockTypeContent.t()
 
       @before_compile ColonelKurtz.BlockTypeContent
 
@@ -95,7 +95,7 @@ defmodule ColonelKurtz.BlockTypeContent do
     |> Module.concat()
   end
 
-  @spec maybe_create(atom, module_body) :: nil | {:module, module, binary, term}
+  @spec maybe_create(atom, Macro.t()) :: nil | {:module, module, binary, term}
   defp maybe_create(module, module_contents) do
     unless Utils.module_exists?(module) do
       Module.create(module, module_contents, Macro.Env.location(__ENV__))
