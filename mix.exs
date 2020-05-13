@@ -44,9 +44,9 @@ defmodule ColonelKurtz.MixProject do
 
   defp deps do
     [
-      {:phoenix, "~> 1.5.0"},
+      {:phoenix, "~> 1.4.17 or ~> 1.5.0"},
       {:ecto_sql, "~> 3.4"},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix_html, "~> 2.14"},
       {:jason, "~> 1.0"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
