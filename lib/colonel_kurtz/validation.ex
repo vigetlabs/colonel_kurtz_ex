@@ -99,8 +99,13 @@ defmodule ColonelKurtz.Validation do
   end
 
   @spec maybe_put_block_changes(changeset, changeset_list, atom, boolean) :: changeset
-  defp maybe_put_block_changes(%Ecto.Changeset{} = changeset, _block_changesets, _field, false = _is_block),
-    do: changeset
+  defp maybe_put_block_changes(
+         %Ecto.Changeset{} = changeset,
+         _block_changesets,
+         _field,
+         false = _is_block
+       ),
+       do: changeset
 
   defp maybe_put_block_changes(changeset, block_changesets, field, true = _is_block) do
     put_change(changeset, field, block_changesets)

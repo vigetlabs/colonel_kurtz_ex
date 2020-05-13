@@ -1,4 +1,4 @@
-defmodule ColonelKurtzTest.BlockTypes.ExampleType do
+defmodule ColonelKurtzTest.BlockTypes.ExampleBlock do
   @moduledoc false
   use ColonelKurtz.BlockType, type: "example"
 
