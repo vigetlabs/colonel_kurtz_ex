@@ -8,7 +8,7 @@
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
     <title>ColonelKurtz.Validation — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
-    <script src="dist/sidebar_items-676a231aaa.js"></script>
+    <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
     <script async src="dist/app-a225d03098e64fef431a.js"></script>
 <link rel="stylesheet" href="assets/docs.css" />  </head>
@@ -80,21 +80,6 @@ which are used to validate block data.</p>
             </a>
             Summary
           </h1>
-  <div class="summary-types summary">
-    <h2>
-      <a href="#types">Types</a>
-    </h2>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#t:changeset/0">changeset()</a>
-  </div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#t:changeset_list/0">changeset_list()</a>
-  </div>
-</div>
-  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
@@ -103,7 +88,7 @@ which are used to validate block data.</p>
   <div class="summary-signature">
     <a href="#validate_blocks/2">validate_blocks(changeset, field_or_fields)</a>
   </div>
-    <div class="summary-synopsis"><p>Given a changeset with an EctoBlocks field of the name specified as <code>field</code>,
+    <div class="summary-synopsis"><p>Given a changeset with an CKBlocks field of the name specified as <code>field</code>,
 validates the blocks contained in <code>changeset.changes.&lt;field&gt;</code>.</p></div>
 </div>
 <div class="summary-row">
@@ -114,61 +99,6 @@ validates the blocks contained in <code>changeset.changes.&lt;field&gt;</code>.<
   </div>
         </section>
 
-        <section id="types" class="details-list">
-          <h1 class="section-heading">
-            <a class="hover-link" href="#types">
-              <span class="icon-link" aria-hidden="true"></span>
-              <span class="sr-only">Link to this section</span>
-            </a>
-Types          </h1>
-          <div class="types-list">
-<section class="detail" id="t:changeset/0">
-  <div class="detail-header">
-    <a href="#t:changeset/0" class="detail-link" title="Link to this type">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature">changeset()</h1>
-      <div class="specs">
-          <pre>changeset() :: %Ecto.Changeset{
-  action: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  changes: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  constraints: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  data: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  empty_values: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  errors: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  filters: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  params: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  prepare: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  repo: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  repo_changes: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  repo_opts: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  required: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  types: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  valid?: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>(),
-  validations: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()
-}</pre>
-      </div>
-  </div>
-  <section class="docstring">
-  </section>
-</section>
-<section class="detail" id="t:changeset_list/0">
-  <div class="detail-header">
-    <a href="#t:changeset_list/0" class="detail-link" title="Link to this type">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this type</span>
-    </a>
-    <h1 class="signature">changeset_list()</h1>
-      <div class="specs">
-          <pre>changeset_list() :: [<a href="#t:changeset/0">changeset</a>()]</pre>
-      </div>
-  </div>
-  <section class="docstring">
-  </section>
-</section>
-          </div>
-        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -185,11 +115,11 @@ Functions          </h1>
     </a>
     <h1 class="signature">validate_blocks(changeset, field_or_fields)</h1>
       <div class="specs">
-          <pre>validate_blocks(<a href="#t:changeset/0">changeset</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()]) :: <a href="#t:changeset/0">changeset</a>()</pre>
+          <pre>validate_blocks(changeset(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>() | [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()]) :: changeset()</pre>
       </div>
   </div>
   <section class="docstring">
-<p>Given a changeset with an EctoBlocks field of the name specified as <code>field</code>,
+<p>Given a changeset with an CKBlocks field of the name specified as <code>field</code>,
 validates the blocks contained in <code>changeset.changes.&lt;field&gt;</code>.</p>
 <p>Returns %Ecto.Changeset{}.</p>
   </section>

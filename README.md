@@ -74,6 +74,31 @@ end
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc) and published on [HexDocs](https://hexdocs.pm). Once published, the docs can be found at [https://hexdocs.pm/colonel_kurtz_ex](https://hexdocs.pm/colonel_kurtz_ex).
 
+## API
+
+The root module for `ColonelKurtzEx` (`ColonelKurtz`) defines the most commonly used API methods when interacting with the library. It delegates all of the implementation to various other submodules. In most cases you won't have to think too hard about where to import things from unless you're reaching for a function that's less commonly used.
+
+- `block_editor(form, field)`
+  - (See `ColonelKurtz.FormHelpers.block_editor/2`)
+
+- `block_editor(form, field, opts)`
+  - (See `ColonelKurtz.FormHelpers.block_editor/3`)
+
+- `blocks_json(form, field)`
+  - (See `ColonelKurtz.FormHelpers.blocks_json/2`)
+
+- `blocks_json(form, field, opts)`
+  - (See `ColonelKurtz.FormHelpers.blocks_json/3`)
+
+- `render_blocks(blocks)`
+  - (See `ColonelKurtz.Renderer.render_blocks/1`)
+
+- `validate_blocks(changeset, field)`
+  - (See `ColonelKurtz.Validation.validate_blocks/2`)
+
+- `validate_blocks(changeset, field, opts)`
+  - (See `ColonelKurtz.Validation.validate_blocks/3`)
+
 ## Getting Set Up
 
 To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz). Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to `CKJS`, you'll need to add the corresponding modules for `CKEX` (a `BlockType`, `BlockTypeView`, and template). In the future `CKEX` will provide generators to expedite the process of common tasks such as adding a new block type.
@@ -196,7 +221,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
     </strong>
   </summary>
 
-  1. Use `ColonelKurtz.Renderer.render_blocks/1` to render block content somewhere in a template.
+  1. Use `ColonelKurtz.render_blocks/1` to render block content somewhere in a template.
 
       <details>
         <summary>
@@ -206,7 +231,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
         You may import this method as needed in the views that will render blocks. Or, as a convenience, you may import this function automatically in all of your phoenix views by adding it to the `your_app_web.ex` definition for `view` (or `view_helpers` if you want it to be available for live views as well, example below).
       </details>
 
-  2. In addition, to render the block editor in your forms, you'll want to pull in `ColonelKurtz.FormHelpers` too. The example below shows how to do this for all Phoenix Views in your application.
+  2. In addition, to render the block editor in your forms, you'll want to pull in `ColonelKurtz.render_blocks/1` too. The example below shows how to do this for all Phoenix Views in your application.
 
       <details>
         <summary>
@@ -226,9 +251,9 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
               import BlogDemoWeb.LiveHelpers
 
               # 1. import `render_blocks/1` so that it is available for all views
-              import ColonelKurtz.Renderer, only: [render_blocks: 1]
+              import ColonelKurtz, only: [render_blocks: 1, block_editor: 2]
 
-              # 2. import the form helpers to make `block_editor/2` available in your form templates
+              # 2. optional: import all of the form helpers if you want to use other methods (such as `blocks_json/2` or `block_errors_json/2`)
               import ColonelKurtz.FormHelpers
 
               import Phoenix.View
@@ -287,29 +312,34 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
       ```elixir
       # lib/your_app/block_types/image.ex
 
+      # 1. optional, you may choose to define the `<type>Block` module if you need to add validation at the block level (for most use cases you can skip this step; it's only necessary if you need to validate e.g. that a block has a particular number of child `:blocks`).
       defmodule YourApp.BlockTypes.ImageBlock do
-        # 1. use the BlockType macro, and specify the type string that matches the data returned by your CKJS block type
-        use ColonelKurtz.BlockType, type: "image"
+        use ColonelKurtz.BlockType
 
-        # 2. use the `defattributes` macro to specify the schema for your block's content
-        defattributes(
-          src: :string,
-          width: :integer,
-          height: :integer
-        )
-
-        # 3. optional, but encouraged - define your validation rules for the block's content
-        def validate_content(_content, changeset) do
-          changeset
-          |> validate_required([:src, :width, :height])
-          # ... any other custom validation rules you need ...
-        end
-
-        # 4. optional, as necessary - define validation rules for the block itself
         def validate(_block, changeset) do
           changeset
           # e.g. this block must have at least 1 child block
           |> validate_length(:blocks, min: 1)
+        end
+      end
+
+      # 2. define the `<type>Block.Content` module within your configured `:block_types` namespace
+      defmodule YourApp.BlockTypes.ImageBlock.Content do
+        # 3. use the BlockType macro, and specify the type string that matches the data returned by your CKJS block type
+        use ColonelKurtz.BlockTypeContent
+
+        # 4. use the `embedded_schema` macro to specify the schema for your block's content
+        embedded_schema do
+          field :src, :string
+          field :width, :integer
+          field :height, :integer
+        end
+
+        # 5. optional, but encouraged - define your validation rules for the block's content
+        def validate(_content, changeset) do
+          changeset
+          |> validate_required([:src, :width, :height])
+          # ... any other custom validation rules you need ...
         end
       end
       ```

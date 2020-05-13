@@ -9,11 +9,12 @@ defmodule ColonelKurtz.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       applications: applications(Mix.env()),
+      aliases: aliases(),
       compilers: compilers(Mix.env()),
       dialyzer: dialyzer(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test],
+      preferred_cli_env: [coveralls: :test, check: :test],
       docs: docs()
       package: package(),
       source_url: "https://github.com/vigetlabs/colonel_kurtz_ex",
@@ -52,6 +53,12 @@ defmodule ColonelKurtz.MixProject do
       {:ex_doc, "~> 0.19", only: [:dev, :test]},
       {:excoveralls, "~> 0.10", only: :test},
       {:cmark, "~> 0.7", only: :dev}
+    ]
+  end
+
+  def aliases do
+    [
+      check: ["do credo --strict, dialyzer, test"]
     ]
   end
 

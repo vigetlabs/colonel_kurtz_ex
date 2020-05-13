@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
-    <title>ColonelKurtz.BlockTypes — colonel_kurtz_ex v0.1.0</title>
+    <title>ColonelKurtz.BlockTypeContent — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
     <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
@@ -64,11 +64,17 @@ colonel_kurtz_ex      </a>
 
       <h1>
         <small class="app-vsn">colonel_kurtz_ex v0.1.0</small>
-ColonelKurtz.BlockTypes      </h1>
+ColonelKurtz.BlockTypeContent      </h1>
 
 
         <section id="moduledoc">
-<p>Provides functions for marshalling data into named BlockType structs.</p>
+<p><code>BlockTypeContent</code> is used to model the inner <code>content</code> field for a given block
+type. Each block type has a unique schema represented by an Ecto.Schema that
+defines an <code>embedded_schema</code> for the expected fields (corresponding with the
+JS implementation for this block type).</p>
+<p>Modules that use this macro may optionally define a <code>validate/2</code> that receives
+the Content struct and a changeset with the fields in their <code>embedded_schema</code>
+already cast and ready to be validated.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -79,35 +85,58 @@ ColonelKurtz.BlockTypes      </h1>
             </a>
             Summary
           </h1>
+  <div class="summary-types summary">
+    <h2>
+      <a href="#types">Types</a>
+    </h2>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#t:t/0">t()</a>
+  </div>
+</div>
+  </div>
   <div class="summary-functions summary">
     <h2>
       <a href="#functions">Functions</a>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#block_type_module/1">block_type_module(type)</a>
+    <a href="#__using__/1">__using__(opts)</a>
   </div>
+    <div class="summary-synopsis"><p>Macro for mixing in the BlockTypeContent behavior.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#block_type_module!/1">block_type_module!(type)</a>
+    <a href="#params_map/1">params_map(params)</a>
   </div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#from_map/1">from_map(data)</a>
-  </div>
-    <div class="summary-synopsis"><p>Convert a map with atom keys to a named block type struct.</p></div>
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
-    <a href="#from_string/1">from_string(data)</a>
-  </div>
-    <div class="summary-synopsis"><p>Converts serialized json into named block type structs.</p></div>
 </div>
   </div>
         </section>
 
+        <section id="types" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#types">
+              <span class="icon-link" aria-hidden="true"></span>
+              <span class="sr-only">Link to this section</span>
+            </a>
+Types          </h1>
+          <div class="types-list">
+<section class="detail" id="t:t/0">
+  <div class="detail-header">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this type</span>
+    </a>
+    <h1 class="signature">t()</h1>
+      <div class="specs">
+          <pre>t() :: %<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(){optional(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()) => <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+      </div>
+  </div>
+  <section class="docstring">
+  </section>
+</section>
+          </div>
+        </section>
         <section id="functions" class="details-list">
           <h1 class="section-heading">
             <a class="hover-link" href="#functions">
@@ -116,62 +145,31 @@ ColonelKurtz.BlockTypes      </h1>
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="block_type_module/1">
+<section class="detail" id="__using__/1">
   <div class="detail-header">
-    <a href="#block_type_module/1" class="detail-link" title="Link to this function">
+    <a href="#__using__/1" class="detail-link" title="Link to this macro">
       <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this function</span>
+      <span class="sr-only">Link to this macro</span>
     </a>
-    <h1 class="signature">block_type_module(type)</h1>
-      <div class="specs">
-          <pre>block_type_module(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}</pre>
-      </div>
+    <h1 class="signature">__using__(opts)</h1>
+      <span class="note">(macro)</span>
   </div>
   <section class="docstring">
+<p>Macro for mixing in the BlockTypeContent behavior.</p>
   </section>
 </section>
-<section class="detail" id="block_type_module!/1">
+<section class="detail" id="params_map/1">
   <div class="detail-header">
-    <a href="#block_type_module!/1" class="detail-link" title="Link to this function">
+    <a href="#params_map/1" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">block_type_module!(type)</h1>
+    <h1 class="signature">params_map(params)</h1>
       <div class="specs">
-          <pre>block_type_module!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">none</a>()</pre>
+          <pre>params_map(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()</pre>
       </div>
   </div>
   <section class="docstring">
-  </section>
-</section>
-<section class="detail" id="from_map/1">
-  <div class="detail-header">
-    <a href="#from_map/1" class="detail-link" title="Link to this function">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature">from_map(data)</h1>
-      <div class="specs">
-          <pre>from_map(block()) :: block_struct()</pre>
-      </div>
-  </div>
-  <section class="docstring">
-<p>Convert a map with atom keys to a named block type struct.</p>
-  </section>
-</section>
-<section class="detail" id="from_string/1">
-  <div class="detail-header">
-    <a href="#from_string/1" class="detail-link" title="Link to this function">
-      <span class="icon-link" aria-hidden="true"></span>
-      <span class="sr-only">Link to this function</span>
-    </a>
-    <h1 class="signature">from_string(data)</h1>
-      <div class="specs">
-          <pre>from_string(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: [block_struct()]</pre>
-      </div>
-  </div>
-  <section class="docstring">
-<p>Converts serialized json into named block type structs.</p>
   </section>
 </section>
           </div>

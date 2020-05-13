@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.21.3">
     <meta name="project" content="colonel_kurtz_ex v0.1.0">
-    <title>ColonelKurtz.BlockTypes — colonel_kurtz_ex v0.1.0</title>
+    <title>ColonelKurtz — colonel_kurtz_ex v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-0ab8a6a80ebaaa287431.css" />
     <script src="dist/sidebar_items-3918975a74.js"></script>
       <script src="docs_config.js"></script>
@@ -64,11 +64,11 @@ colonel_kurtz_ex      </a>
 
       <h1>
         <small class="app-vsn">colonel_kurtz_ex v0.1.0</small>
-ColonelKurtz.BlockTypes      </h1>
+ColonelKurtz      </h1>
 
 
         <section id="moduledoc">
-<p>Provides functions for marshalling data into named BlockType structs.</p>
+<p>Defines the most commonly used functions in ColonelKurtz.</p>
         </section>
 
         <section id="summary" class="details-list">
@@ -85,25 +85,45 @@ ColonelKurtz.BlockTypes      </h1>
     </h2>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#block_type_module/1">block_type_module(type)</a>
+    <a href="#block_editor/2">block_editor(form, field)</a>
   </div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.FormHelpers.html#block_editor/2"><code>ColonelKurtz.FormHelpers.block_editor/2</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#block_type_module!/1">block_type_module!(type)</a>
+    <a href="#block_editor/3">block_editor(form, field, opts)</a>
   </div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.FormHelpers.html#block_editor/3"><code>ColonelKurtz.FormHelpers.block_editor/3</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#from_map/1">from_map(data)</a>
+    <a href="#blocks_json/2">blocks_json(form, field)</a>
   </div>
-    <div class="summary-synopsis"><p>Convert a map with atom keys to a named block type struct.</p></div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.FormHelpers.html#blocks_json/2"><code>ColonelKurtz.FormHelpers.blocks_json/2</code></a>.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#from_string/1">from_string(data)</a>
+    <a href="#blocks_json/3">blocks_json(form, field, opts)</a>
   </div>
-    <div class="summary-synopsis"><p>Converts serialized json into named block type structs.</p></div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.FormHelpers.html#blocks_json/3"><code>ColonelKurtz.FormHelpers.blocks_json/3</code></a>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#render_blocks/1">render_blocks(blocks)</a>
+  </div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.Renderer.html#render_blocks/1"><code>ColonelKurtz.Renderer.render_blocks/1</code></a>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#validate_blocks/2">validate_blocks(changeset, field)</a>
+  </div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.Validation.html#validate_blocks/2"><code>ColonelKurtz.Validation.validate_blocks/2</code></a>.</p></div>
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#validate_blocks/3">validate_blocks(changeset, field, opts)</a>
+  </div>
+    <div class="summary-synopsis"><p>See <a href="ColonelKurtz.Validation.html#validate_blocks/3"><code>ColonelKurtz.Validation.validate_blocks/3</code></a>.</p></div>
 </div>
   </div>
         </section>
@@ -116,62 +136,88 @@ ColonelKurtz.BlockTypes      </h1>
             </a>
 Functions          </h1>
           <div class="functions-list">
-<section class="detail" id="block_type_module/1">
+<section class="detail" id="block_editor/2">
   <div class="detail-header">
-    <a href="#block_type_module/1" class="detail-link" title="Link to this function">
+    <a href="#block_editor/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">block_type_module(type)</h1>
-      <div class="specs">
-          <pre>block_type_module(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()}</pre>
-      </div>
+    <h1 class="signature">block_editor(form, field)</h1>
   </div>
   <section class="docstring">
+<p>See <a href="ColonelKurtz.FormHelpers.html#block_editor/2"><code>ColonelKurtz.FormHelpers.block_editor/2</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="block_type_module!/1">
+<section class="detail" id="block_editor/3">
   <div class="detail-header">
-    <a href="#block_type_module!/1" class="detail-link" title="Link to this function">
+    <a href="#block_editor/3" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">block_type_module!(type)</h1>
-      <div class="specs">
-          <pre>block_type_module!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">module</a>() | <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">none</a>()</pre>
-      </div>
+    <h1 class="signature">block_editor(form, field, opts)</h1>
   </div>
   <section class="docstring">
+<p>See <a href="ColonelKurtz.FormHelpers.html#block_editor/3"><code>ColonelKurtz.FormHelpers.block_editor/3</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="from_map/1">
+<section class="detail" id="blocks_json/2">
   <div class="detail-header">
-    <a href="#from_map/1" class="detail-link" title="Link to this function">
+    <a href="#blocks_json/2" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">from_map(data)</h1>
-      <div class="specs">
-          <pre>from_map(block()) :: block_struct()</pre>
-      </div>
+    <h1 class="signature">blocks_json(form, field)</h1>
   </div>
   <section class="docstring">
-<p>Convert a map with atom keys to a named block type struct.</p>
+<p>See <a href="ColonelKurtz.FormHelpers.html#blocks_json/2"><code>ColonelKurtz.FormHelpers.blocks_json/2</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="from_string/1">
+<section class="detail" id="blocks_json/3">
   <div class="detail-header">
-    <a href="#from_string/1" class="detail-link" title="Link to this function">
+    <a href="#blocks_json/3" class="detail-link" title="Link to this function">
       <span class="icon-link" aria-hidden="true"></span>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature">from_string(data)</h1>
-      <div class="specs">
-          <pre>from_string(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: [block_struct()]</pre>
-      </div>
+    <h1 class="signature">blocks_json(form, field, opts)</h1>
   </div>
   <section class="docstring">
-<p>Converts serialized json into named block type structs.</p>
+<p>See <a href="ColonelKurtz.FormHelpers.html#blocks_json/3"><code>ColonelKurtz.FormHelpers.blocks_json/3</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="render_blocks/1">
+  <div class="detail-header">
+    <a href="#render_blocks/1" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">render_blocks(blocks)</h1>
+  </div>
+  <section class="docstring">
+<p>See <a href="ColonelKurtz.Renderer.html#render_blocks/1"><code>ColonelKurtz.Renderer.render_blocks/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="validate_blocks/2">
+  <div class="detail-header">
+    <a href="#validate_blocks/2" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">validate_blocks(changeset, field)</h1>
+  </div>
+  <section class="docstring">
+<p>See <a href="ColonelKurtz.Validation.html#validate_blocks/2"><code>ColonelKurtz.Validation.validate_blocks/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="validate_blocks/3">
+  <div class="detail-header">
+    <a href="#validate_blocks/3" class="detail-link" title="Link to this function">
+      <span class="icon-link" aria-hidden="true"></span>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature">validate_blocks(changeset, field, opts)</h1>
+  </div>
+  <section class="docstring">
+<p>See <a href="ColonelKurtz.Validation.html#validate_blocks/3"><code>ColonelKurtz.Validation.validate_blocks/3</code></a>.</p>
   </section>
 </section>
           </div>
