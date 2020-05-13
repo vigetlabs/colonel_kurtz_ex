@@ -8,13 +8,13 @@ defmodule ColonelKurtz.FormHelpers do
 
   alias Phoenix.HTML.Form
 
-  @type form :: Phoenix.HTML.Form.t
-  @type json_opts :: keyword | Jason.Encode.opts
+  @type form :: Phoenix.HTML.Form.t()
+  @type json_opts :: keyword | Jason.Encode.opts()
   @type block_error :: %{errors: list(map), blocks: list(block_error)}
   @type block_with_errors :: %{content: map, errors: list(map), blocks: list(block_with_errors)}
 
-  @spec block_editor(form, atom) :: list(Phoenix.HTML.safe)
-  @spec block_editor(form, atom, json_opts) :: list(Phoenix.HTML.safe)
+  @spec block_editor(form, atom) :: list(Phoenix.HTML.safe())
+  @spec block_editor(form, atom, json_opts) :: list(Phoenix.HTML.safe())
   def block_editor(form, field), do: block_editor(form, field, [])
 
   def block_editor(%Form{} = f, field, opts) do

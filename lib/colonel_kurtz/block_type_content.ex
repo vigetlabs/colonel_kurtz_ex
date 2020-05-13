@@ -2,9 +2,9 @@ defmodule ColonelKurtz.BlockTypeContent do
   @moduledoc false
 
   @type t :: %{
-    :__struct__ => atom,
-    optional(any) => any
-  }
+          :__struct__ => atom,
+          optional(any) => any
+        }
 
   defmacro __using__(schema: schema, block_module: block_module) do
     quote do
@@ -63,7 +63,9 @@ defmodule ColonelKurtz.BlockTypeContent do
     quote do
       defmodule Content do
         @moduledoc false
-        use ColonelKurtz.BlockTypeContent, schema: unquote(schema), block_module: unquote(block_module)
+        use ColonelKurtz.BlockTypeContent,
+          schema: unquote(schema),
+          block_module: unquote(block_module)
       end
     end
   end

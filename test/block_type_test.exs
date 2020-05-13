@@ -29,7 +29,8 @@ defmodule ColonelKurtzTest.BlockTypeTest do
         build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})
       ]
 
-      assert [safe: ["<div>\n  <p>", "Example", "</p>\n</div>\n"]] = ColonelKurtz.Renderer.render_blocks(blocks)
+      assert [safe: ["<div>\n  <p>", "Example", "</p>\n</div>\n"]] =
+               ColonelKurtz.Renderer.render_blocks(blocks)
     end
   end
 end

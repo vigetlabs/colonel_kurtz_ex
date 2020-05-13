@@ -17,15 +17,15 @@ defmodule ColonelKurtz.BlockType do
   alias ColonelKurtz.Block
   alias ColonelKurtz.EctoHelpers
 
-  @type changeset :: Ecto.Changeset.t
+  @type changeset :: Ecto.Changeset.t()
 
   @type t :: %{
-    :__struct__ => atom,
-    required(:block_id) => nil | binary,
-    required(:type) => binary,
-    required(:content) => map,
-    required(:blocks) => list(t)
-  }
+          :__struct__ => atom,
+          required(:block_id) => nil | binary,
+          required(:type) => binary,
+          required(:content) => map,
+          required(:blocks) => list(t)
+        }
 
   @doc """
   The BlockType __using__ macro allows modules to behave as BlockTypes.
@@ -35,11 +35,12 @@ defmodule ColonelKurtz.BlockType do
       use Ecto.Schema
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      import unquote(__MODULE__), only: [
-        defattributes: 1,
-        attributes_from_params: 2,
-        lift_content_errors: 1
-      ]
+      import unquote(__MODULE__),
+        only: [
+          defattributes: 1,
+          attributes_from_params: 2,
+          lift_content_errors: 1
+        ]
 
       import Ecto.Changeset
       import ColonelKurtz.Validation, only: [validate_blocks: 3]
@@ -49,9 +50,9 @@ defmodule ColonelKurtz.BlockType do
       alias ColonelKurtz.EctoBlocks
       alias ColonelKurtz.Validatable
 
-      @typep block :: Block.t
+      @typep block :: Block.t()
       @typep block_struct :: unquote(__MODULE__).t
-      @typep changeset :: Ecto.Changeset.t
+      @typep changeset :: Ecto.Changeset.t()
 
       @before_compile unquote(__MODULE__)
       @after_compile unquote(__MODULE__)
@@ -115,6 +116,7 @@ defmodule ColonelKurtz.BlockType do
       def content_attributes(params) do
         attributes_from_params(content_schema_keys(), params)
       end
+
       defoverridable content_attributes: 1
 
       def validate(_block, changeset), do: changeset

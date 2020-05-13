@@ -7,8 +7,8 @@ defmodule ColonelKurtz.BlockTypes do
   alias ColonelKurtz.BlockType
   alias ColonelKurtz.Utils
 
-  @typep block :: Block.t
-  @typep block_struct :: BlockType.t
+  @typep block :: Block.t()
+  @typep block_struct :: BlockType.t()
 
   @doc """
   Converts serialized json into named block type structs.
@@ -60,7 +60,8 @@ defmodule ColonelKurtz.BlockTypes do
   defp block_type_module(type) do
     case lookup_block_type_module(type) do
       {:error, :does_not_exist, module} ->
-        raise RuntimeError, message: "The application configured :block_types, but #{module} does not exist."
+        raise RuntimeError,
+          message: "The application configured :block_types, but #{module} does not exist."
 
       module ->
         module

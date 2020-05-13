@@ -1,7 +1,7 @@
 defprotocol ColonelKurtz.Validatable do
   @moduledoc false
 
-  @type changeset :: Ecto.Changeset.t
+  @type changeset :: Ecto.Changeset.t()
 
   @spec changeset(struct, map) :: changeset
   def changeset(struct, params)

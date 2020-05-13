@@ -24,4 +24,3 @@ defmodule ColonelKurtzTest.BlockTypesTest do
     end
   end
 end
-

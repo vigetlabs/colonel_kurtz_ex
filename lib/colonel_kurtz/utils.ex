@@ -1,6 +1,6 @@
 defmodule ColonelKurtz.Utils do
   @moduledoc false
-  def fetch_config() do
+  def fetch_config do
     case Application.fetch_env(:colonel_kurtz_ex, ColonelKurtz) do
       :error -> {:error, :missing_config}
       config -> config

@@ -38,8 +38,8 @@ defmodule ColonelKurtz.MixProject do
   def applications(:test), do: [:phoenix]
   def applications(_), do: []
 
-  def compilers(:test), do: [:phoenix] ++ Mix.compilers
-  def compilers(_), do: Mix.compilers
+  def compilers(:test), do: [:phoenix] ++ Mix.compilers()
+  def compilers(_), do: Mix.compilers()
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
@@ -67,5 +67,6 @@ defmodule ColonelKurtz.MixProject do
   defp docs_before_closing_head_tag(:html) do
     ~s(<link rel="stylesheet" href="assets/docs.css" />)
   end
+
   defp docs_before_closing_head_tag(_), do: ""
 end
