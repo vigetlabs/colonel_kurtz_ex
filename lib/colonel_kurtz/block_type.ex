@@ -43,11 +43,13 @@ defmodule ColonelKurtz.BlockType do
       @typep block :: block
       @typep block_struct :: BlockType.t()
 
+      @block_attributes [:block_id, :type, :content, :blocks]
+
       @content_module Module.concat(__MODULE__, Content)
 
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
-      @derive [Jason.Encoder]
+      @derive {Jason.Encoder, only: @block_attributes}
 
       embedded_schema do
         field(:type, :string, null: false)
