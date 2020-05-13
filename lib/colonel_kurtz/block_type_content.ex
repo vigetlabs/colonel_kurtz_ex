@@ -18,9 +18,6 @@ defmodule ColonelKurtz.BlockTypeContent do
           optional(any) => any
         }
 
-  @typep module_body ::
-           {:use, [context: atom, import: atom], [{:__aliases__, [alias: boolean], list(atom)}]}
-
   @doc """
   Macro for mixing in the BlockTypeContent behavior.
   """
