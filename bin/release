@@ -38,10 +38,20 @@ fi
 echo "✅"
 
 #
+# Confirm changelog is up to date
+#
+read -rp "> Have you updated the CHANGELOG with the changes for '$NEW_VERSION'? (y/n) " CHANGELOG_CHOICE
+case "$CHANGELOG_CHOICE" in
+  n|N ) echo "Release cancelled, update the CHANGELOG and restart the release." && exit 1;;
+  y|Y ) ;;
+  * ) echo "Invalid response." && exit 1;;
+esac
+
+#
 # Confirm release
 #
-read -rp "> Are you sure you want to bump the $1 version and release '$NEW_VERSION'? (y/n) " CHOICE
-case "$CHOICE" in
+read -rp "> Are you sure you want to bump the $1 version and release '$NEW_VERSION'? (y/n) " RELEASE_CHOICE
+case "$RELEASE_CHOICE" in
   n|N ) echo "Release cancelled" && exit 1;;
   y|Y ) ;;
   * ) echo "Invalid response." && exit 1;;
