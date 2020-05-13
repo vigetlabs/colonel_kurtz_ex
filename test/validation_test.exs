@@ -6,7 +6,7 @@ defmodule ColonelKurtzTest.ValidationTest do
   doctest ColonelKurtz.Validation
 
   describe "Validation" do
-    test "validate_blocks/1 calls runs validations on all blocks" do
+    test "validate_blocks/1 runs validations on all blocks" do
       post =
         Post.changeset(%Post{}, %{
           content: [
