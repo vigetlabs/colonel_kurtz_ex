@@ -90,8 +90,12 @@ defmodule ColonelKurtz.MixProject do
   defp package do
     [
       name: "colonel_kurtz_ex",
+      maintainers: ["Dylan Lederle-Ensign", "Solomon Hawk"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/vigetlabs/colonel_kurtz_ex"},
+      links: %{
+        "GitHub" => "https://github.com/vigetlabs/colonel_kurtz_ex",
+        "Docs" => "http://code.viget.com/colonel_kurtz_ex/readme.html"
+      },
       files: ~w(lib .formatter.exs mix.exs README* LICENSE* CHANGELOG*)
     ]
   end
