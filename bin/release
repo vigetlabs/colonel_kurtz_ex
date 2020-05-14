@@ -140,7 +140,7 @@ echo "✅ Docs updated and committed"
 # Create new git tag
 #
 echo "Tagging $NEW_VERSION for release..."
-git tag -a "$NEW_VERSION" -m "[release] Add tag for $NEW_VERSION"
+git tag -a "v$NEW_VERSION" -m "[release] Add tag for $NEW_VERSION"
 git push origin master --tags
 echo "✅ Tagged release and pushed up the master branch"
 
