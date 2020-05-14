@@ -97,7 +97,7 @@ defmodule ColonelKurtz.MixProject do
         "GitHub" => "https://github.com/vigetlabs/colonel_kurtz_ex",
         "Docs" => "http://code.viget.com/colonel_kurtz_ex/readme.html"
       },
-      files: ~w(lib .formatter.exs mix.exs README* LICENSE* CHANGELOG*)
+      files: ~w(lib .formatter.exs mix.exs README* LICENSE* CHANGELOG* VERSION*)
     ]
   end
 end
