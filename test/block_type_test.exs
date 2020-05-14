@@ -52,8 +52,9 @@ defmodule ColonelKurtzTest.BlockTypeTest do
 
     test "returns a map with string keys when given a map with mixed keys" do
       params = %{"src" => "imagesrc.png", other_prop: "other_value"}
-      assert %{"src" => "imagesrc.png", "other_prop" => "other_value"} = ColonelKurtz.BlockType.attributes_from_params(params)
-    end
 
+      assert %{"src" => "imagesrc.png", "other_prop" => "other_value"} =
+               ColonelKurtz.BlockType.attributes_from_params(params)
+    end
   end
 end
