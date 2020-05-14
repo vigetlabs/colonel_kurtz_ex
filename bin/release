@@ -132,9 +132,7 @@ echo "✅"
 #
 echo "Updating docs... "
 mix docs
-
-git add VERSION
-git add docs
+git add docs VERSION
 git commit -m "[release] $NEW_VERSION Bump $1 version, update docs/"
 echo "✅ Docs updated and committed"
 
@@ -150,5 +148,6 @@ echo "✅ Tagged release and pushed up the master branch"
 # Publish to hex
 #
 echo -n "Publishing to hex... "
-mix hex.publish || echo "🚫 Publication failed!" && exit 1
+mix hex.publish package || echo "🚫 Package publication failed!" && exit 1
+mix hex.publish docs || echo "🚫 Docs publication failed!" && exit 1
 echo "✅ Publication successful for $NEW_VERSION!"
