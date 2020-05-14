@@ -123,14 +123,16 @@ defmodule ColonelKurtz.BlockType do
   def lift_content_errors(changeset), do: changeset
 
   #
-  # Extracts the Block's Content attributes from params, converting string keys
-  # to atoms. Will only contain the keys specified in the schema (Defined by
-  # using the `defattributes/1` macro).
+  # Extracts the Block's Content attributes from params, converting atom keys
+  # to strings.
   #
   @spec attributes_from_params(map) :: map
   def attributes_from_params(params) do
     Enum.reduce(Map.keys(params), %{}, fn key, acc ->
-      Map.put(acc, key, Map.get(params, Atom.to_string(key), Map.get(params, key)))
+      Map.put(acc, convert_key(key), Map.get(params, key))
     end)
   end
+
+  defp convert_key(key) when is_binary(key), do: key
+  defp convert_key(key) when is_atom(key), do: Atom.to_string(key)
 end

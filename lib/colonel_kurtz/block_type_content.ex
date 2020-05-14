@@ -62,7 +62,7 @@ defmodule ColonelKurtz.BlockTypeContent do
         struct_attrs =
           for name <- __schema__(:fields),
               into: Keyword.new(),
-              do: {name, Map.get(attrs, name)}
+              do: {name, Map.get(attrs, Atom.to_string(name))}
 
         struct!(__MODULE__, struct_attrs)
       end

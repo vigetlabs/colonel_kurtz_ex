@@ -37,4 +37,23 @@ defmodule ColonelKurtzTest.BlockTypeTest do
                ColonelKurtz.Renderer.render_blocks(blocks)
     end
   end
+
+  describe "#attributes_from_params/1" do
+    # https://github.com/vigetlabs/colonel_kurtz_ex/issues/10
+    test "returns a map with string keys when given a map with string keys" do
+      params = %{"src" => "imagesrc.png"}
+      assert %{"src" => "imagesrc.png"} = ColonelKurtz.BlockType.attributes_from_params(params)
+    end
+
+    test "returns a map with string keys when given a map with atom keys" do
+      params = %{src: "imagesrc.png"}
+      assert %{"src" => "imagesrc.png"} = ColonelKurtz.BlockType.attributes_from_params(params)
+    end
+
+    test "returns a map with string keys when given a map with mixed keys" do
+      params = %{"src" => "imagesrc.png", other_prop: "other_value"}
+      assert %{"src" => "imagesrc.png", "other_prop" => "other_value"} = ColonelKurtz.BlockType.attributes_from_params(params)
+    end
+
+  end
 end

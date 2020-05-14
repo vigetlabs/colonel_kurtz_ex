@@ -2,10 +2,7 @@
 
 ## New Changes
 
-* Added typespecs
-* Added credo
-* Added dialyxir
-* Added test configuration and a foundation for further test coverage
+* [Bugfix #10](https://github.com/vigetlabs/colonel_kurtz_ex/issues/10): properly convert param keys to strings
 
 ---
 
