@@ -53,28 +53,10 @@ defmodule ColonelKurtz.BlockTypes do
 
   @spec block_type_module(binary) :: module
   def block_type_module(type) do
-    case lookup_block_type_module(type) do
-      {:error, :does_not_exist, module} ->
-        Logger.warn("The application configured :block_types, but #{module} does not exist.")
-        UnrecognizedBlock
-
-      {:error, :missing_field, field} ->
-        Logger.warn(
-          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
-        )
-
-        UnrecognizedBlock
-
-      {:error, :missing_config} ->
-        Logger.warn(
-          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
-        )
-
-        UnrecognizedBlock
-
-      {:ok, module} ->
-        module
-    end
+    type
+    |> lookup_block_type_module()
+    |> maybe_issue_warning()
+    |> Utils.module_or_fallback(UnrecognizedBlock)
   end
 
   # private
@@ -103,5 +85,30 @@ defmodule ColonelKurtz.BlockTypes do
   @spec block_type_module_name(module, binary) :: {:ok, module}
   defp block_type_module_name(module, type) do
     {:ok, Module.concat(module, Recase.to_pascal(type) <> "Block")}
+  end
+
+  defp maybe_issue_warning({:ok, module}), do: {:ok, module}
+
+  defp maybe_issue_warning(result) do
+    case result do
+      {:error, :does_not_exist, module} ->
+        Logger.warn("The application configured :block_types, but #{module} does not exist.")
+
+      {:error, :missing_field, field} ->
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
+
+      {:error, :missing_config} ->
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
+
+      _ ->
+        nil
+    end
+
+    # just return the result
+    result
   end
 end

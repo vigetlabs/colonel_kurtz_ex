@@ -49,28 +49,10 @@ defmodule ColonelKurtz.Renderer do
 
   @spec block_view_module(binary) :: module
   def block_view_module(type) do
-    case lookup_block_view_module(type) do
-      {:error, :does_not_exist, module} ->
-        Logger.warn("The application configured :block_types, but #{module} does not exist.")
-        UnrecognizedBlockView
-
-      {:error, :missing_field, field} ->
-        Logger.warn(
-          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
-        )
-
-        UnrecognizedBlockView
-
-      {:error, :missing_config} ->
-        Logger.warn(
-          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
-        )
-
-        UnrecognizedBlockView
-
-      {:ok, module} ->
-        module
-    end
+    type
+    |> lookup_block_view_module()
+    |> maybe_issue_warning()
+    |> Utils.module_or_fallback(UnrecognizedBlockView)
   end
 
   @spec lookup_block_view_module(binary) ::
@@ -90,5 +72,30 @@ defmodule ColonelKurtz.Renderer do
   @spec block_view_module_name(module, binary) :: {:ok, module}
   defp block_view_module_name(module, type) do
     {:ok, Module.concat(module, Recase.to_pascal(type) <> "View")}
+  end
+
+  defp maybe_issue_warning({:ok, module}), do: {:ok, module}
+
+  defp maybe_issue_warning(result) do
+    case result do
+      {:error, :does_not_exist, module} ->
+        Logger.warn("The application configured :block_views, but #{module} does not exist.")
+
+      {:error, :missing_field, field} ->
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
+
+      {:error, :missing_config} ->
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
+
+      _ ->
+        nil
+    end
+
+    # just return the result
+    result
   end
 end
