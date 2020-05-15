@@ -14,6 +14,12 @@ defmodule ColonelKurtz.BlockTypes do
   @typep block :: Block.t()
   @typep block_struct :: BlockType.t()
 
+  @typep module_lookup_result ::
+           {:ok, module}
+           | {:error, :does_not_exist, module}
+           | {:error, :missing_config}
+           | {:error, :missing_field, :block_types}
+
   @doc """
   Converts serialized json into named block type structs.
   """
@@ -68,11 +74,7 @@ defmodule ColonelKurtz.BlockTypes do
     |> apply(:from_map, [block])
   end
 
-  @spec lookup_block_type_module(binary) ::
-          {:ok, module}
-          | {:error, :does_not_exist, module}
-          | {:error, :missing_config}
-          | {:error, :missing_field, :block_types}
+  @spec lookup_block_type_module(binary) :: module_lookup_result
   defp lookup_block_type_module(type) do
     with {:ok, config} <- Config.fetch_config(),
          {:ok, block_types} <- Config.get(config, :block_types),
@@ -87,6 +89,7 @@ defmodule ColonelKurtz.BlockTypes do
     {:ok, Module.concat(module, Recase.to_pascal(type) <> "Block")}
   end
 
+  @spec maybe_issue_warning(module_lookup_result) :: module_lookup_result
   defp maybe_issue_warning({:ok, module}), do: {:ok, module}
 
   defp maybe_issue_warning(result) do
@@ -103,9 +106,6 @@ defmodule ColonelKurtz.BlockTypes do
         Logger.warn(
           "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
         )
-
-      _ ->
-        nil
     end
 
     # just return the result
