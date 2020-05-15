@@ -92,23 +92,16 @@ defmodule ColonelKurtz.BlockTypes do
           | {:error, :missing_config}
           | {:error, :missing_field, :block_types}
   defp lookup_block_type_module(type) do
-    with {:ok, block_types} <- block_types_module(),
-         {:ok, module} <- Utils.module_exists?(block_type_module_name(block_types, type)) do
-      {:ok, module}
-    end
-  end
-
-  @spec block_types_module ::
-          {:ok, module} | {:error, :missing_config} | {:error, :missing_field, :block_types}
-  defp block_types_module do
     with {:ok, config} <- Config.fetch_config(),
-         {:ok, module} <- Config.get(config, :block_types) do
+         {:ok, block_types} <- Config.get(config, :block_types),
+         {:ok, module_name} <- block_type_module_name(block_types, type),
+         {:ok, module} <- Utils.module_exists?(module_name) do
       {:ok, module}
     end
   end
 
-  @spec block_type_module_name(module, binary) :: module
+  @spec block_type_module_name(module, binary) :: {:ok, module}
   defp block_type_module_name(module, type) do
-    Module.concat(module, Recase.to_pascal(type) <> "Block")
+    {:ok, Module.concat(module, Recase.to_pascal(type) <> "Block")}
   end
 end

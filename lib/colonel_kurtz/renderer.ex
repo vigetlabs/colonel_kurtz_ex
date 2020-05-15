@@ -79,23 +79,16 @@ defmodule ColonelKurtz.Renderer do
           | {:error, :missing_config}
           | {:error, :missing_field, :block_views}
   defp lookup_block_view_module(type) do
-    with {:ok, block_types} <- block_views_module(),
-         {:ok, module} <- Utils.module_exists?(block_view_module_name(block_types, type)) do
-      {:ok, module}
-    end
-  end
-
-  @spec block_views_module ::
-          {:ok, module} | {:error, :missing_config} | {:error, :missing_field, :block_views}
-  defp block_views_module do
     with {:ok, config} <- Config.fetch_config(),
-         {:ok, module} <- Config.get(config, :block_views) do
+         {:ok, block_types} <- Config.get(config, :block_views),
+         {:ok, module_name} <- block_view_module_name(block_types, type),
+         {:ok, module} <- Utils.module_exists?(module_name) do
       {:ok, module}
     end
   end
 
-  @spec block_view_module_name(module, binary) :: module
+  @spec block_view_module_name(module, binary) :: {:ok, module}
   defp block_view_module_name(module, type) do
-    Module.concat(module, Recase.to_pascal(type) <> "View")
+    {:ok, Module.concat(module, Recase.to_pascal(type) <> "View")}
   end
 end
