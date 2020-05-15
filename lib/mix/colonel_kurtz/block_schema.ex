@@ -1,6 +1,5 @@
 defmodule Mix.ColonelKurtz.BlockTypeContentSchema do
   # see https://github.com/phoenixframework/phoenix/blob/master/lib/mix/phoenix/schema.ex
-  alias Mix.Phoenix.Schema
 
   defstruct attrs: [], types: []
 

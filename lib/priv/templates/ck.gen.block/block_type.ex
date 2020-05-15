@@ -1,9 +1,7 @@
-defmodule <%= inspect context.module %> do
+defmodule Foo do
   use ColonelKurtz.BlockType
 
-  embedded_schema do
-  end
-
+  # customize your validations or delete this function
   def validate(_content, changeset) do
     changeset
   end

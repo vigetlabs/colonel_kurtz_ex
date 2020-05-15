@@ -1,3 +1,3 @@
-defmodule <%= inspect context.module %> do
-  use ColonelKurtz.BlockView
+defmodule FooView do
+  use ColonelKurtz.BlockTypeView
 end

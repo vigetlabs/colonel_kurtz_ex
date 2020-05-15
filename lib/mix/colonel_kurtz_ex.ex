@@ -1,8 +1,14 @@
 defmodule Mix.ColonelKurtz do
-  defp parse_opts(args, switches) do
+
+  # CLI API:
+  #
+  # mix ck.gen.block example text:string
+  alias ColonelKurtz.Config
+
+  def parse_opts(args, switches) do
     {opts, _parsed, _invalid} = OptionParser.parse(args, switches: switches)
 
-    opt_app = opts[:app] || Config.get!(:otp_app)
+    otp_app = opts[:app] || Config.get!(:otp_app)
 
     unless otp_app do
       Mix.raise("""
