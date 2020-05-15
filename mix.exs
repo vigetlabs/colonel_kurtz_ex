@@ -10,7 +10,7 @@ defmodule ColonelKurtz.MixProject do
       deps: deps(),
       applications: applications(Mix.env()),
       aliases: aliases(),
-      compilers: compilers(),
+      compilers: compilers(Mix.env()),
       dialyzer: dialyzer(),
       elixirc_paths: elixirc_paths(Mix.env()),
       test_coverage: [tool: ExCoveralls],
@@ -35,7 +35,8 @@ defmodule ColonelKurtz.MixProject do
   def applications(:test), do: [:phoenix]
   def applications(_), do: []
 
-  def compilers(), do: [:phoenix] ++ Mix.compilers()
+  def compilers(:test), do: [:phoenix] ++ Mix.compilers()
+  def compilers(_), do: Mix.compilers()
 
   defp description do
     "ColonelKurtzEx facilitates working with the JavaScript block content editor [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz) in Phoenix applications."
