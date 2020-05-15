@@ -8,7 +8,7 @@ defmodule ColonelKurtz.BlockView do
   """
 
   @doc """
-  The BlockType __using__ macro allows modules to behave as BlockViews.
+  The BlockView __using__ macro allows modules to behave as BlockViews.
   """
   defmacro __using__(_opts) do
     quote do
