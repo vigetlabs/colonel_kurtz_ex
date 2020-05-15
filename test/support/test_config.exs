@@ -1,5 +1,5 @@
 defmodule ColonelKurtzTest.TestConfig do
-  @config Application.get_env(:colonel_kurtz_ex, ColonelKurtz)
+  @config Application.get_env(:colonel_kurtz, ColonelKurtz)
 
   @moduledoc false
   defmacro __using__(_opts) do
@@ -14,22 +14,22 @@ defmodule ColonelKurtzTest.TestConfig do
   end
 
   def get_config do
-    Application.get_env(:colonel_kurtz_ex, ColonelKurtz)
+    Application.get_env(:colonel_kurtz, ColonelKurtz)
   end
 
   def set_config(config) do
-    Application.put_env(:colonel_kurtz_ex, ColonelKurtz, config)
+    Application.put_env(:colonel_kurtz, ColonelKurtz, config)
   end
 
   def set_config_value(config, field, value) do
     Application.put_env(
-      :colonel_kurtz_ex,
+      :colonel_kurtz,
       ColonelKurtz,
       Keyword.merge(config, Keyword.new({field, value}))
     )
   end
 
   def clear_config do
-    Application.delete_env(:colonel_kurtz_ex, ColonelKurtz)
+    Application.delete_env(:colonel_kurtz, ColonelKurtz)
   end
 end

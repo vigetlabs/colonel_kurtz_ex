@@ -1,0 +1,9 @@
+<!--
+
+To access the block's content:
+  <%= @content.<field> %>
+
+If you need to render child blocks:
+  <%= @children %>
+
+-->

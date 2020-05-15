@@ -94,12 +94,12 @@ defmodule ColonelKurtz.BlockTypes do
       {:error, :missing_field, field} ->
         raise RuntimeError,
           message:
-            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+            "Application defined :colonel_kurtz config, but did not provide the :#{field} field."
 
       {:error, :missing_config} ->
         raise RuntimeError,
           message:
-            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+            "ColonelKurtz expected the application to configure :colonel_kurtz, but no configuration was found."
     end
   end
 

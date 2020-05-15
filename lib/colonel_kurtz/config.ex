@@ -9,7 +9,7 @@ defmodule ColonelKurtz.Config do
 
   @spec fetch_config :: {:ok, Config.t()} | {:error, :missing_config}
   def fetch_config do
-    case Application.fetch_env(:colonel_kurtz_ex, ColonelKurtz) do
+    case Application.fetch_env(:colonel_kurtz, ColonelKurtz) do
       :error -> {:error, :missing_config}
       config -> config
     end
@@ -20,6 +20,16 @@ defmodule ColonelKurtz.Config do
     case Keyword.fetch(config, field) do
       :error -> {:error, :missing_field, field}
       block_types -> block_types
+    end
+  end
+
+  def get!(field) do
+    with {:ok, config} <- fetch_config(),
+         {:ok, value} <- get(config, field) do
+      value
+    else
+      _ ->
+        nil
     end
   end
 end

@@ -3,7 +3,7 @@ defmodule ColonelKurtz.MixProject do
 
   def project do
     [
-      app: :colonel_kurtz_ex,
+      app: :colonel_kurtz,
       version: File.read!("VERSION") |> String.trim(),
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
