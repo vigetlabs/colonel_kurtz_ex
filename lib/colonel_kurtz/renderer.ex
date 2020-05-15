@@ -6,7 +6,10 @@ defmodule ColonelKurtz.Renderer do
 
   alias ColonelKurtz.Block
   alias ColonelKurtz.Config
+  alias ColonelKurtz.UnrecognizedBlockView
   alias ColonelKurtz.Utils
+
+  require Logger
 
   @typep block :: Block.t()
 
@@ -21,11 +24,13 @@ defmodule ColonelKurtz.Renderer do
   @spec render_block(block) :: iodata
   defp render_block(%{type: type} = block) do
     type
-    |> block_view_module!()
+    |> block_view_module()
     |> maybe_render_block(block)
   end
 
   @spec maybe_render_block(module, block) :: iodata
+  defp maybe_render_block(UnrecognizedBlockView, _block), do: ""
+
   defp maybe_render_block(module, block) do
     if apply(module, :renderable?, [block]) do
       apply(module, :render, ["index.html", assigns(block)])
@@ -42,35 +47,41 @@ defmodule ColonelKurtz.Renderer do
     ]
   end
 
-  @spec block_view_module!(binary) :: module | none
-  def block_view_module!(type) do
-    case lookup_block_view_module!(type) do
+  @spec block_view_module(binary) :: module | none
+  def block_view_module(type) do
+    case lookup_block_view_module(type) do
       {:error, :does_not_exist, module} ->
-        raise RuntimeError,
-          message: "The application configured :block_types, but #{module} does not exist."
+        Logger.warn("The application configured :block_types, but #{module} does not exist.")
+        UnrecognizedBlockView
+
+      {:error, :missing_field, field} ->
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
+
+        UnrecognizedBlockView
+
+      {:error, :missing_config} ->
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
+
+        UnrecognizedBlockView
 
       {:ok, module} ->
         module
     end
   end
 
-  @spec lookup_block_view_module!(binary) :: {:ok, module} | {:error, :does_not_exist, module}
-  defp lookup_block_view_module!(type) do
-    case block_views_module() do
-      {:ok, module} ->
-        module
-        |> block_view_module_name(type)
-        |> Utils.module_exists?()
-
-      {:error, :missing_field, field} ->
-        raise RuntimeError,
-          message:
-            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
-
-      {:error, :missing_config} ->
-        raise RuntimeError,
-          message:
-            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+  @spec lookup_block_view_module(binary) ::
+          {:ok, module}
+          | {:error, :does_not_exist, module}
+          | {:error, :missing_config}
+          | {:error, :missing_field, :block_views}
+  defp lookup_block_view_module(type) do
+    with {:ok, block_types} <- block_views_module(),
+         {:ok, module} <- Utils.module_exists?(block_view_module_name(block_types, type)) do
+      {:ok, module}
     end
   end
 
@@ -85,6 +96,6 @@ defmodule ColonelKurtz.Renderer do
 
   @spec block_view_module_name(module, binary) :: module
   defp block_view_module_name(module, type) do
-    Module.concat(module, Macro.camelize(type) <> "View")
+    Module.concat(module, Recase.to_pascal(type) <> "View")
   end
 end

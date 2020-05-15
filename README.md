@@ -55,7 +55,7 @@
     <strong>Rendering</strong>
   </summary>
 
-  `ColonelKurtzEx` provides a `BlockTypeView` macro that can be used in [Phoenix Views](https://hexdocs.pm/phoenix/Phoenix.View.html#content). A block type view, aside from being a normal Phoenix View (used to handle presentation of data), controls whether a block can render by specifying an implementation for `renderable?/1`. The default is `true`, but modules that `use` the macro may override this method to enable more fine-grained control over whether a block should be rendered based on its current data.
+  `ColonelKurtzEx` provides a `BlockView` macro that can be used in [Phoenix Views](https://hexdocs.pm/phoenix/Phoenix.View.html#content). A block type view, aside from being a normal Phoenix View (used to handle presentation of data), controls whether a block can render by specifying an implementation for `renderable?/1`. The default is `true`, but modules that `use` the macro may override this method to enable more fine-grained control over whether a block should be rendered based on its current data.
 
   For example, you might need to model a block that requires exactly 3 images to be defined in its data. If a greater or lesser number is specified, the block type view can disable rendering (e.g. to prevent invalid layouts from happening). However, you should try to implement these rules in your block type validation to prevent invalid data from reaching the database in the first place.
 </details>
@@ -101,16 +101,16 @@ The root module for `ColonelKurtzEx` (`ColonelKurtz`) defines the most commonly 
 
 ## Getting Set Up
 
-To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz). Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to `CKJS`, you'll need to add the corresponding modules for `CKEX` (a `BlockType`, `BlockTypeView`, and template). In the future `CKEX` will provide generators to expedite the process of common tasks such as adding a new block type.
+To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colonel Kurtz](https://github.com/vigetlabs/colonel-kurtz). Since the two libraries go hand in hand, you'll often jump back and forth between the two. For example, when you add a new block type to `CKJS`, you'll need to add the corresponding modules for `CKEX` (a `BlockType`, `BlockView`, and template). In the future `CKEX` will provide generators to expedite the process of common tasks such as adding a new block type.
 
 **Note**: The following sections are expandable (and are collapsed by default).
 
 <details>
   <summary>
-    <strong>1. Add Folders for BlockTypes and BlockTypeViews</strong>
+    <strong>1. Add Folders for BlockTypes and BlockViews</strong>
   </summary>
 
-  After adding the library to your dependencies, you'll want to define a few modules in the scope of your application. One for your custom `BlockType` definitions, and one for your `BlockTypeView`s.
+  After adding the library to your dependencies, you'll want to define a few modules in the scope of your application. One for your custom `BlockType` definitions, and one for your `BlockView`s.
 
   **Note:** *it is important that each of these concepts live inside a dedicated module namespace in your application so that the library can look up specific block type and view modules at runtime.*
 
@@ -136,7 +136,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
     </strong>
   </summary>
 
-  Add the following to your `config/config.exs` to allow `CKEX` to locate your custom `BlockType` and `BlockTypeView` modules:
+  Add the following to your `config/config.exs` to allow `CKEX` to locate your custom `BlockType` and `BlockView` modules:
 
   ```elixir
   config :colonel_kurtz_ex, ColonelKurtz,
@@ -357,7 +357,7 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
       defmodule YourAppWeb.Blocks.ImageView do
         use YourAppWeb, :view
-        use ColonelKurtz.BlockTypeView
+        use ColonelKurtz.BlockView
 
         # optionally implement `renderable?/1`
         def renderable?(%ImageBlock{content: %{src: ""}} = block), do: false
@@ -390,9 +390,9 @@ To get set up with `ColonelKurtzEx`, you'll need to install and configure [Colon
 
   You configure the `:block_views` and `:block_types` options for `CKEX` in your `config.exs` by providing the modules in your app that will contain your custom block types and views. When `CKEX` marshalls blocks JSON, it parses data into lists of maps using `Jason` and then looks up a block type based on the block's `type` field.
 
-  It does so by calling `Module.concat` with the module you specified for `:block_types` and `Macro.camelize(type) <> "Block"` (e.g. `"image"` => `YourApp.BlockTypes.ImageBlock`).
+  It does so by calling `Module.concat` with the module you specified for `:block_types` and `Recase.to_pascal(type) <> "Block"` (e.g. `"image"` => `YourApp.BlockTypes.ImageBlock`).
 
-  Similarly, to lookup your view modules `CKEX` calls `Module.concat` with the module you specified for `:block_views` and `Macro.camelize(type) <> "View"` (e.g. `"image"` => `YourAppWeb.Blocks.ImageView`).
+  Similarly, to lookup your view modules `CKEX` calls `Module.concat` with the module you specified for `:block_views` and `Recase.to_pascal(type) <> "View"` (e.g. `"image"` => `YourAppWeb.Blocks.ImageView`).
 
   ---
 </details>

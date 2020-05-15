@@ -6,7 +6,10 @@ defmodule ColonelKurtz.BlockTypes do
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
   alias ColonelKurtz.Config
+  alias ColonelKurtz.UnrecognizedBlock
   alias ColonelKurtz.Utils
+
+  require Logger
 
   @typep block :: Block.t()
   @typep block_struct :: BlockType.t()
@@ -48,17 +51,26 @@ defmodule ColonelKurtz.BlockTypes do
     |> to_block_type_struct
   end
 
-  @spec block_type_module(binary) :: {:ok, module} | {:error, atom}
+  @spec block_type_module(binary) :: module
   def block_type_module(type) do
-    lookup_block_type_module(type)
-  end
-
-  @spec block_type_module!(binary) :: module | none
-  def block_type_module!(type) do
-    case lookup_block_type_module!(type) do
+    case lookup_block_type_module(type) do
       {:error, :does_not_exist, module} ->
-        raise RuntimeError,
-          message: "The application configured :block_types, but #{module} does not exist."
+        Logger.warn("The application configured :block_types, but #{module} does not exist.")
+        UnrecognizedBlock
+
+      {:error, :missing_field, field} ->
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
+
+        UnrecognizedBlock
+
+      {:error, :missing_config} ->
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
+
+        UnrecognizedBlock
 
       {:ok, module} ->
         module
@@ -70,36 +82,19 @@ defmodule ColonelKurtz.BlockTypes do
   @spec to_block_type_struct(map) :: block_struct
   defp to_block_type_struct(%{type: type} = block) do
     type
-    |> block_type_module!()
+    |> block_type_module()
     |> apply(:from_map, [block])
   end
 
   @spec lookup_block_type_module(binary) ::
-          {:ok, module} | {:error, atom} | {:error, atom, module}
+          {:ok, module}
+          | {:error, :does_not_exist, module}
+          | {:error, :missing_config}
+          | {:error, :missing_field, :block_types}
   defp lookup_block_type_module(type) do
     with {:ok, block_types} <- block_types_module(),
          {:ok, module} <- Utils.module_exists?(block_type_module_name(block_types, type)) do
       {:ok, module}
-    end
-  end
-
-  @spec lookup_block_type_module!(binary) :: {:ok, module} | {:error, :does_not_exist, module}
-  defp lookup_block_type_module!(type) do
-    case block_types_module() do
-      {:ok, module} ->
-        module
-        |> block_type_module_name(type)
-        |> Utils.module_exists?()
-
-      {:error, :missing_field, field} ->
-        raise RuntimeError,
-          message:
-            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
-
-      {:error, :missing_config} ->
-        raise RuntimeError,
-          message:
-            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
     end
   end
 
@@ -114,6 +109,6 @@ defmodule ColonelKurtz.BlockTypes do
 
   @spec block_type_module_name(module, binary) :: module
   defp block_type_module_name(module, type) do
-    Module.concat(module, Macro.camelize(type) <> "Block")
+    Module.concat(module, Recase.to_pascal(type) <> "Block")
   end
 end

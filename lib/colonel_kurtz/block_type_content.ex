@@ -40,6 +40,16 @@ defmodule ColonelKurtz.BlockTypeContent do
 
       @derive [Jason.Encoder]
 
+      @spec from_map(map) :: block_content
+      def from_map(attrs) do
+        struct_attrs =
+          for name <- __schema__(:fields),
+              into: Keyword.new(),
+              do: {name, Map.get(attrs, Atom.to_string(name))}
+
+        struct!(__MODULE__, struct_attrs)
+      end
+
       @spec changeset(block_content, map) :: changeset
       def changeset(content, params) do
         embeds = __schema__(:embeds)
@@ -55,16 +65,6 @@ defmodule ColonelKurtz.BlockTypeContent do
           end)
 
         validate(content, changeset_with_embeds)
-      end
-
-      @spec from_map(map) :: block_content
-      def from_map(attrs) do
-        struct_attrs =
-          for name <- __schema__(:fields),
-              into: Keyword.new(),
-              do: {name, Map.get(attrs, Atom.to_string(name))}
-
-        struct!(__MODULE__, struct_attrs)
       end
 
       @spec validate(block_content, changeset) :: changeset

@@ -1,13 +1,5 @@
-defmodule ColonelKurtz.BlockType do
-  @moduledoc """
-  The BlockType module defines a macro that is used to mix in the Block Type
-  behavior. Block Types are embedded Ecto Schemas.
-
-  A Block has a `type` (e.g. "image"), a list of children (`blocks`), and a
-  well-defined schema with content attributes (`content`). The content schema is
-  defined by a user in a `TypeName.Content` module. The Block Type schema
-  `embeds_one` of the Content module.
-  """
+defmodule ColonelKurtz.UnrecognizedBlockType do
+  @moduledoc false
 
   import Ecto.Changeset
 
@@ -23,9 +15,6 @@ defmodule ColonelKurtz.BlockType do
 
   @typep changeset :: Ecto.Changeset.t()
 
-  @doc """
-  The BlockType __using__ macro allows modules to behave as BlockTypes.
-  """
   defmacro __using__(_opts) do
     quote do
       use Ecto.Schema
@@ -38,6 +27,7 @@ defmodule ColonelKurtz.BlockType do
       alias ColonelKurtz.BlockType
       alias ColonelKurtz.CKBlocks
       alias ColonelKurtz.EctoHelpers
+      alias ColonelKurtz.UnrecognizedBlock
 
       @typep changeset :: Ecto.Changeset.t()
       @typep block :: block
@@ -45,7 +35,7 @@ defmodule ColonelKurtz.BlockType do
 
       @block_attributes [:block_id, :type, :content, :blocks]
 
-      @content_module Module.concat(__MODULE__, Content)
+      @content_module UnrecognizedBlock.Content
 
       @primary_key {:block_id, :binary_id, autogenerate: false}
 
@@ -54,27 +44,7 @@ defmodule ColonelKurtz.BlockType do
       embedded_schema do
         field(:type, :string, null: false)
         field(:blocks, CKBlocks)
-        embeds_one(:content, @content_module)
-      end
-
-      @doc """
-      Takes a Block map and converts it to a named BlockType struct according
-      to its :type. Generates a :block_id if necessary, and turns `block.content`
-      into a named BlockType.Content module as well.
-      """
-      @spec from_map(block) :: block_struct
-      def from_map(%{type: type, content: content, blocks: blocks} = attrs) do
-        content =
-          content
-          |> attributes_from_params()
-          |> @content_module.from_map()
-
-        struct!(__MODULE__,
-          block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
-          type: type,
-          content: content,
-          blocks: blocks || []
-        )
+        field(:content, :map)
       end
 
       @doc """
@@ -87,8 +57,7 @@ defmodule ColonelKurtz.BlockType do
       def changeset(block, params) do
         changeset =
           struct(__MODULE__)
-          |> cast(params, [:block_id, :type, :blocks])
-          |> cast_embed(:content)
+          |> cast(params, [:block_id, :type, :blocks, :content])
           |> lift_content_errors()
           |> validate_blocks(:blocks, is_block: true)
 
@@ -98,6 +67,21 @@ defmodule ColonelKurtz.BlockType do
       @spec validate(block_struct, changeset) :: changeset
       def validate(_block, changeset), do: changeset
       defoverridable validate: 2
+
+      @doc """
+      Takes a Block map and converts it to a named BlockType struct according
+      to its :type. Generates a :block_id if necessary, and turns `block.content`
+      into a named BlockType.Content module as well.
+      """
+      @spec from_map(block) :: block_struct
+      def from_map(%{type: type, content: content, blocks: blocks} = attrs) do
+        struct!(__MODULE__,
+          block_id: Map.get(attrs, :block_id) || Ecto.UUID.generate(),
+          type: type,
+          content: attributes_from_params(content),
+          blocks: blocks || []
+        )
+      end
     end
   end
 
