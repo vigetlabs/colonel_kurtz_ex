@@ -47,7 +47,7 @@ defmodule ColonelKurtz.Renderer do
     ]
   end
 
-  @spec block_view_module(binary) :: module | none
+  @spec block_view_module(binary) :: module
   def block_view_module(type) do
     case lookup_block_view_module(type) do
       {:error, :does_not_exist, module} ->
