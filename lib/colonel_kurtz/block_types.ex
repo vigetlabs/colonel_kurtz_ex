@@ -92,8 +92,8 @@ defmodule ColonelKurtz.BlockTypes do
   @spec maybe_issue_warning(module_lookup_result) :: module_lookup_result
   defp maybe_issue_warning({:ok, module}), do: {:ok, module}
 
-  defp maybe_issue_warning(result) do
-    case result do
+  defp maybe_issue_warning(lookup_result) do
+    case lookup_result do
       {:error, :does_not_exist, module} ->
         Logger.warn("The application configured :block_types, but #{module} does not exist.")
 
@@ -108,7 +108,7 @@ defmodule ColonelKurtz.BlockTypes do
         )
     end
 
-    # just return the result
-    result
+    # just return the lookup_result
+    lookup_result
   end
 end
