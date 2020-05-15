@@ -7,6 +7,7 @@ defmodule ColonelKurtzTest.BlockTypeTest do
   doctest ColonelKurtz.BlockType
 
   alias ColonelKurtzTest.BlockTypes.ExampleBlock
+  alias ColonelKurtzTest.BlockTypes.SectionBlock
 
   describe "BlockType" do
     test "example" do
@@ -20,6 +21,16 @@ defmodule ColonelKurtzTest.BlockTypeTest do
       block = build_block_type(ExampleBlock, type: "example", content: %{text: ""})
 
       assert %{valid?: false} = ExampleBlock.changeset(block, Map.from_struct(block))
+    end
+
+    test "renders a block with `content: false`" do
+      example_block = build_block_type(ExampleBlock, type: "example", content: %{text: "Example"})
+      section_block = build_block_type(SectionBlock, type: "section", blocks: [example_block])
+
+      assert %SectionBlock{} = section_block
+
+      assert %{valid?: true} =
+               SectionBlock.changeset(section_block, Map.from_struct(section_block))
     end
   end
 
