@@ -48,6 +48,7 @@ defmodule ColonelKurtz.MixProject do
       {:ecto_sql, "~> 3.4"},
       {:phoenix_html, "~> 2.14"},
       {:jason, "~> 1.0"},
+      {:recase, "~> 0.5"},
       {:dialyxir, "~> 1.0.0-rc.7", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.19", only: [:dev, :test]},
