@@ -28,6 +28,10 @@ defmodule ColonelKurtz.Config do
          {:ok, value} <- get(config, field) do
       value
     else
+      {:error, :missing_config} ->
+        raise "Missing configuration :colonel_kurtz"
+      {:error, :missing_field, field} ->
+        raise "Configuration is missing field #{field}"
       _ ->
         nil
     end
