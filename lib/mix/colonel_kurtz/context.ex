@@ -1,7 +1,9 @@
 defmodule Mix.ColonelKurtz.Context do
-  # see https://github.com/phoenixframework/phoenix/blob/master/lib/mix/phoenix/schema.ex
-  alias Mix.ColonelKurtz.Schema
+  @moduledoc false
+
+  # see https://github.com/phoenixframework/phoenix/blob/master/lib/mix/phoenix/context.ex
   alias Mix.ColonelKurtz.Context
+  alias Mix.ColonelKurtz.Schema
 
   defstruct opts: nil,
             bindings: nil,
@@ -25,12 +27,11 @@ defmodule Mix.ColonelKurtz.Context do
     block_types_context = ColonelKurtz.Config.get!(:block_types)
     block_views_context = ColonelKurtz.Config.get!(:block_views)
 
-    block_module = Module.concat(
-      [
+    block_module =
+      Module.concat([
         block_types_context,
         Recase.to_pascal(schema.name) <> "Block"
-      ]
-    )
+      ])
 
     bindings = [
       context: %{
@@ -44,21 +45,25 @@ defmodule Mix.ColonelKurtz.Context do
     ]
 
     web_prefix = Mix.Phoenix.web_path(Mix.Phoenix.context_app())
-    template_folder = block_views_context |> Module.split() |> Enum.drop(1) |> List.first() |> Phoenix.Naming.underscore()
+
+    template_folder =
+      block_views_context
+      |> Module.split()
+      |> Enum.drop(1)
+      |> List.first()
+      |> Phoenix.Naming.underscore()
+
     template_target = Path.join([web_prefix, "templates", template_folder, schema.name])
 
     %Context{
       opts: opts,
       bindings: bindings,
-
       block_template: block_template,
       view_template: view_template,
       template_template: template_template,
-
       block_file: Phoenix.Naming.underscore(schema.name) <> "_block.ex",
       view_file: Phoenix.Naming.underscore(schema.name) <> "_view.ex",
       template_file: "index.html.eex",
-
       block_path: blocks_target(module_path(block_types_context)),
       view_path: views_target(module_path(block_views_context)),
       template_path: template_target

@@ -26,7 +26,7 @@ defmodule Mix.Tasks.Ck.Gen.Block do
 
   def run(args) do
     if Mix.Project.umbrella?() do
-      Mix.raise "mix ck.gen.block can only be run inside an application directory"
+      Mix.raise("mix ck.gen.block can only be run inside an application directory")
     end
 
     context = build(args)
@@ -44,8 +44,7 @@ defmodule Mix.Tasks.Ck.Gen.Block do
       Mix.Generator.create_file(target, compiled)
 
       Mix.shell().info("""
-      View the generated block at #{target}. You should add validations and any
-      further customizations to the schema field options.
+      View the generated block at #{target}. You should add validations and any further customizations to the schema field options.
       """)
     end
   end
@@ -61,7 +60,10 @@ defmodule Mix.Tasks.Ck.Gen.Block do
 
   defp generate_template(context) do
     if context.opts[:template] do
-      Mix.Generator.copy_file(context.template_template, Path.join(context.template_path, context.template_file))
+      Mix.Generator.copy_file(
+        context.template_template,
+        Path.join(context.template_path, context.template_file)
+      )
     end
   end
 
