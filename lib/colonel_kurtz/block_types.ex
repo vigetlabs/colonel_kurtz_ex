@@ -6,10 +6,19 @@ defmodule ColonelKurtz.BlockTypes do
   alias ColonelKurtz.Block
   alias ColonelKurtz.BlockType
   alias ColonelKurtz.Config
+  alias ColonelKurtz.UnrecognizedBlock
   alias ColonelKurtz.Utils
+
+  require Logger
 
   @typep block :: Block.t()
   @typep block_struct :: BlockType.t()
+
+  @typep module_lookup_result ::
+           {:ok, module}
+           | {:error, :does_not_exist, module}
+           | {:error, :missing_config}
+           | {:error, :missing_field, :block_types}
 
   @doc """
   Converts serialized json into named block type structs.
@@ -48,21 +57,12 @@ defmodule ColonelKurtz.BlockTypes do
     |> to_block_type_struct
   end
 
-  @spec block_type_module(binary) :: {:ok, module} | {:error, atom}
+  @spec block_type_module(binary) :: module
   def block_type_module(type) do
-    lookup_block_type_module(type)
-  end
-
-  @spec block_type_module!(binary) :: module | none
-  def block_type_module!(type) do
-    case lookup_block_type_module!(type) do
-      {:error, :does_not_exist, module} ->
-        raise RuntimeError,
-          message: "The application configured :block_types, but #{module} does not exist."
-
-      {:ok, module} ->
-        module
-    end
+    type
+    |> lookup_block_type_module()
+    |> maybe_issue_warning()
+    |> Utils.module_or_fallback(UnrecognizedBlock)
   end
 
   # private
@@ -70,50 +70,45 @@ defmodule ColonelKurtz.BlockTypes do
   @spec to_block_type_struct(map) :: block_struct
   defp to_block_type_struct(%{type: type} = block) do
     type
-    |> block_type_module!()
+    |> block_type_module()
     |> apply(:from_map, [block])
   end
 
-  @spec lookup_block_type_module(binary) ::
-          {:ok, module} | {:error, atom} | {:error, atom, module}
+  @spec lookup_block_type_module(binary) :: module_lookup_result
   defp lookup_block_type_module(type) do
-    with {:ok, block_types} <- block_types_module(),
-         {:ok, module} <- Utils.module_exists?(block_type_module_name(block_types, type)) do
+    with {:ok, config} <- Config.fetch_config(),
+         {:ok, block_types} <- Config.get(config, :block_types),
+         {:ok, module_name} <- block_type_module_name(block_types, type),
+         {:ok, module} <- Utils.module_exists?(module_name) do
       {:ok, module}
     end
   end
 
-  @spec lookup_block_type_module!(binary) :: {:ok, module} | {:error, :does_not_exist, module}
-  defp lookup_block_type_module!(type) do
-    case block_types_module() do
-      {:ok, module} ->
-        module
-        |> block_type_module_name(type)
-        |> Utils.module_exists?()
+  @spec block_type_module_name(module, binary) :: {:ok, module}
+  defp block_type_module_name(module, type) do
+    {:ok, Module.concat(module, Recase.to_pascal(type) <> "Block")}
+  end
+
+  @spec maybe_issue_warning(module_lookup_result) :: module_lookup_result
+  defp maybe_issue_warning({:ok, module}), do: {:ok, module}
+
+  defp maybe_issue_warning(lookup_result) do
+    case lookup_result do
+      {:error, :does_not_exist, module} ->
+        Logger.warn("The application configured :block_types, but #{module} does not exist.")
 
       {:error, :missing_field, field} ->
-        raise RuntimeError,
-          message:
-            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
 
       {:error, :missing_config} ->
-        raise RuntimeError,
-          message:
-            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
     end
-  end
 
-  @spec block_types_module ::
-          {:ok, module} | {:error, :missing_config} | {:error, :missing_field, :block_types}
-  defp block_types_module do
-    with {:ok, config} <- Config.fetch_config(),
-         {:ok, module} <- Config.get(config, :block_types) do
-      {:ok, module}
-    end
-  end
-
-  @spec block_type_module_name(module, binary) :: module
-  defp block_type_module_name(module, type) do
-    Module.concat(module, Macro.camelize(type) <> "Block")
+    # just return the lookup_result
+    lookup_result
   end
 end

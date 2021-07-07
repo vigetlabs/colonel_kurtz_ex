@@ -15,4 +15,7 @@ defmodule ColonelKurtz.Utils do
         {:ok, module}
     end
   end
+
+  def module_or_fallback({:ok, module}, _fallback), do: module
+  def module_or_fallback(_, fallback), do: fallback
 end

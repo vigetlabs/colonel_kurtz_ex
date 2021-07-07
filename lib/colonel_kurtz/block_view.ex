@@ -1,6 +1,6 @@
-defmodule ColonelKurtz.BlockTypeView do
+defmodule ColonelKurtz.BlockView do
   @moduledoc """
-  The BlockTypeView defines a macro that modules (Phoenix.Views) can use to
+  The BlockView defines a macro that modules (Phoenix.Views) can use to
   support a default implementation of `renderable?/1`.
 
   The `ColonelKurtz.Renderer` calls `renderable?/1` on user-defined BlockView
@@ -8,11 +8,10 @@ defmodule ColonelKurtz.BlockTypeView do
   """
 
   @doc """
-  The BlockType __using__ macro allows modules to behave as BlockTypeViews.
+  The BlockView __using__ macro allows modules to behave as BlockViews.
   """
   defmacro __using__(_opts) do
     quote do
-      @spec renderable?(map) :: boolean
       def renderable?(_block), do: true
       defoverridable renderable?: 1
     end

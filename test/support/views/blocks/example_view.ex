@@ -5,5 +5,5 @@ defmodule ColonelKurtzTest.Blocks.ExampleView do
     root: "test/support/templates",
     namespace: ColonelKurtzTest
 
-  use ColonelKurtz.BlockTypeView
+  use ColonelKurtz.BlockView
 end

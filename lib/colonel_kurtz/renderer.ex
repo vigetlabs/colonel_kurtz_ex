@@ -6,9 +6,18 @@ defmodule ColonelKurtz.Renderer do
 
   alias ColonelKurtz.Block
   alias ColonelKurtz.Config
+  alias ColonelKurtz.UnrecognizedBlockView
   alias ColonelKurtz.Utils
 
+  require Logger
+
   @typep block :: Block.t()
+
+  @typep module_lookup_result ::
+           {:ok, module}
+           | {:error, :does_not_exist, module}
+           | {:error, :missing_config}
+           | {:error, :missing_field, :block_views}
 
   @spec render_blocks(nil) :: nil
   def render_blocks(nil), do: nil
@@ -21,11 +30,13 @@ defmodule ColonelKurtz.Renderer do
   @spec render_block(block) :: iodata
   defp render_block(%{type: type} = block) do
     type
-    |> block_view_module!()
+    |> block_view_module()
     |> maybe_render_block(block)
   end
 
   @spec maybe_render_block(module, block) :: iodata
+  defp maybe_render_block(UnrecognizedBlockView, _block), do: ""
+
   defp maybe_render_block(module, block) do
     if apply(module, :renderable?, [block]) do
       apply(module, :render, ["index.html", assigns(block)])
@@ -42,49 +53,49 @@ defmodule ColonelKurtz.Renderer do
     ]
   end
 
-  @spec block_view_module!(binary) :: module | none
-  def block_view_module!(type) do
-    case lookup_block_view_module!(type) do
-      {:error, :does_not_exist, module} ->
-        raise RuntimeError,
-          message: "The application configured :block_types, but #{module} does not exist."
-
-      {:ok, module} ->
-        module
-    end
+  @spec block_view_module(binary) :: module
+  def block_view_module(type) do
+    type
+    |> lookup_block_view_module()
+    |> maybe_issue_warning()
+    |> Utils.module_or_fallback(UnrecognizedBlockView)
   end
 
-  @spec lookup_block_view_module!(binary) :: {:ok, module} | {:error, :does_not_exist, module}
-  defp lookup_block_view_module!(type) do
-    case block_views_module() do
-      {:ok, module} ->
-        module
-        |> block_view_module_name(type)
-        |> Utils.module_exists?()
-
-      {:error, :missing_field, field} ->
-        raise RuntimeError,
-          message:
-            "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
-
-      {:error, :missing_config} ->
-        raise RuntimeError,
-          message:
-            "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
-    end
-  end
-
-  @spec block_views_module ::
-          {:ok, module} | {:error, :missing_config} | {:error, :missing_field, :block_views}
-  defp block_views_module do
+  @spec lookup_block_view_module(binary) :: module_lookup_result
+  defp lookup_block_view_module(type) do
     with {:ok, config} <- Config.fetch_config(),
-         {:ok, module} <- Config.get(config, :block_views) do
+         {:ok, block_types} <- Config.get(config, :block_views),
+         {:ok, module_name} <- block_view_module_name(block_types, type),
+         {:ok, module} <- Utils.module_exists?(module_name) do
       {:ok, module}
     end
   end
 
-  @spec block_view_module_name(module, binary) :: module
+  @spec block_view_module_name(module, binary) :: {:ok, module}
   defp block_view_module_name(module, type) do
-    Module.concat(module, Macro.camelize(type) <> "View")
+    {:ok, Module.concat(module, Recase.to_pascal(type) <> "View")}
+  end
+
+  @spec maybe_issue_warning(module_lookup_result) :: module_lookup_result
+  defp maybe_issue_warning({:ok, module}), do: {:ok, module}
+
+  defp maybe_issue_warning(lookup_result) do
+    case lookup_result do
+      {:error, :does_not_exist, module} ->
+        Logger.warn("The application configured :block_views, but #{module} does not exist.")
+
+      {:error, :missing_field, field} ->
+        Logger.warn(
+          "Application defined :colonel_kurtz_ex config, but did not provide the :#{field} field."
+        )
+
+      {:error, :missing_config} ->
+        Logger.warn(
+          "ColonelKurtz expected the application to configure :colonel_kurtz_ex, but no configuration was found."
+        )
+    end
+
+    # just return the lookup_result
+    lookup_result
   end
 end

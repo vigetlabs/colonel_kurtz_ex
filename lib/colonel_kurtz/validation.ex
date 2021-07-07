@@ -64,7 +64,7 @@ defmodule ColonelKurtz.Validation do
   @spec to_changesets(list(map)) :: changeset_list
   defp to_changesets(blocks) do
     Enum.map(blocks, fn block ->
-      BlockTypes.block_type_module!(block.type).changeset(block, Map.from_struct(block))
+      BlockTypes.block_type_module(block.type).changeset(block, Map.from_struct(block))
     end)
   end
 
